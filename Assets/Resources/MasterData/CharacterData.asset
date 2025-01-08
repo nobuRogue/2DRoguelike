@@ -18,7 +18,7 @@ MonoBehaviour:
     - ID: 0
       nameID: 0
       spriteName: rogue_player
-      HP: 11
+      HP: 20
       Attack: 5
       Defense: 1
     - ID: 1
@@ -28,11 +28,11 @@ MonoBehaviour:
       Attack: 3
       Defense: 1
     - ID: 2
-      nameID: 0
-      spriteName: 
-      HP: 0
-      Attack: 0
-      Defense: 0
+      nameID: 2
+      spriteName: rogue_sand_enemy2
+      HP: 8
+      Attack: 2
+      Defense: 1
     - ID: 3
       nameID: 0
       spriteName: 
