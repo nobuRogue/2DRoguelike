@@ -26,10 +26,26 @@ public class MenuPlayerStatus : MenuBase {
 
 	public void SetPlayerHP( int currentHP, int maxHP ) {
 		_HPText.text = currentHP.ToString() + "/" + maxHP.ToString();
+		float hpRatio = (float)currentHP / maxHP;
+		if (hpRatio < 0.2f) {
+			_HPText.color = Color.red;
+		} else if (hpRatio > 0.5) {
+			_HPText.color = Color.white;
+		} else {
+			_HPText.color = Color.yellow;
+		}
 	}
 
 	public void SetPlayerStamina( int setStamina ) {
 		_StaminaText.text = (setStamina / 10).ToString() + "%";
+		if (setStamina <= 0) {
+			_StaminaText.color = Color.red;
+		} else if (setStamina <= 500) {
+			_StaminaText.color = Color.yellow;
+		} else {
+			_StaminaText.color = Color.white;
+		}
+
 	}
 
 }

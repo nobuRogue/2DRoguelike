@@ -25,6 +25,7 @@ public class TurnProcessor {
 		_acceptPlayerInput = new AcceptPlayerInput();
 		_acceptPlayerInput.SetActionCallback( AddMove );
 		MoveAction.SetEndProcess( EndFloor, EndDungeon );
+		CharacterUtility.SetEndDungeonProcess( EndDungeon );
 	}
 
 	public void SetEndProcess( System.Action<eDungeonEndReason> endDungeonProcess, System.Action endFloorProcess ) {
@@ -42,8 +43,8 @@ public class TurnProcessor {
 			ThinkAllEnemyAction();
 			// キャラクターオブジェクトの移動
 			await MoveCharacterObject();
-
-			// 行動を再思考させ、実行させる
+			// エネミーの行動を実行させる
+			await ActionAllEnemy();
 			break;
 		}
 		// ターン終了時処理
@@ -72,6 +73,17 @@ public class TurnProcessor {
 		}
 		await WaitTask( moveTaskList );
 		_moveActionList.Clear();
+	}
+
+	private async UniTask ActionAllEnemy() {
+		await CharacterManager.instance.ExecuteTaskAllCharacter( ActionEnemy );
+	}
+
+	private async UniTask ActionEnemy( CharacterBase character ) {
+		var enemy = character as EnemyCharacter;
+		if (!_continueTurn || enemy == null) return;
+
+		await enemy.ExecuteScheduleAction();
 	}
 
 	private void EndTurn() {

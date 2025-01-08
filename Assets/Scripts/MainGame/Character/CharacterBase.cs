@@ -69,7 +69,7 @@ public abstract class CharacterBase {
 	}
 
 	public virtual void SetHP( int setHP ) {
-		HP = Mathf.Max( setHP, 0 );
+		HP = Mathf.Clamp( setHP, 0, maxHP );
 	}
 
 	public virtual async UniTask OnEndTurnProcess() {
@@ -92,5 +92,21 @@ public abstract class CharacterBase {
 
 		direction = setDir;
 		GetObject()?.SetDirection( direction );
+	}
+
+	/// <summary>
+	/// É_ÉÅÅ[ÉWÇó^Ç¶ÇÈ
+	/// </summary>
+	/// <param name="damageValue"></param>
+	public virtual void Damage( int damageValue ) {
+		SetHP( HP - damageValue );
+	}
+
+	public eCharacterAnimation GetCurrentAnimation() {
+		return GetObject().currenAnim;
+	}
+
+	public bool IsDead() {
+		return HP <= 0;
 	}
 }

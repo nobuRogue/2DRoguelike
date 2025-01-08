@@ -476,6 +476,7 @@ MonoBehaviour:
   - {fileID: 2086936983326147314, guid: ec7ec3531b182f044974decca59a8ed7, type: 3}
   - {fileID: 4130072428040130403, guid: 69e56e87d7e766842a584bffd96d5497, type: 3}
   - {fileID: -3919318231968898916, guid: d098834c5b10e25418a6dfe5593c548c, type: 3}
+  - {fileID: 7674948444495426458, guid: 74e75c61d65fa0e4c9f241244838dfb3, type: 3}
   _debugObjectList: []
 --- !u!4 &1374711073
 Transform:

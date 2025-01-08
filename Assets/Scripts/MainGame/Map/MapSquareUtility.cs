@@ -32,9 +32,34 @@ public class MapSquareUtility {
 	/// <param name="dir"></param>
 	/// <returns></returns>
 	public static bool CanMove( Vector2Int sourcePos, MapSquareData moveSquare, eDirectionEight dir ) {
+		return CanMoveTerrain( sourcePos, moveSquare, dir ) && !moveSquare.existCharacter;
+	}
+
+	/// <summary>
+	/// ˆÚ“®‰Â”Û”»’è
+	/// </summary>
+	/// <param name="sourcePos"></param>
+	/// <param name="moveSquare"></param>
+	/// <param name="dir"></param>
+	/// <returns></returns>
+	public static bool CanMoveTerrain( Vector2Int sourcePos, MapSquareData moveSquare, eDirectionEight dir ) {
 		if (moveSquare == null ||
-			moveSquare.terrain == eTerrain.Wall ||
-			moveSquare.existCharacter) return false;
+			moveSquare.terrain == eTerrain.Wall) return false;
+
+		if (!dir.IsSlant()) return true;
+
+		eDirectionFour[] separateDir = dir.Separate();
+		for (int i = 0, max = separateDir.Length; i < max; i++) {
+			var checkSquare = MapSquareManager.instance.Get( sourcePos.ToVectorPos( separateDir[i] ) );
+			if (checkSquare == null || checkSquare.terrain == eTerrain.Wall) return false;
+
+		}
+		return true;
+	}
+
+	public static bool CanAttackSquare( Vector2Int sourcePos, MapSquareData attackSquare, eDirectionEight dir ) {
+		if (attackSquare == null ||
+			attackSquare.terrain == eTerrain.Wall) return false;
 
 		if (!dir.IsSlant()) return true;
 
@@ -67,7 +92,7 @@ public class MapSquareUtility {
 		GetChebyshevAroudSquare( ref aroundSquareIDList, sourceSquare );
 		aroundSquareIDList.Add( sourceSquare.ID );
 		List<int> adjacentRoomID = new List<int>();
-		PlayerCharacter player = CharacterManager.instance.GetPlayer();
+		PlayerCharacter player = CharacterUtility.GetPlayer();
 		bool visiblePlayer = false;
 		for (int i = 0, max = aroundSquareIDList.Count; i < max; i++) {
 			var targetSquare = GetSquareData( aroundSquareIDList[i] );

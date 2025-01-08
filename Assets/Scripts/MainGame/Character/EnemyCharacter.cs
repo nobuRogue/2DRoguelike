@@ -4,6 +4,7 @@
  * @author yaonobu
  * @date 2025/1/4
  */
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,5 +61,9 @@ public class EnemyCharacter : CharacterBase {
 
 	public MoveAction ThinkAction() {
 		return _enemyAI.ThinkAction();
+	}
+
+	public async UniTask ExecuteScheduleAction() {
+		await _enemyAI.ExecuteScheduleAction();
 	}
 }

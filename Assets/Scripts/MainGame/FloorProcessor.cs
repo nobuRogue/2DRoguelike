@@ -35,19 +35,20 @@ public class FloorProcessor {
 		while (_continueFloor) await _turnProcessor.Execute();
 
 		await FadeManager.instance.FadeOut( Color.black );
+		OnEndFloor();
 	}
 
 	private async UniTask SetupFloor() {
 		// マップのスプライト設定
 		UserData userData = UserDataHolder.currentData;
-		var floorMaster = FloorMasterUtility.GetCharacterMaster( userData.floorCount );
+		var floorMaster = FloorMasterUtility.GetFloorMaster( userData.floorCount );
 		TerrainSpriteAssignor.SetFloorSpriteIndex( floorMaster.spriteIndex );
 		// フロア生成
 		MapSquareManager.instance.SetoutBGSprite( TerrainSpriteAssignor.GetTerrainSprite( eTerrain.Wall ) );
 		await MapCreater.CreateMap();
 		MenuManager.instance.Get<MenuPlayerStatus>().SetFloorCount( userData.floorCount );
 		// プレイヤー設置
-		PlayerCharacter player = CharacterManager.instance.GetPlayer();
+		PlayerCharacter player = CharacterUtility.GetPlayer();
 		List<MapSquareData> candidateSquareList = new List<MapSquareData>( GameConst.MAP_SQUARE_MAX_WIDTH * GameConst.MAP_SQUARE_MAX_HEIGHT );
 		MapSquareManager.instance.ExecuteAllSquare( square => {
 			if (square.terrain != eTerrain.Room) return;
@@ -65,10 +66,9 @@ public class FloorProcessor {
 			if (IsEmpty( candidateSquareList )) break;
 
 			int enemySquareIndex = Random.Range( 0, candidateSquareList.Count );
-			CharacterManager.instance.UseEnemy( 1, candidateSquareList[enemySquareIndex] );
+			CharacterManager.instance.UseEnemy( Random.Range( 0, 2 ) == 0 ? 1 : 2, candidateSquareList[enemySquareIndex] );
 			candidateSquareList.RemoveAt( enemySquareIndex );
 		}
-
 	}
 
 	private void EndFloor() {
@@ -79,5 +79,10 @@ public class FloorProcessor {
 		EndFloor();
 		_EndDungeon( endReason );
 	}
+
+	private void OnEndFloor() {
+		CharacterUtility.UnuseAllEnemy();
+	}
+
 
 }

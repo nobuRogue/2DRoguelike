@@ -23,9 +23,7 @@ public class DungeonProcessor {
 	public async UniTask<eDungeonEndReason> Execute() {
 		_endReason = eDungeonEndReason.Invalid;
 		while (_endReason == eDungeonEndReason.Invalid) {
-
 			await _floorProcessor.Execute();
-
 		}
 		return _endReason;
 	}

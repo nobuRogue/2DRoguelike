@@ -7,6 +7,8 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+using static CharacterUtility;
+
 public class PartMain : PartBase {
 	[SerializeField]
 	private MapSquareManager _squareManager = null;
@@ -18,10 +20,14 @@ public class PartMain : PartBase {
 
 	public override async UniTask Initialize() {
 		await MenuManager.instance.Get<MenuPlayerStatus>( "Prefabs/Menu/MenuPlayerStatus" ).Initialize();
+		await MenuManager.instance.Get<MenuGameOver>( "Prefabs/Menu/MenuGameOver" ).Initialize();
 
 		TerrainSpriteAssignor.Initialize();
 		_dungeonProcessor = new DungeonProcessor();
 		_dungeonProcessor.Initialize();
+
+		ActionRangeManager.Initialize();
+		ActionEffectManager.Initialize();
 	}
 
 	public override async UniTask Setup() {
@@ -36,7 +42,7 @@ public class PartMain : PartBase {
 			userData.SetIsNewGame( false );
 		} else {
 			// プレイヤー取得
-			player = CharacterManager.instance.GetPlayer();
+			player = GetPlayer();
 		}
 		//
 		var menuPlayerStatus = MenuManager.instance.Get<MenuPlayerStatus>();
@@ -49,13 +55,31 @@ public class PartMain : PartBase {
 	}
 
 	public override async UniTask Execute() {
+		SoundManager.instance.PlayBgm( 0 );
 		// ダンジョン処理実行
 		var menuPlayerStatus = MenuManager.instance.Get<MenuPlayerStatus>();
 		await menuPlayerStatus.Open();
-		await _dungeonProcessor.Execute();
+		eDungeonEndReason endReason = await _dungeonProcessor.Execute();
 		await menuPlayerStatus.Close();
 		UserDataHolder.currentData.SetFloorCount( 1 );
-		UniTask unitask = PartManager.instance.TransitionPart( eGamePart.Ending );
+		GetPlayer().ResetStatus();
+		SoundManager.instance.StopBgm();
+		UniTask task;
+		switch (endReason) {
+			case eDungeonEndReason.Dead:
+				var gameOverMenu = MenuManager.instance.Get<MenuGameOver>();
+				await gameOverMenu.Open();
+				await gameOverMenu.Close();
+				task = PartManager.instance.TransitionPart( eGamePart.Title );
+				break;
+			case eDungeonEndReason.Clear:
+				task = PartManager.instance.TransitionPart( eGamePart.Ending );
+				break;
+			default:
+				task = PartManager.instance.TransitionPart( eGamePart.Title );
+				break;
+		}
+
 	}
 
 	public override async UniTask Cleannup() {

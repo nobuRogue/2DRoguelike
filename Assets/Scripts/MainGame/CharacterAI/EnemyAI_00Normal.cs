@@ -46,11 +46,34 @@ public class EnemyAI_00Normal : EnemyAIBase {
 			return randomMove;
 		} else {
 			// プレイヤーを見つけているので可能な行動があるか確認
-
-			// 可能な行動があるので予定に設定して終わり
-
-			// 
+			var attackActionMaster = ActionMasterUtility.GetActionMaster( GameConst.ATTACK_ACTION_ID );
+			eDirectionEight dir = eDirectionEight.Invalid;
+			if (ActionRangeManager.GetRange( attackActionMaster.rangeID ).CanUse( sourceSquare.ID, ref dir )) {
+				// 可能な行動があるので予定に設定して終わり
+				_scheduleActionID = GameConst.ATTACK_ACTION_ID;
+				return null;
+			}
+			// プレイヤーに近づく移動を行う
+			MapSquareData playerSquare = GetSquareData( player.squarePosition );
+			List<ChebyshevMoveData> routeResult = null;
+			RouteSearcher.RouteSearchChebyshev( ref routeResult, sourceSquare.ID, playerSquare.ID, CanPassToPlayer );
+			if (IsEnableIndex( routeResult, 1 )) {
+				ChebyshevMoveData toPlayerMoveData = routeResult[0];
+				MoveAction toPlayerMove = new MoveAction();
+				toPlayerMove.ProcessData( sourceEnemy, toPlayerMoveData );
+				return toPlayerMove;
+			}
 		}
 		return null;
 	}
+
+	private bool CanPassToPlayer( MapSquareData square, eDirectionEight dir, int distance ) {
+		MapSquareData prevSquare = GetSquareData( square.squarePosition.ToVectorPos( dir.ReverseDir() ) );
+		if (prevSquare == null) return false;
+
+		if (!CanMoveTerrain( prevSquare.squarePosition, square, dir )) return false;
+
+		return square.enemyID < 0;
+	}
+
 }

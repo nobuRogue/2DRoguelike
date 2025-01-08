@@ -16,6 +16,8 @@ public class PlayerCharacter : CharacterBase {
 
 	private readonly int PLAYER_MOVE_TRAIL_COUNT = 3;
 
+	private int _recoveryCount = 0;
+
 	/// <summary>
 	/// オブジェクトを取得するコールバック
 	/// </summary>
@@ -32,13 +34,19 @@ public class PlayerCharacter : CharacterBase {
 		_moveTrailSquareIDList = new List<int>( PLAYER_MOVE_TRAIL_COUNT );
 		Setup( masterData, squareData );
 		GetObject()?.Setup( masterData );
-		SetStamina( 1000 );
+		SetStamina( GameConst.PLAYER_DEFAULT_STAMINA );
 
 	}
 
 	public override void Teardown() {
 		base.Teardown();
 		GetObject()?.Teardown();
+	}
+
+	public void ResetStatus() {
+		SetHP( maxHP );
+		SetStamina( GameConst.PLAYER_DEFAULT_STAMINA );
+		_recoveryCount = 0;
 	}
 
 	protected override CharacterObject GetObject() {
@@ -93,7 +101,22 @@ public class PlayerCharacter : CharacterBase {
 
 	public override async UniTask OnEndTurnProcess() {
 		await base.OnEndTurnProcess();
-		DecrementStamina();
+		if (stamina > 1) {
+			DecrementStamina();
+			ProcessRecovery();
+		} else {
+			Damage( 1 );
+			if (IsDead()) await CharacterUtility.DeadCharacter( this );
+
+		}
+	}
+
+	private void ProcessRecovery() {
+		_recoveryCount++;
+		if (_recoveryCount < 5) return;
+
+		SetHP( HP + 1 );
+		_recoveryCount -= 5;
 	}
 
 	public override void OnSquare( int squareID ) {
@@ -108,5 +131,4 @@ public class PlayerCharacter : CharacterBase {
 	public bool ExistMoveTrail( int squareID ) {
 		return _moveTrailSquareIDList.Exists( trail => trail == squareID );
 	}
-
 }

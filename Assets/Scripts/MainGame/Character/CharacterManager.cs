@@ -5,7 +5,6 @@
  * @date 2025/1/4
  */
 using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -66,6 +65,8 @@ public class CharacterManager : MonoBehaviour {
 	/// </summary>
 	/// <param name="unuseEnemy"></param>
 	public void UnuseEnemy( EnemyCharacter unuseEnemy ) {
+		// マスから取り除く
+		MapSquareUtility.GetSquareData( unuseEnemy.squarePosition )?.RemoveCharacter();
 		// 使用リストから取り除く
 		int unuseID = unuseEnemy.ID;
 		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
@@ -170,6 +171,8 @@ public class CharacterManager : MonoBehaviour {
 		action.Invoke( GetPlayer() );
 		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
 		for (int i = 0, max = useEnemyList.Count; i < max; i++) {
+			if (useEnemyList[i] == null) continue;
+
 			action.Invoke( useEnemyList[i] );
 		}
 	}
@@ -184,6 +187,8 @@ public class CharacterManager : MonoBehaviour {
 		await task.Invoke( GetPlayer() );
 		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
 		for (int i = 0, max = useEnemyList.Count; i < max; i++) {
+			if (useEnemyList[i] == null) continue;
+
 			await task.Invoke( useEnemyList[i] );
 		}
 	}

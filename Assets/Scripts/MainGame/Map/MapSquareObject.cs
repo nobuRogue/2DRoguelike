@@ -13,6 +13,9 @@ public class MapSquareObject : MonoBehaviour {
 	private SpriteRenderer _sprite = null;
 
 	[SerializeField]
+	private SpriteRenderer _trailSprite = null;
+
+	[SerializeField]
 	private Transform _characterRoot = null;
 
 	public Transform characterRoot { get; private set; } = null;
@@ -23,6 +26,7 @@ public class MapSquareObject : MonoBehaviour {
 		localPosition.y = position.y * 0.32f;
 		localPosition.z = position.y * 0.1f;
 		transform.localPosition = localPosition;
+		SetTrailSpriteVisibility( false );
 	}
 
 	public void SetTerrain( eTerrain terrain ) {
@@ -32,4 +36,9 @@ public class MapSquareObject : MonoBehaviour {
 	public Transform GetCharacterRoot() {
 		return _characterRoot;
 	}
+
+	public void SetTrailSpriteVisibility( bool isVisible ) {
+		_trailSprite.enabled = isVisible;
+	}
+
 }

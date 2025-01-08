@@ -69,7 +69,7 @@ public class MoveAction {
 		moveCharacter.SetAnimation( eCharacterAnimation.Wait );
 		UserData userData = UserDataHolder.currentData;
 		int floorCount = userData.floorCount;
-		var floorMaster = FloorMasterUtility.GetCharacterMaster( floorCount + 1 );
+		var floorMaster = FloorMasterUtility.GetFloorMaster( floorCount + 1 );
 		if (floorMaster == null) {
 			// 次のフロアマスターデータが無ければゲームクリア
 			_EndDungeon( eDungeonEndReason.Clear );
@@ -81,9 +81,9 @@ public class MoveAction {
 	}
 
 	private CharacterBase GetCharacter() {
-		if (_isPlayer) return CharacterManager.instance.GetPlayer();
+		if (_isPlayer) return CharacterUtility.GetPlayer();
 
-		return CharacterManager.instance.GetEnemy( _enemyID );
+		return CharacterUtility.GetEnemy( _enemyID );
 	}
 
 }

@@ -56,4 +56,8 @@ public class MapSquareData {
 		existPlayer = false;
 		enemyID = -1;
 	}
+
+	public void SetRangeSpriteVisibility( bool isVisible ) {
+		_GetObject( ID ).SetTrailSpriteVisibility( isVisible );
+	}
 }

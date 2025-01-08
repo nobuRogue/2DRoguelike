@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e401823a6edd91044a8fcaf76a04ddfc, type: 3}
+  m_Name: ActionData
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: ActionData
+    list:
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0
+    - ID: 0
+      rangeID: 0
+      effectID: 0

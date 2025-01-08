@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FloorMasterUtility {
-	public static Entity_FloorData.Param GetCharacterMaster( int floorCount ) {
+	public static Entity_FloorData.Param GetFloorMaster( int floorCount ) {
 		var floorMasterList = MasterDataManager.floorData[0];
 		for (int i = 0, max = floorMasterList.Count; i < max; i++) {
 			var floorMaster = floorMasterList[i];
