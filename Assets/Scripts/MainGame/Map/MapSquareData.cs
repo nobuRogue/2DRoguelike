@@ -14,17 +14,46 @@ public class MapSquareData {
 	}
 
 	public int ID { get; private set; } = -1;
-	public Vector2Int position { get; private set; } = Vector2Int.zero;
+	public int roomID { get; private set; } = -1;
+	public Vector2Int squarePosition { get; private set; } = Vector2Int.zero;
 	public eTerrain terrain { get; private set; } = eTerrain.Invalid;
 
-	public void Setup( int setID, Vector2Int setPosition ) {
+	public bool existCharacter {
+		get { return existPlayer || enemyID >= 0; }
+	}
+	public bool existPlayer { get; private set; } = false;
+	public int enemyID { get; private set; } = -1;
+
+	public void Setup( int setID, Vector2Int setSquarePosition ) {
 		ID = setID;
-		position = setPosition;
-		_GetObject( ID )?.Setup( position );
+		squarePosition = setSquarePosition;
+		_GetObject( ID )?.Setup( squarePosition );
 	}
 
 	public void SetTerrain( eTerrain setTerrain ) {
 		terrain = setTerrain;
+		roomID = -1;
 		_GetObject( ID )?.SetTerrain( terrain );
+	}
+
+	public Transform GetCharacterRoot() {
+		return _GetObject( ID ).GetCharacterRoot();
+	}
+
+	public void SetRoomID( int setRoomID ) {
+		roomID = setRoomID;
+	}
+
+	public void SetPlayer() {
+		existPlayer = true;
+	}
+
+	public void SetEnemy( int setEnemyID ) {
+		enemyID = setEnemyID;
+	}
+
+	public void RemoveCharacter() {
+		existPlayer = false;
+		enemyID = -1;
 	}
 }

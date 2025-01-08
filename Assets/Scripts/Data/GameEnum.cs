@@ -84,9 +84,19 @@ public enum eDirectionEight {
 }
 
 /// <summary>
+/// ダンジョン終了要因
+/// </summary>
+public enum eDungeonEndReason {
+	Invalid = -1,
+	Dead,           // 死亡
+	Clear,          // クリア
+	ReturnToTitle,  // タイトルに戻る
+}
+
+/// <summary>
 /// フロア終了要因
 /// </summary>
-public enum eEndReason {
+public enum eFloorEndReason {
 	Invalid = -1,
 	Stair,      // 階段
 	Dead,       // 死亡
@@ -94,7 +104,6 @@ public enum eEndReason {
 	Escape,     // 脱出
 	Event,      // イベント
 	ReturnToTitle,// タイトルに戻る
-	GameClear,  // ゲームクリア
 }
 
 /// <summary>
@@ -116,5 +125,13 @@ public enum eTerrain {
 	Room,
 	Wall,
 	Stair,
+	Max,
+}
+
+public enum eCharacterAnimation {
+	Wait,
+	Walk,
+	Attack,
+	Damage,
 	Max,
 }

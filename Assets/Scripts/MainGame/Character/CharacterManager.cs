@@ -4,6 +4,7 @@
  * @author yaonobu
  * @date 2025/1/4
  */
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,86 +23,169 @@ public class CharacterManager : MonoBehaviour {
 
 	public static CharacterManager instance { get; private set; } = null;
 
-	private List<CharacterBase> _useList = null;
-	private List<CharacterBase> _unuseList = null;
+	private static System.Func<PlayerCharacter> _GetPlayerData = null;
+	private static System.Action<PlayerCharacter> _SetPlayerData = null;
+	private static System.Func<List<EnemyCharacter>> _GetEnemyDataList = null;
 
-	private List<CharacterObject> _useObjectList = null;
-	private List<CharacterObject> _unuseObjectList = null;
-
-	void Start() {
-		instance = this;
+	public static void SetCharacterProcess( System.Func<PlayerCharacter> getPlayerProcess, System.Action<PlayerCharacter> setPlayerProcess, System.Func<List<EnemyCharacter>> getEnemyListProcess ) {
+		_GetPlayerData = getPlayerProcess;
+		_SetPlayerData = setPlayerProcess;
+		_GetEnemyDataList = getEnemyListProcess;
 	}
 
+	private CharacterObject _playerObject = null;
+
+	private List<EnemyCharacter> _unuseEnemyList = null;
+
+	private List<CharacterObject> _useEnemyObjectList = null;
+	private List<CharacterObject> _unuseEnemyObjectList = null;
+
 	public void Initialize() {
-		CharacterBase.SetObejectGetProcess( GetCharacterObject );
-		int characterCount = 32;
-		_useList = new List<CharacterBase>( characterCount );
-		_unuseList = new List<CharacterBase>( characterCount );
-		_useObjectList = new List<CharacterObject>( characterCount );
-		_unuseObjectList = new List<CharacterObject>( characterCount );
-		for (int i = 0; i < characterCount; i++) {
-			CreateUnuse();
+		instance = this;
+		EnemyCharacter.SetObejectGetProcess( GetEnemyObject );
+		PlayerCharacter.SetObejectGetProcess( GetPlayerObject );
+
+		int enemyCount = GameConst.FLOOR_ENEMY_MAX;
+		_unuseEnemyList = new List<EnemyCharacter>( enemyCount );
+		_useEnemyObjectList = new List<CharacterObject>( enemyCount );
+		_unuseEnemyObjectList = new List<CharacterObject>( enemyCount );
+		for (int i = 0; i < enemyCount; i++) {
+			CreateUnuseEnemy();
 		}
 	}
 
-	private void CreateUnuse() {
+	private void CreateUnuseEnemy() {
 		// キャラクターオブジェクト生成して未使用状態にする
-		UnuseObject( Instantiate( _characterObjectOrigin ) );
+		UnuseObject( -1, Instantiate( _characterObjectOrigin ) );
 		// キャラクターデータ生成して未使用状態にする
-		Unuse( new CharacterBase() );
+		UnuseEnemy( new EnemyCharacter() );
 	}
 
 	/// <summary>
 	/// キャラクターとオブジェクトを未使用状態にする
 	/// </summary>
-	/// <param name="unuseCharacter"></param>
-	public void Unuse( CharacterBase unuseCharacter ) {
-		CharacterObject unuseCharacterObject = null;
-		if (IsEnableIndex( _useObjectList, unuseCharacter.ID )) unuseCharacterObject = _useObjectList[unuseCharacter.ID];
-
-		unuseCharacter.Teardown();
-		_useList.Remove( unuseCharacter );
-		_unuseList.Add( unuseCharacter );
-		if (unuseCharacterObject == null) return;
-
-		UnuseObject( unuseCharacterObject );
+	/// <param name="unuseEnemy"></param>
+	public void UnuseEnemy( EnemyCharacter unuseEnemy ) {
+		// 使用リストから取り除く
+		int unuseID = unuseEnemy.ID;
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		if (IsEnableIndex( useEnemyList, unuseID )) useEnemyList[unuseID] = null;
+		// 片付けて未使用リストに加える
+		unuseEnemy.Teardown();
+		_unuseEnemyList.Add( unuseEnemy );
+		if (!IsEnableIndex( _useEnemyObjectList, unuseID )) return;
+		// オブジェクトの未使用化
+		UnuseObject( unuseID, _useEnemyObjectList[unuseID] );
 	}
 
 	/// <summary>
 	/// キャラクターオブジェクトを未使用状態にする
 	/// </summary>
 	/// <param name="unuseCharacterObject"></param>
-	private void UnuseObject( CharacterObject unuseCharacterObject ) {
-		_useObjectList.Remove( unuseCharacterObject );
-		_unuseObjectList.Add( unuseCharacterObject );
+	private void UnuseObject( int unuseID, CharacterObject unuseCharacterObject ) {
+		if (unuseCharacterObject == null) return;
+
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		if (IsEnableIndex( useEnemyList, unuseID )) _useEnemyObjectList[unuseID] = null;
+
+		_unuseEnemyObjectList.Add( unuseCharacterObject );
 		unuseCharacterObject.transform.SetParent( _unuseObjectRoot );
 	}
 
-
-
-	public CharacterBase GetCharacter( int ID ) {
-		if (!IsEnableIndex( _useList, ID )) return null;
-
-		return _useList[ID];
-	}
-
-	private CharacterObject GetCharacterObject( int objectID ) {
-		if (!IsEnableIndex( _useObjectList, objectID )) return null;
-
-		return _useObjectList[objectID];
+	/// <summary>
+	/// プレイヤーの生成
+	/// </summary>
+	/// <returns></returns>
+	public PlayerCharacter UsePlayer( int masterID, MapSquareData squareData ) {
+		_playerObject = Instantiate( _characterObjectOrigin, _useObjectRoot );
+		PlayerCharacter _player = new PlayerCharacter();
+		_player.Setup( masterID, squareData );
+		_SetPlayerData( _player );
+		return _player;
 	}
 
 	/// <summary>
-	/// 全てのマスに指定した処理を行う
+	/// エネミーキャラクター生成
+	/// </summary>
+	/// <returns></returns>
+	public EnemyCharacter UseEnemy( int masterID, MapSquareData squareData ) {
+		// 未使用のキャラクターが無ければ生成
+		if (IsEmpty( _unuseEnemyList )) CreateUnuseEnemy();
+		// 未使用のキャラクターリストから取得
+		EnemyCharacter useEnemy = _unuseEnemyList[0];
+		CharacterObject useObject = _unuseEnemyObjectList[0];
+		_unuseEnemyList.RemoveAt( 0 );
+		_unuseEnemyObjectList.RemoveAt( 0 );
+		// 使用リストに追加
+		int useID = -1;
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		for (int i = 0, max = useEnemyList.Count; i < max; i++) {
+			var enemy = useEnemyList[i];
+			if (enemy != null) continue;
+
+			useID = i;
+			break;
+		}
+		if (useID < 0) {
+			useID = useEnemyList.Count;
+			useEnemyList.Add( null );
+			_useEnemyObjectList.Add( null );
+		}
+		// 生成したエネミーの初期設定
+		useEnemyList[useID] = useEnemy;
+		_useEnemyObjectList[useID] = useObject;
+		useObject.transform.SetParent( _useObjectRoot );
+		useEnemy.Setup( useID, masterID, squareData );
+		return useEnemy;
+	}
+
+	public PlayerCharacter GetPlayer() {
+		return _GetPlayerData();
+	}
+
+	public EnemyCharacter GetEnemy( int ID ) {
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		if (!IsEnableIndex( useEnemyList, ID )) return null;
+
+		return useEnemyList[ID];
+	}
+
+	private CharacterObject GetEnemyObject( int objectID ) {
+		if (!IsEnableIndex( _useEnemyObjectList, objectID )) return null;
+
+		return _useEnemyObjectList[objectID];
+	}
+
+	private CharacterObject GetPlayerObject() {
+		return _playerObject;
+	}
+
+	/// <summary>
+	/// 全てのキャラクターに指定した処理を行う
 	/// </summary>
 	/// <param name="action"></param>
-	public void ExecuteAllSquare( System.Action<CharacterBase> action ) {
+	public void ExecuteAllCharacter( System.Action<CharacterBase> action ) {
 		if (action == null) return;
 
-		for (int i = 0, max = _useList.Count; i < max; i++) {
-			action?.Invoke( _useList[i] );
+		action.Invoke( GetPlayer() );
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		for (int i = 0, max = useEnemyList.Count; i < max; i++) {
+			action.Invoke( useEnemyList[i] );
 		}
+	}
 
+	/// <summary>
+	/// 全てのキャラクターに指定したタスクを行う
+	/// </summary>
+	/// <param name="task"></param>
+	public async UniTask ExecuteTaskAllCharacter( System.Func<CharacterBase, UniTask> task ) {
+		if (task == null) return;
+
+		await task.Invoke( GetPlayer() );
+		List<EnemyCharacter> useEnemyList = _GetEnemyDataList();
+		for (int i = 0, max = useEnemyList.Count; i < max; i++) {
+			await task.Invoke( useEnemyList[i] );
+		}
 	}
 
 }

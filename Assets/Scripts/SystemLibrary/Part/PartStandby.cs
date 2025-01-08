@@ -20,6 +20,10 @@ public class PartStandby : PartBase {
 	}
 
 	public override async UniTask Execute() {
+		await FadeManager.instance.FadeOut( Color.black );
+		// マスターデータ読み込み
+		MasterDataManager.LoadAllData();
+
 		UniTask task = PartManager.instance.TransitionPart( eGamePart.Title );
 	}
 

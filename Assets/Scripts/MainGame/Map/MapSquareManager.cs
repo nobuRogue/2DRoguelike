@@ -12,23 +12,28 @@ using static CommonModule;
 
 public class MapSquareManager : MonoBehaviour {
 	[SerializeField]
+	private SpriteRenderer _outBGSprite = null;
+
+	[SerializeField]
 	private MapSquareObject _squareObjectOrigin = null;
 
 	[SerializeField]
 	private Transform _objectRoot = null;
 	public static MapSquareManager instance { get; private set; } = null;
 
-	private List<MapSquareData> _useDataList = null;
-	private List<MapSquareObject> _useObjectList = null;
+	private static System.Func<List<MapSquareData>> _GetUseDataList = null;
 
-	void Start() {
-		instance = this;
+	public static void SetGetSquareListProcess( System.Func<List<MapSquareData>> setProcess ) {
+		_GetUseDataList = setProcess;
 	}
 
+	private List<MapSquareObject> _useObjectList = null;
+
 	public void Initialize() {
+		instance = this;
 		MapSquareData.SetObejectGetProcess( GetSquareObject );
 		int squareMaxCount = GameConst.MAP_SQUARE_MAX_HEIGHT * GameConst.MAP_SQUARE_MAX_WIDTH;
-		_useDataList = new List<MapSquareData>( squareMaxCount );
+		List<MapSquareData> useDataList = _GetUseDataList();
 		_useObjectList = new List<MapSquareObject>( squareMaxCount );
 		for (int i = 0; i < squareMaxCount; i++) {
 			// マスオブジェクト生成
@@ -37,15 +42,20 @@ public class MapSquareManager : MonoBehaviour {
 			// マスデータ生成
 			MapSquareData createSquare = new MapSquareData();
 			createSquare.Setup( i, GetPosition( i ) );
-			_useDataList.Add( createSquare );
+			useDataList.Add( createSquare );
 			createSquare.SetTerrain( eTerrain.Wall );
 		}
 	}
 
-	public MapSquareData Get( int ID ) {
-		if (!IsEnableIndex( _useDataList, ID )) return null;
+	public void SetoutBGSprite( Sprite bgSprite ) {
+		_outBGSprite.sprite = bgSprite;
+	}
 
-		return _useDataList[ID];
+	public MapSquareData Get( int ID ) {
+		List<MapSquareData> useDataList = _GetUseDataList();
+		if (!IsEnableIndex( useDataList, ID )) return null;
+
+		return useDataList[ID];
 	}
 
 	public MapSquareData Get( Vector2Int position ) {
@@ -86,10 +96,10 @@ public class MapSquareManager : MonoBehaviour {
 	public void ExecuteAllSquare( System.Action<MapSquareData> action ) {
 		if (action == null) return;
 
-		for (int i = 0, max = _useDataList.Count; i < max; i++) {
-			action?.Invoke( _useDataList[i] );
+		List<MapSquareData> useDataList = _GetUseDataList();
+		for (int i = 0, max = useDataList.Count; i < max; i++) {
+			action?.Invoke( useDataList[i] );
 		}
-
 	}
 
 }

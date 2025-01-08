@@ -32,8 +32,8 @@ public class RouteSearcher {
 
 		public int GetScore( Vector2Int goalPosition ) {
 			MapSquareData square = MapSquareManager.instance.Get( squareID );
-			int xdiff = Mathf.Abs( square.position.x - goalPosition.x );
-			int ydiff = Mathf.Abs( square.position.y - goalPosition.y );
+			int xdiff = Mathf.Abs( square.squarePosition.x - goalPosition.x );
+			int ydiff = Mathf.Abs( square.squarePosition.y - goalPosition.y );
 			return xdiff + ydiff;
 		}
 	}
@@ -79,7 +79,7 @@ public class RouteSearcher {
 		InitializeList( ref _manhattanOpenList, 1024 );
 		// 最初のノードを生成オープンリストに加える
 		_manhattanOpenList.Add( new DistanceNodeManhattan( eDirectionFour.Invalid, null, 0, startSquareID ) );
-		Vector2Int goalPosition = MapSquareManager.instance.Get( goalSquareID ).position;
+		Vector2Int goalPosition = MapSquareManager.instance.Get( goalSquareID ).squarePosition;
 		while (_distanceTableManhattan.goalNode == null) {
 			var minScoreNode = GetMinManhattanScoreNode( goalPosition );
 			if (minScoreNode == null) return;
@@ -103,7 +103,7 @@ public class RouteSearcher {
 		System.Func<MapSquareData, eDirectionFour, int, bool> CanPass ) {
 		if (baseNode == null) return;
 
-		Vector2Int basePosition = MapSquareManager.instance.Get( baseNode.squareID ).position;
+		Vector2Int basePosition = MapSquareManager.instance.Get( baseNode.squareID ).squarePosition;
 		for (int i = (int)eDirectionFour.Up; i < (int)eDirectionFour.Max; i++) {
 			eDirectionFour dir = (eDirectionFour)i;
 			Vector2Int nextPosition = basePosition.ToVectorPos( dir );

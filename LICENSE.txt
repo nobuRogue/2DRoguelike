@@ -1,0 +1,2 @@
+Copyright (c) 2013 yamamura tatsuhiko
+https://opensource.org/licenses/mit-license.php

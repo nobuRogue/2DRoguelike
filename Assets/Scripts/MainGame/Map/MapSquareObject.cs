@@ -12,6 +12,9 @@ public class MapSquareObject : MonoBehaviour {
 	[SerializeField]
 	private SpriteRenderer _sprite = null;
 
+	[SerializeField]
+	private Transform _characterRoot = null;
+
 	public Transform characterRoot { get; private set; } = null;
 
 	public void Setup( Vector2Int position ) {
@@ -24,5 +27,9 @@ public class MapSquareObject : MonoBehaviour {
 
 	public void SetTerrain( eTerrain terrain ) {
 		_sprite.sprite = TerrainSpriteAssignor.GetTerrainSprite( terrain );
+	}
+
+	public Transform GetCharacterRoot() {
+		return _characterRoot;
 	}
 }

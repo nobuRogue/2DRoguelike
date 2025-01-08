@@ -1,6 +1,6 @@
 /**
  * @file ManhattanMoveData.cs
- * @brief マップ生成クラス
+ * @brief 4方向の移動情報
  * @author yaonobu
  * @date 2025/1/4
  */

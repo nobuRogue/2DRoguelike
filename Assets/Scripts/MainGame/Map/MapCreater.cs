@@ -13,7 +13,7 @@ using static CommonModule;
 
 public class MapCreater {
 
-	private static readonly int MIN_ROOM_SIZE = 3;
+
 
 	private class AreaData {
 		public Vector2Int startPos = Vector2Int.zero;
@@ -28,28 +28,31 @@ public class MapCreater {
 
 	private static List<AreaData> _areaList = null;
 	private static List<int> _devideLineSquare = null;
+	private static List<int> _roomSquareList = null;
 
 	public static async UniTask CreateMap() {
 		// 壁で埋める
 		int squareMaxCount = GameConst.MAP_SQUARE_MAX_WIDTH * GameConst.MAP_SQUARE_MAX_HEIGHT;
 		InitializeList( ref _devideLineSquare, squareMaxCount );
+		InitializeList( ref _roomSquareList, squareMaxCount );
 		MapSquareManager.instance.ExecuteAllSquare( SetWallAndChecDevideLine );
+		MapSquareUtility.ClearRoom();
 		// 最初のエリアを作る
 		_areaList = new List<AreaData>();
 		_areaList.Add( new AreaData( new Vector2Int( 2, 2 ), GameConst.MAP_SQUARE_MAX_WIDTH - 4, GameConst.MAP_SQUARE_MAX_HEIGHT - 4 ) );
 		// エリアを分割する
-		await DevideArea( 8 );
+		await DevideArea( GameConst.AREA_DEVIDE_COUNT );
 		// 部屋を置く
 		CreateRoom();
 		// 部屋を繋げる
 		ConnectRoom();
 		// 階段を置く
-
+		CreateStair();
 	}
 
 	private static void SetWallAndChecDevideLine( MapSquareData square ) {
 		square.SetTerrain( eTerrain.Wall );
-		var position = square.position;
+		var position = square.squarePosition;
 		if (position.x == 0 || position.y == 0 ||
 			position.x == GameConst.MAP_SQUARE_MAX_WIDTH - 1 ||
 			position.y == GameConst.MAP_SQUARE_MAX_HEIGHT - 1) return;
@@ -64,7 +67,7 @@ public class MapCreater {
 		for (int i = 0; i < devideCount; i++) {
 			// 幅最大のエリアと縦か横か取得
 			var maxSizeArea = GetMaxSizeArea( out int maxSize, out bool isVertical );
-			if (maxSizeArea == null || maxSize < (MIN_ROOM_SIZE + 2) * 2 + 1) break;
+			if (maxSizeArea == null || maxSize < (GameConst.MIN_ROOM_SIZE + 2) * 2 + 1) break;
 
 			await DevideArea( maxSizeArea, isVertical );
 		}
@@ -100,9 +103,9 @@ public class MapCreater {
 	}
 
 	private static async UniTask DevideAreaVertical( AreaData devideArea ) {
-		int randomMax = devideArea.height - ((MIN_ROOM_SIZE + 2) * 2);
+		int randomMax = devideArea.height - ((GameConst.MIN_ROOM_SIZE + 2) * 2);
 		int devidePos = Random.Range( 0, randomMax );
-		devidePos += MIN_ROOM_SIZE + 2 + devideArea.startPos.y;
+		devidePos += GameConst.MIN_ROOM_SIZE + 2 + devideArea.startPos.y;
 		// 新しいエリアの生成
 		_areaList.Add( new AreaData( new Vector2Int( devideArea.startPos.x, devidePos + 1 ), devideArea.width, devideArea.startPos.y + devideArea.height - devidePos - 1 ) );
 		// 既存エリアの修正
@@ -113,9 +116,9 @@ public class MapCreater {
 		}
 	}
 	private static async UniTask DevideAreaHorizontal( AreaData devideArea ) {
-		int randomMax = devideArea.width - ((MIN_ROOM_SIZE + 2) * 2);
+		int randomMax = devideArea.width - ((GameConst.MIN_ROOM_SIZE + 2) * 2);
 		int devidePos = Random.Range( 0, randomMax );
-		devidePos += MIN_ROOM_SIZE + 2 + devideArea.startPos.x;
+		devidePos += GameConst.MIN_ROOM_SIZE + 2 + devideArea.startPos.x;
 		// 新しいエリアの生成
 		_areaList.Add( new AreaData( new Vector2Int( devidePos + 1, devideArea.startPos.y ), devideArea.startPos.x + devideArea.width - devidePos - 1, devideArea.height ) );
 		// 既存エリアの修正
@@ -133,8 +136,8 @@ public class MapCreater {
 	}
 
 	private static void CreateAreaRoom( AreaData areaData ) {
-		int roomWidth = Random.Range( MIN_ROOM_SIZE, areaData.width - 1 );
-		int roomHeight = Random.Range( MIN_ROOM_SIZE, areaData.height - 1 );
+		int roomWidth = Random.Range( GameConst.MIN_ROOM_SIZE, areaData.width - 1 );
+		int roomHeight = Random.Range( GameConst.MIN_ROOM_SIZE, areaData.height - 1 );
 
 		int widthRandomRange = areaData.width - 1 - roomWidth;
 		int heightRandomRange = areaData.height - 1 - roomHeight;
@@ -142,11 +145,16 @@ public class MapCreater {
 		int startX = areaData.startPos.x + 1 + Random.Range( 0, widthRandomRange );
 		int startY = areaData.startPos.y + 1 + Random.Range( 0, heightRandomRange );
 
+		RoomData createRoom = new RoomData();
 		for (int y = 0, yMax = roomHeight; y < yMax; y++) {
 			for (int x = 0, xMax = roomWidth; x < xMax; x++) {
-				MapSquareManager.instance.Get( startX + x, startY + y ).SetTerrain( eTerrain.Room );
+				MapSquareData roomSquare = MapSquareManager.instance.Get( startX + x, startY + y );
+				roomSquare.SetTerrain( eTerrain.Room );
+				createRoom.AddSquare( roomSquare.ID );
 			}
 		}
+		_roomSquareList.AddRange( createRoom.squareIDList );
+		MapSquareUtility.AddRoom( createRoom );
 	}
 
 	private static void ConnectRoom() {
@@ -195,7 +203,7 @@ public class MapCreater {
 				MapSquareData squareData = MapSquareManager.instance.Get( startX + x, startY + y );
 				if (squareData.terrain != eTerrain.Wall) continue;
 
-				MapSquareData adjucentSquare = MapSquareManager.instance.Get( squareData.position.ToVectorPos( reverseDir ) );
+				MapSquareData adjucentSquare = MapSquareManager.instance.Get( squareData.squarePosition.ToVectorPos( reverseDir ) );
 				if (adjucentSquare == null || adjucentSquare.terrain != eTerrain.Room) continue;
 
 				targetList.Add( squareData );
@@ -208,9 +216,16 @@ public class MapCreater {
 			startSquare.SetTerrain( eTerrain.Passage );
 			if (_devideLineSquare.Exists( square => square == startSquare.ID )) break;
 
-			startSquare = MapSquareManager.instance.Get( startSquare.position.ToVectorPos( dir ) );
+			startSquare = MapSquareManager.instance.Get( startSquare.squarePosition.ToVectorPos( dir ) );
 		}
 		return startSquare;
+	}
+
+	private static void CreateStair() {
+		if (IsEmpty( _roomSquareList )) return;
+
+		MapSquareData stairSquare = MapSquareManager.instance.Get( _roomSquareList[Random.Range( 0, _roomSquareList.Count )] );
+		stairSquare.SetTerrain( eTerrain.Stair );
 	}
 
 }

@@ -69,6 +69,46 @@ public static class ExpansionMethod {
 		return (eDirectionEight)result;
 	}
 
+	/// <summary>
+	/// ŽÎ‚ß‚©”Û‚©
+	/// </summary>
+	/// <param name="dir"></param>
+	/// <returns></returns>
+	public static bool IsSlant( this eDirectionEight dir ) {
+		switch (dir) {
+			case eDirectionEight.UpRight:
+			case eDirectionEight.DownRight:
+			case eDirectionEight.DownLeft:
+			case eDirectionEight.UpLeft:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	public static eDirectionFour[] Separate( this eDirectionEight dir ) {
+		eDirectionFour[] result = new eDirectionFour[] { eDirectionFour.Invalid, eDirectionFour.Invalid };
+		switch (dir) {
+			case eDirectionEight.UpRight:
+				result[0] = eDirectionFour.Up;
+				result[1] = eDirectionFour.Right;
+				break;
+			case eDirectionEight.DownRight:
+				result[0] = eDirectionFour.Down;
+				result[1] = eDirectionFour.Right;
+				break;
+			case eDirectionEight.DownLeft:
+				result[0] = eDirectionFour.Down;
+				result[1] = eDirectionFour.Left;
+				break;
+			case eDirectionEight.UpLeft:
+				result[0] = eDirectionFour.Up;
+				result[1] = eDirectionFour.Left;
+				break;
+		}
+		return result;
+	}
+
 	public static eDirectionFour ReverseDir( this eDirectionFour dir ) {
 		int result = (int)dir + 2;
 		if (result >= (int)eDirectionFour.Max) result -= (int)eDirectionFour.Max;

@@ -4,40 +4,93 @@
  * @author yaonobu
  * @date 2025/1/4
  */
-
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterBase {
-	private static System.Func<int, CharacterObject> _GetObject = null;
+public abstract class CharacterBase {
+	public Vector2Int squarePosition { get; protected set; } = new Vector2Int( -1, -1 );
 
-	public static void SetObejectGetProcess( System.Func<int, CharacterObject> setProcess ) {
-		_GetObject = setProcess;
-	}
-	public int ID { get; private set; }
-	public Vector2Int position { get; private set; } = Vector2Int.zero;
+	public int masterID { get; protected set; } = -1;
 
-	public int HP { get; private set; } = -1;
+	public int maxHP { get; protected set; } = -1;
+	public int HP { get; protected set; } = -1;
 
-	public void Setup( int setID, Vector2Int setPosition ) {
-		ID = setID;
-		_GetObject( ID )?.Setup();
-		SetSquarePosition( setPosition );
-	}
+	public int attack { get; protected set; } = -1;
+	public int defense { get; protected set; } = -1;
 
-	public void Teardown() {
-		_GetObject( ID )?.Teardown();
-		ID = -1;
-	}
-
-	public void SetSquarePosition( Vector2Int setPosition ) {
-		position = setPosition;
-		_GetObject( ID ).SetSquarePostion();
+	public eDirectionEight direction = eDirectionEight.Invalid;
+	protected void Setup( Entity_CharacterData.Param masterData, MapSquareData squareData ) {
+		SetMaxHP( masterData.HP );
+		SetHP( masterData.HP );
+		attack = masterData.Attack;
+		defense = masterData.Defense;
+		SetSquare( squareData );
+		SetDirection( eDirectionEight.Down );
 	}
 
-	public void SetPosition() {
+	public virtual void Teardown() {
 
 	}
 
+	protected abstract CharacterObject GetObject();
+
+	/// <summary>
+	/// 見た目と情報、両方の変更
+	/// </summary>
+	/// <param name="setPosition"></param>
+	/// <param name="set3DPosition"></param>
+	public void SetSquare( MapSquareData square ) {
+		SetSquarePosition( square );
+		Set3DPosition( square.GetCharacterRoot().position );
+	}
+
+	/// <summary>
+	/// 情報のみの変更
+	/// </summary>
+	/// <param name="setPosition"></param>
+	public virtual void SetSquarePosition( MapSquareData square ) {
+		MapSquareData prevSquare = MapSquareUtility.GetSquareData( squarePosition );
+		if (prevSquare != null) prevSquare.RemoveCharacter();
+
+		squarePosition = square.squarePosition;
+		OnSquare( square.ID );
+	}
+
+	/// <summary>
+	/// 見た目のみの変更
+	/// </summary>
+	/// <param name="set3DPosition"></param>
+	public abstract void Set3DPosition( Vector3 setPosition );
+
+	public virtual void SetMaxHP( int setMaxHP ) {
+		maxHP = setMaxHP;
+	}
+
+	public virtual void SetHP( int setHP ) {
+		HP = Mathf.Max( setHP, 0 );
+	}
+
+	public virtual async UniTask OnEndTurnProcess() {
+
+	}
+
+	public void SetAnimation( eCharacterAnimation setAnim ) {
+		GetObject()?.SetAnimation( setAnim );
+	}
+
+	/// <summary>
+	/// マスに移動した時に行われる内部処理
+	/// </summary>
+	public virtual void OnSquare( int squareID ) {
+
+	}
+
+	public void SetDirection( eDirectionEight setDir ) {
+		if (direction == setDir) return;
+
+		direction = setDir;
+		GetObject()?.SetDirection( direction );
+	}
 }

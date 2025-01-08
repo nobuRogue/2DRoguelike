@@ -12,7 +12,7 @@ using Cysharp.Threading.Tasks;
 
 public class PartTitle : PartBase {
 	public override async UniTask Initialize() {
-
+		await MenuManager.instance.Get<MenuTitle>( "Prefabs/Menu/MenuTitle" ).Initialize();
 	}
 
 	public override async UniTask Setup() {
@@ -20,6 +20,11 @@ public class PartTitle : PartBase {
 	}
 
 	public override async UniTask Execute() {
+		var titleMenu = MenuManager.instance.Get<MenuTitle>();
+		await titleMenu.Open();
+		await titleMenu.Close();
+		if (UserDataHolder.currentData == null) UserDataHolder.SetCurrentData( new UserData() );
+
 		UniTask task = PartManager.instance.TransitionPart( eGamePart.MainGame );
 	}
 
