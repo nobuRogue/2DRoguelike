@@ -35,7 +35,6 @@ public class PlayerCharacter : CharacterBase {
 		Setup( masterData, squareData );
 		GetObject()?.Setup( masterData );
 		SetStamina( GameConst.PLAYER_DEFAULT_STAMINA );
-
 	}
 
 	public override void Teardown() {
@@ -103,7 +102,8 @@ public class PlayerCharacter : CharacterBase {
 		await base.OnEndTurnProcess();
 		if (stamina > 1) {
 			DecrementStamina();
-			ProcessRecovery();
+			if (!IsDead()) ProcessRecovery();
+
 		} else {
 			Damage( 1 );
 			if (IsDead()) await CharacterUtility.DeadCharacter( this );
