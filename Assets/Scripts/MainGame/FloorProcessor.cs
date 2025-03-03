@@ -5,7 +5,6 @@
  * @date 2025/1/4
  */
 using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,6 +67,12 @@ public class FloorProcessor {
 			int enemySquareIndex = Random.Range( 0, candidateSquareList.Count );
 			CharacterManager.instance.UseEnemy( Random.Range( 0, 2 ) == 0 ? 1 : 2, candidateSquareList[enemySquareIndex] );
 			candidateSquareList.RemoveAt( enemySquareIndex );
+		}
+		// アイテム設置
+		for (int i = 0; i < 5; i++) {
+			int itemSquareIndex = Random.Range( 0, candidateSquareList.Count );
+			ItemManager.instance.UseItem( 0, candidateSquareList[itemSquareIndex] );
+			candidateSquareList.RemoveAt( itemSquareIndex );
 		}
 	}
 

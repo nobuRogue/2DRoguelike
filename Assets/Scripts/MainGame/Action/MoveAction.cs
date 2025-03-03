@@ -47,8 +47,8 @@ public class MoveAction {
 	/// <returns></returns>
 	public async UniTask ProcessObject( float duration ) {
 		var moveCharacter = GetCharacter();
-		Vector3 sourcePos = MapSquareManager.instance.Get( _moveData.sourceSquareID ).GetCharacterRoot().position;
-		Vector3 movePos = MapSquareManager.instance.Get( _moveData.moveSquareID ).GetCharacterRoot().position;
+		Vector3 sourcePos = MapSquareManager.instance.Get( _moveData.sourceSquareID ).GetObjectRoot().position;
+		Vector3 movePos = MapSquareManager.instance.Get( _moveData.moveSquareID ).GetObjectRoot().position;
 		float elapsedTime = 0.0f;
 		moveCharacter.SetDirection( _moveData.dir );
 		moveCharacter.SetAnimation( eCharacterAnimation.Walk );

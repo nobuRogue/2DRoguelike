@@ -19,6 +19,8 @@ public class GameConst {
 
 	public static readonly int FLOOR_ENEMY_MAX = 16;
 
+	public static readonly int ITEM_MAX = 256;
+
 	// アクション関連
 	public static readonly int ATTACK_ACTION_ID = 0;    // 通常攻撃のアクションID
 }

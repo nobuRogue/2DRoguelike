@@ -135,3 +135,8 @@ public enum eCharacterAnimation {
 	Damage,
 	Max,
 }
+
+public enum eItemCategory {
+	Potion,
+	Max
+}

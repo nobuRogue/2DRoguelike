@@ -27,6 +27,8 @@ public class UserData {
 	private PlayerCharacter _player = null;
 	private List<EnemyCharacter> _enemyList = null;
 
+	private List<ItemBase> _itemList = null;
+
 	public UserData() {
 		isNewGame = true;
 		SetFloorCount( 1 );
@@ -34,6 +36,8 @@ public class UserData {
 		_squareList = new List<MapSquareData>( squareCount );
 		_roomList = new List<RoomData>( GameConst.AREA_DEVIDE_COUNT + 1 );
 		_enemyList = new List<EnemyCharacter>( GameConst.FLOOR_ENEMY_MAX );
+
+		_itemList = new List<ItemBase>( GameConst.ITEM_MAX );
 	}
 
 	public void SetIsNewGame( bool setIsNewGame ) {
@@ -62,6 +66,10 @@ public class UserData {
 
 	public List<EnemyCharacter> GetEnemyList() {
 		return _enemyList;
+	}
+
+	public List<ItemBase> GetitemList() {
+		return _itemList;
 	}
 
 	public void AddRoom( RoomData addRoom ) {

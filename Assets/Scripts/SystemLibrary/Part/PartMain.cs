@@ -16,6 +16,9 @@ public class PartMain : PartBase {
 	[SerializeField]
 	private CharacterManager _characterManager = null;
 
+	[SerializeField]
+	private ItemManager _itemManager = null;
+
 	private DungeonProcessor _dungeonProcessor = null;
 
 	public override async UniTask Initialize() {
@@ -36,6 +39,7 @@ public class PartMain : PartBase {
 		if (userData.isNewGame) {
 			_squareManager.Initialize();
 			_characterManager.Initialize();
+			_itemManager.Initialize();
 			// ƒvƒŒƒCƒ„[¶¬
 			var squareData = MapSquareManager.instance.Get( 1, 1 );
 			player = CharacterManager.instance.UsePlayer( 0, squareData );

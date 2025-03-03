@@ -43,7 +43,7 @@ public abstract class CharacterBase {
 	/// <param name="set3DPosition"></param>
 	public void SetSquare( MapSquareData square ) {
 		SetSquarePosition( square );
-		Set3DPosition( square.GetCharacterRoot().position );
+		Set3DPosition( square.GetObjectRoot().position );
 	}
 
 	/// <summary>

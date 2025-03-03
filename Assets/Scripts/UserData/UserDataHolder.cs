@@ -12,6 +12,7 @@ public class UserDataHolder {
 		currentData = setData;
 		MapSquareManager.SetGetSquareListProcess( currentData.GetSquareList );
 		CharacterManager.SetCharacterProcess( currentData.GetPlayer, currentData.SetPlayer, currentData.GetEnemyList );
+		ItemManager.SetItemProcess( currentData.GetitemList );
 	}
 
 }

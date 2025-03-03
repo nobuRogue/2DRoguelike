@@ -36,7 +36,7 @@ public class MapSquareData {
 		_GetObject( ID )?.SetTerrain( terrain );
 	}
 
-	public Transform GetCharacterRoot() {
+	public Transform GetObjectRoot() {
 		return _GetObject( ID ).GetCharacterRoot();
 	}
 
