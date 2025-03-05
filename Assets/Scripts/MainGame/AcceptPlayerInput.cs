@@ -73,7 +73,7 @@ public class AcceptPlayerInput {
 	}
 
 	private async UniTask AcceptDirection( PlayerCharacter player ) {
-		if (!Input.GetKey( KeyCode.X )) return;
+		if (!Input.GetKey( KeyCode.LeftShift )) return;
 
 		MapSquareData playerSquare = GetSquareData( player.squarePosition );
 		MapSquareData forwardSquare = GetSquareData( playerSquare.squarePosition.ToVectorPos( player.direction ) );
