@@ -11,10 +11,10 @@ public class ItemObject : MonoBehaviour {
 	[SerializeField]
 	private SpriteRenderer _itemImage = null;
 
-	private static readonly string ITEM_ICON_SPRITE = "Design/Sprites/Item/itemIcons";
+	private static readonly string _ITEM_ICON_SPRITE = "Design/Sprites/Item/itemIcons";
 
 	public void Setup( Entity_ItemData.Param masterData ) {
-		_itemImage.sprite = Resources.LoadAll<Sprite>( ITEM_ICON_SPRITE )[masterData.category];
+		_itemImage.sprite = Resources.LoadAll<Sprite>( _ITEM_ICON_SPRITE )[masterData.category];
 	}
 
 	public void Teardown() {
@@ -25,4 +25,9 @@ public class ItemObject : MonoBehaviour {
 		// オブジェクトの座標を変更する処理
 		transform.position = setPosition;
 	}
+
+	public void UnuseSelf( int ID ) {
+		ItemManager.instance.UnuseObject( ID );
+	}
+
 }

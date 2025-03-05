@@ -16,34 +16,34 @@ MonoBehaviour:
   - name: ItemData
     list:
     - ID: 0
-      nameID: 100
+      nameID: 1000
       category: 0
       effectID: 0
     - ID: 1
-      nameID: 101
+      nameID: 1001
       category: 0
       effectID: 0
     - ID: 2
-      nameID: 102
+      nameID: 1002
       category: 0
       effectID: 0
     - ID: 3
-      nameID: 103
+      nameID: 1003
       category: 0
       effectID: 0
     - ID: 4
-      nameID: 104
+      nameID: 1004
       category: 0
       effectID: 0
     - ID: 5
-      nameID: 105
+      nameID: 1005
       category: 0
       effectID: 0
     - ID: 6
-      nameID: 106
+      nameID: 1006
       category: 0
       effectID: 0
     - ID: 7
-      nameID: 107
+      nameID: 1007
       category: 0
       effectID: 0

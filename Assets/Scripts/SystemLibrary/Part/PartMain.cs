@@ -24,6 +24,7 @@ public class PartMain : PartBase {
 	public override async UniTask Initialize() {
 		await MenuManager.instance.Get<MenuPlayerStatus>( "Prefabs/Menu/MenuPlayerStatus" ).Initialize();
 		await MenuManager.instance.Get<MenuGameOver>( "Prefabs/Menu/MenuGameOver" ).Initialize();
+		await MenuManager.instance.Get<MenuItemList>( "Prefabs/Menu/CanvasItemList" ).Initialize();
 
 		TerrainSpriteAssignor.Initialize();
 		_dungeonProcessor = new DungeonProcessor();

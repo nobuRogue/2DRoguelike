@@ -28,6 +28,8 @@ public class AcceptPlayerInput {
 			bool isAttack = await AcceptAttack( player );
 			if (isAttack) break;
 
+			await AcceptItemList();
+
 			await AcceptDirection( player );
 			await UniTask.DelayFrame( 1 );
 		}
@@ -116,6 +118,14 @@ public class AcceptPlayerInput {
 		return eDirectionEight.Invalid;
 	}
 
+	private async UniTask AcceptItemList() {
+		if (!Input.GetKey( KeyCode.C )) return;
 
+		MenuItemList itemList = MenuManager.instance.Get<MenuItemList>();
+		await itemList.Setup( CharacterUtility.GetPlayer().possessItemList );
+		await itemList.Open();
+		await itemList.AcceptInput();
+		await itemList.Close();
+	}
 
 }

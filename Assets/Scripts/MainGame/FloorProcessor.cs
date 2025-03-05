@@ -69,9 +69,14 @@ public class FloorProcessor {
 			candidateSquareList.RemoveAt( enemySquareIndex );
 		}
 		// アイテム設置
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			int itemSquareIndex = Random.Range( 0, candidateSquareList.Count );
 			ItemManager.instance.UseItem( 0, candidateSquareList[itemSquareIndex] );
+			candidateSquareList.RemoveAt( itemSquareIndex );
+		}
+		for (int i = 0; i < 2; i++) {
+			int itemSquareIndex = Random.Range( 0, candidateSquareList.Count );
+			ItemManager.instance.UseItem( 1, candidateSquareList[itemSquareIndex] );
 			candidateSquareList.RemoveAt( itemSquareIndex );
 		}
 	}

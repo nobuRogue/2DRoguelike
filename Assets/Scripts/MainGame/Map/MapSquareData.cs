@@ -24,6 +24,8 @@ public class MapSquareData {
 	public bool existPlayer { get; private set; } = false;
 	public int enemyID { get; private set; } = -1;
 
+	public int itemID { get; private set; } = -1;
+
 	public void Setup( int setID, Vector2Int setSquarePosition ) {
 		ID = setID;
 		squarePosition = setSquarePosition;
@@ -59,5 +61,13 @@ public class MapSquareData {
 
 	public void SetRangeSpriteVisibility( bool isVisible ) {
 		_GetObject( ID ).SetTrailSpriteVisibility( isVisible );
+	}
+
+	public void SetItem( int setItemID ) {
+		itemID = setItemID;
+	}
+
+	public void RemoveItem() {
+		itemID = -1;
 	}
 }

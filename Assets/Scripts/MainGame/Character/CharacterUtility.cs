@@ -42,4 +42,11 @@ public class CharacterUtility {
 			CharacterManager.instance.UnuseEnemy( enemy );
 		} );
 	}
+
+	public static void AddPlayerItem( int itemID ) {
+		PlayerCharacter player = GetPlayer();
+		ItemBase itemData = ItemManager.instance.GetItem( itemID );
+		player.AddItem( itemID );
+		itemData.AddPlayerItem();
+	}
 }

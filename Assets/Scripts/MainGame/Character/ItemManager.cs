@@ -44,14 +44,14 @@ public class ItemManager : MonoBehaviour {
 			_unuseItemList.Add( new List<ItemBase>( itemCount ) );
 			for (int j = 0; j < itemCount; j++) {
 				// アイテムデータ生成して未使用状態にする
-				UnuseItem( CreateCategoryItem( (eItemCategory)i ) );
+				_unuseItemList[i].Add( CreateCategoryItem( (eItemCategory)i ) );
 			}
 		}
 		_useItemObjectList = new List<ItemObject>( itemCount );
 		_unuseItemObjectList = new List<ItemObject>( itemCount );
 		for (int i = 0; i < itemCount; i++) {
 			// アイテムオブジェクト生成して未使用状態にする
-			UnuseObject( -1, Instantiate( _itemObjectOrigin ) );
+			_unuseItemObjectList.Add( Instantiate( _itemObjectOrigin ) );
 		}
 	}
 
@@ -60,8 +60,6 @@ public class ItemManager : MonoBehaviour {
 	/// </summary>
 	/// <param name="unuseItem"></param>
 	public void UnuseItem( ItemBase unuseItem ) {
-		// マスから取り除く
-		MapSquareUtility.GetSquareData( unuseItem.squarePosition )?.RemoveCharacter();
 		// 使用リストから取り除く
 		int unuseID = unuseItem.ID;
 		List<ItemBase> useItemList = _GetItemDataList();
@@ -71,21 +69,23 @@ public class ItemManager : MonoBehaviour {
 		_unuseItemList[(int)unuseItem.GetItemCategory()].Add( unuseItem );
 		if (!IsEnableIndex( _useItemObjectList, unuseID )) return;
 		// オブジェクトの未使用化
-		UnuseObject( unuseID, _useItemObjectList[unuseID] );
+		UnuseObject( unuseID );
 	}
 
 	/// <summary>
 	/// キャラクターオブジェクトを未使用状態にする
 	/// </summary>
 	/// <param name="unuseItemObject"></param>
-	private void UnuseObject( int unuseID, ItemObject unuseItemObject ) {
+	public void UnuseObject( int unuseID ) {
+		if (!IsEnableIndex( _useItemObjectList, unuseID ) || _useItemObjectList[unuseID] == null) return;
+
+		ItemObject unuseItemObject = _useItemObjectList[unuseID];
 		if (unuseItemObject == null) return;
 
-		List<ItemBase> useItemList = _GetItemDataList();
-		if (IsEnableIndex( useItemList, unuseID )) _useItemObjectList[unuseID] = null;
-
+		_useItemObjectList[unuseID] = null;
 		_unuseItemObjectList.Add( unuseItemObject );
 		unuseItemObject.transform.SetParent( _unuseObjectRoot );
+		unuseItemObject.Teardown();
 	}
 
 	/// <summary>
@@ -97,7 +97,7 @@ public class ItemManager : MonoBehaviour {
 		var itemMaster = ItemMasterUtility.GetItemMaster( masterID );
 		var itemCategory = (eItemCategory)itemMaster.category;
 		ItemBase useItem = GetUsableItem( itemCategory );
-		ItemObject useItemObject = GetUsableItemObject(); ;
+
 		// 使用リストに追加
 		int useID = -1;
 		List<ItemBase> useItemList = _GetItemDataList();
@@ -115,10 +115,15 @@ public class ItemManager : MonoBehaviour {
 		}
 		// 生成したアイテムの初期設定
 		useItemList[useID] = useItem;
-		_useItemObjectList[useID] = useItemObject;
-		useItemObject.transform.SetParent( _useObjectRoot );
+		UseItemObject( useID );
 		useItem.Setup( useID, masterID, squareData );
 		return useItem;
+	}
+
+	public void UseItemObject( int useID ) {
+		ItemObject useItemObject = GetUsableItemObject();
+		_useItemObjectList[useID] = useItemObject;
+		useItemObject.transform.SetParent( _useObjectRoot );
 	}
 
 	private ItemBase GetUsableItem( eItemCategory itemCategory ) {

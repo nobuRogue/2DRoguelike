@@ -60,10 +60,26 @@ public class MoveAction {
 			await UniTask.DelayFrame( 1 );
 		}
 		moveCharacter.Set3DPosition( movePos );
+
+		AfterMoveProcess( moveCharacter );
+	}
+
+	private void AfterMoveProcess( CharacterBase moveCharacter ) {
 		// プレイヤーならフロア移動判定
 		if (!_isPlayer) return;
 
 		var moveSquare = MapSquareManager.instance.Get( _moveData.moveSquareID );
+		ProcessItem( moveSquare );
+		ProcessStair( moveSquare, moveCharacter );
+	}
+
+	private void ProcessItem( MapSquareData moveSquare ) {
+		if (moveSquare.itemID < 0) return;
+
+		CharacterUtility.AddPlayerItem( moveSquare.itemID );
+	}
+
+	private void ProcessStair( MapSquareData moveSquare, CharacterBase moveCharacter ) {
 		if (moveSquare.terrain != eTerrain.Stair) return;
 		// フロア移動する
 		moveCharacter.SetAnimation( eCharacterAnimation.Wait );

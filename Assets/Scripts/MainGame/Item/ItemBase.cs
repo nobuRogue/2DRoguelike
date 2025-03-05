@@ -15,6 +15,9 @@ public abstract class ItemBase {
 
 	public Vector2Int squarePosition { get; protected set; } = new Vector2Int( -1, -1 );
 
+	public bool isPlayerItem = false;
+	public int characterID { get; protected set; } = -1;
+
 	public int ID { get; protected set; } = -1;
 
 	public int masterID { get; protected set; } = -1;
@@ -27,7 +30,9 @@ public abstract class ItemBase {
 	}
 
 	public virtual void Teardown() {
-
+		RemoveCurrentPlace();
+		ID = -1;
+		masterID = -1;
 	}
 
 	/// <summary>
@@ -42,19 +47,20 @@ public abstract class ItemBase {
 	/// <param name="setPosition"></param>
 	/// <param name="set3DPosition"></param>
 	public void SetSquare( MapSquareData square ) {
-		SetSquarePosition( square );
+		RemoveCurrentPlace();
+
 		Set3DPosition( square.GetObjectRoot().position );
+		squarePosition = square.squarePosition;
+		square.SetItem( ID );
 	}
 
-	/// <summary>
-	/// èÓïÒÇÃÇ›ÇÃïœçX
-	/// </summary>
-	/// <param name="setPosition"></param>
-	public virtual void SetSquarePosition( MapSquareData square ) {
-		MapSquareData prevSquare = MapSquareUtility.GetSquareData( squarePosition );
-		if (prevSquare != null) prevSquare.RemoveCharacter();
+	public void RemoveCurrentPlace() {
+		if (squarePosition.x >= 0 || squarePosition.y >= 0) {
+			MapSquareUtility.GetSquareData( squarePosition )?.RemoveItem();
+			_GetItemObject( ID )?.UnuseSelf( ID );
+			return;
+		}
 
-		squarePosition = square.squarePosition;
 	}
 
 	/// <summary>
@@ -62,7 +68,15 @@ public abstract class ItemBase {
 	/// </summary>
 	/// <param name="set3DPosition"></param>
 	public void Set3DPosition( Vector3 setPosition ) {
-		_GetItemObject( ID ).SetPostion( setPosition );
+		var itemObject = _GetItemObject( ID );
+		if (itemObject == null) ItemManager.instance.UseItemObject( ID );
+
+		_GetItemObject( ID )?.SetPostion( setPosition );
+	}
+
+	public void AddPlayerItem() {
+		RemoveCurrentPlace();
+		isPlayerItem = true;
 	}
 
 }

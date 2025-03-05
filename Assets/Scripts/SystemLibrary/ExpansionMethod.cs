@@ -115,4 +115,8 @@ public static class ExpansionMethod {
 
 		return (eDirectionFour)result;
 	}
+
+	public static string ToMessage( this int messageID ) {
+		return MessageMasterUtility.GetMasterMessage( messageID );
+	}
 }
