@@ -476,7 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878111b0e3e28954da012e3f1ffd9a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SystemManager
-  _systemObjectList: []
+  _systemObjectList:
+  - {fileID: 6884245447374580439, guid: d603dfe917dad9b4791e7ee35a8ddc72, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

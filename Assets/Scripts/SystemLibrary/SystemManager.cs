@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +12,21 @@ public class SystemManager : MonoBehaviour {
 	private SystemObject[] _systemObjectList = null;
 
 	void Start() {
-
+		Initialize();
 	}
+
+	private async UniTask Initialize() {
+		// 各システムオブジェクトの生成
+		for (int i = 0; i < _systemObjectList.Length; i++) {
+			SystemObject origin = _systemObjectList[i];
+			if (origin == null) continue;
+			// オブジェクトの生成
+			SystemObject createObj = Instantiate(origin, transform);
+			// 初期化処理
+			await createObj.Initialize();
+		}
+		// タイトルパートの実行
+		UniTask task = PartManager.instance.TransitionPart(eGamePart.Title);
+	}
+
 }
