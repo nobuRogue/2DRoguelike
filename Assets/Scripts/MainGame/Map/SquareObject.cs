@@ -32,10 +32,10 @@ public class SquareObject : MonoBehaviour {
 	/// 地形の設定
 	/// </summary>
 	/// <param name="setTerrain"></param>
-	public void SetTerrain(eTerrain setTerrain) {
+	public void SetTerrain(eTerrain setTerrain, int index = -1) {
 		// データ上の地形変更
 		squareData?.SetTerrain(setTerrain);
-		// TODO:見た目の地形変更
-		_terrainSprite.sprite = TerrainSpriteAssignor.instance.GetTerrainSprite(setTerrain);
+		// 見た目の地形変更
+		_terrainSprite.sprite = TerrainSpriteAssignor.instance.GetTerrainSprite(setTerrain, index);
 	}
 }

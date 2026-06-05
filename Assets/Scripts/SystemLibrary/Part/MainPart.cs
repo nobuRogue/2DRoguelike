@@ -16,6 +16,6 @@ public class MainPart : PartBase {
 	}
 
 	public override async UniTask Execute() {
-
+		MapCreater.instance.CreateMap();
 	}
 }

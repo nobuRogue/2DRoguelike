@@ -24,8 +24,17 @@ public class TerrainSpriteAssignor {
 
 	private List<Sprite[]> _terrainSpriteList = null;
 
+	/// <summary>
+	/// シングルトンなのでコンストラクタを private にしている（クラス外からnew（インスタンス化）できなくする）
+	/// </summary>
 	private TerrainSpriteAssignor() {
-
+		int spriteFileCount = _MAP_SPRITE_NAME_LIST.Length;
+		_terrainSpriteList = new List<Sprite[]>(spriteFileCount);
+		// 全ての使用スプライトの読み込み
+		for (int i = 0; i < spriteFileCount; i++) {
+			Sprite[] loadSpriteList = Resources.LoadAll<Sprite>(_MAP_SPRITE_PATH + _MAP_SPRITE_NAME_LIST[i]);
+			_terrainSpriteList.Add(loadSpriteList);
+		}
 	}
 
 	/// <summary>
@@ -33,9 +42,13 @@ public class TerrainSpriteAssignor {
 	/// </summary>
 	/// <param name="terrain"></param>
 	/// <returns></returns>
-	public Sprite GetTerrainSprite(eTerrain terrain) {
-		Sprite[] terrainSprite = Resources.LoadAll<Sprite>(_MAP_SPRITE_PATH + GetTerrainSpriteName(terrain));
-		return terrainSprite[0];
+	public Sprite GetTerrainSprite(eTerrain terrain, int index = -1) {
+		Sprite[] terrainSprite = _terrainSpriteList[GetTerrainSpriteIndex(terrain)];
+		if (CommonModule.IsEmpty(terrainSprite)) return null;
+		// 無効なインデクスならランダムなスプライトを返す
+		if (!CommonModule.IsEnableIndex(terrainSprite, index)) index = Random.Range(0, terrainSprite.Length);
+
+		return terrainSprite[index];
 	}
 
 	/// <summary>
@@ -43,17 +56,17 @@ public class TerrainSpriteAssignor {
 	/// </summary>
 	/// <param name="terrain"></param>
 	/// <returns></returns>
-	private string GetTerrainSpriteName(eTerrain terrain) {
+	private int GetTerrainSpriteIndex(eTerrain terrain) {
 		switch (terrain) {
 			case eTerrain.Passage:
 			case eTerrain.Room:
-				return _MAP_SPRITE_NAME_LIST[0];
+				return 0;
 			case eTerrain.Wall:
-				return _MAP_SPRITE_NAME_LIST[1];
+				return 1;
 			case eTerrain.Stair:
-				return _MAP_SPRITE_NAME_LIST[2];
+				return 2;
 		}
-		return string.Empty;
+		return 0;
 	}
 
 }
