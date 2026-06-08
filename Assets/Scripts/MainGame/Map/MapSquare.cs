@@ -10,6 +10,11 @@ public class MapSquare {
 	public int posY { get; private set; } = -1;
 	// 地形情報
 	public eTerrain terrain { get; private set; } = eTerrain.Invalid;
+	// 相互参照はダメ
+	// 参照カウンタ式のGC（ガベージコレクション）が呼ばれなくなるから
+	// ガベージコレクション：特定のアルゴリズムに則った自動的な参照の破棄
+	// 参照カウンタ式のGC：参照されている個所をカウントしておく、参照されている数が0になったら解放される
+	public int roomID { get; private set; } = -1;
 
 	/// <summary>
 	/// コンストラクタ
@@ -29,5 +34,13 @@ public class MapSquare {
 	/// <param name="setTerrain"></param>
 	public void SetTerrain(eTerrain setTerrain) {
 		terrain = setTerrain;
+	}
+
+	/// <summary>
+	/// ルームIDのセッタ
+	/// </summary>
+	/// <param name="roomID"></param>
+	public void SetRoomID(int roomID) {
+		this.roomID = roomID;
 	}
 }

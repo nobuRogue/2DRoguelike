@@ -15,8 +15,20 @@ public enum eGamePart {
 /// </summary>
 public enum eTerrain {
 	Invalid = -1,
-	Passage,	// ’Ê˜H
-	Room,		// •”‰®
-	Wall,		// •Ç
-	Stair,		// ŠK’i
+	Passage,    // ’Ê˜H
+	Room,       // •”‰®
+	Wall,       // •Ç
+	Stair,      // ŠK’i
+}
+
+/// <summary>
+/// 4•ûŒü
+/// </summary>
+public enum eDirectionFour {
+	Invalid = -1,
+	Up,
+	Right,
+	Down,
+	Left,
+	Max,
 }

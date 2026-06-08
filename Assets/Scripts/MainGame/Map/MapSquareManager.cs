@@ -13,6 +13,12 @@ public class MapSquareManager : MonoBehaviour {
 	/// </summary>
 	private List<SquareObject> _squareList = null;
 
+	// オブジェクトプーリング：役割を終えたオブジェクトを破棄せずに、プールしておき、再利用する。
+	// 使用中の部屋リスト
+	private List<RoomData> _roomList = null;
+	// 未使用状態の部屋リスト
+	private List<RoomData> _unuseRoomList = null;
+
 	public void Initialize() {
 		instance = this;
 		// マスオブジェクトを必要数生成
@@ -27,6 +33,9 @@ public class MapSquareManager : MonoBehaviour {
 			squareObject.Setup(i, posX, posY);
 			_squareList.Add(squareObject);
 		}
+		// 部屋情報の初期化
+		_roomList = new List<RoomData>();
+		_unuseRoomList = new List<RoomData>();
 	}
 
 	/// <summary>
@@ -66,6 +75,17 @@ public class MapSquareManager : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// 指定座標から指定方向の隣接マスを取得
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="dir"></param>
+	/// <returns></returns>
+	public SquareObject GetToDirSquare(int x, int y, eDirectionFour dir) {
+		return null;
+	}
+
+	/// <summary>
 	/// 座標指定のマス取得
 	/// </summary>
 	/// <param name="x"></param>
@@ -85,6 +105,48 @@ public class MapSquareManager : MonoBehaviour {
 		for (int i = 0; i < _squareList.Count; i++) {
 			action(_squareList[i]);
 		}
+	}
+
+	/// <summary>
+	/// 部屋の追加
+	/// </summary>
+	/// <param name="squareIDList"></param>
+	public void AddRoom(List<int> squareIDList) {
+		// 使用可能な部屋を取得
+		RoomData addRoom = GetUsableRoom();
+		// 使用リストに追加
+		int roomID = _roomList.Count;
+		addRoom.Setup(roomID, squareIDList);
+		_roomList.Add(addRoom);
+	}
+
+	/// <summary>
+	/// 使用可能な部屋取得
+	/// </summary>
+	/// <returns></returns>
+	private RoomData GetUsableRoom() {
+		// 未使用がなければインスタンスを生成
+		if (CommonModule.IsEmpty(_unuseRoomList)) return new RoomData();
+		// 未使用のものがあればそれを返す
+		RoomData result = _unuseRoomList[0];
+		_unuseRoomList.RemoveAt(0);
+		return result;
+	}
+
+	/// <summary>
+	/// 全ての部屋の削除
+	/// </summary>
+	public void RemoveAllRoom() {
+		if (CommonModule.IsEmpty(_roomList)) return;
+
+		for (int i = 0; i < _roomList.Count; i++) {
+			RoomData roomData = _roomList[i];
+			if (roomData == null) continue;
+
+			roomData.Teardown();
+			_unuseRoomList.Add(roomData);
+		}
+		_roomList.Clear();
 	}
 
 }

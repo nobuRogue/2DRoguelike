@@ -38,7 +38,7 @@ public class MapCreater {
 	// エリアのリスト
 	private List<AreaData> _areaList = null;
 	// 分割線のマスのIDリスト
-	private List<int> _devideLineList = null;
+	private List<int> _divideLineList = null;
 	// エリアの分割回数
 	private const int _AREA_DEVIDE_COUNT = 8;
 	// 最小部屋サイズ
@@ -48,9 +48,9 @@ public class MapCreater {
 		// 最初のエリアを生成
 		CreateFirstArea();
 		// エリアを分割
-		DevideAreaFixCount();
+		DivideAreaFixCount();
 		// 部屋の配置
-
+		CreateAllRoom();
 		// 全部屋を連結
 
 		// 階段を置く
@@ -62,7 +62,7 @@ public class MapCreater {
 	/// </summary>
 	private void CreateFirstArea() {
 		_areaList = new List<AreaData>();
-		_devideLineList = new List<int>();
+		_divideLineList = new List<int>();
 		// 全てのマスを壁にする
 		MapSquareManager.instance.ExecuteAllSquare(SetFirstWall);
 
@@ -86,89 +86,89 @@ public class MapCreater {
 		if (x != 1 && x != GameConst.MAP_SQUARE_WIDTH_COUNT - 2 &&
 			y != 1 && y != GameConst.MAP_SQUARE_HEIGHT_COUNT - 2) return;
 		// 分割線マスの追加
-		AddDevideLine(square);
+		AddDivideLine(square);
 	}
 
 	/// <summary>
 	/// 分割線マスへの追加
 	/// </summary>
 	/// <param name="square"></param>
-	private void AddDevideLine(SquareObject square) {
-		_devideLineList.Add(square.squareData.ID);
+	private void AddDivideLine(SquareObject square) {
+		_divideLineList.Add(square.squareData.ID);
 		square.SetTerrain(eTerrain.Wall, 2);
 	}
 
 	/// <summary>
 	/// エリアの分割
 	/// </summary>
-	private void DevideAreaFixCount() {
+	private void DivideAreaFixCount() {
 		for (int i = 0; i < _AREA_DEVIDE_COUNT; i++) {
 			// 幅最大のエリアを取得
-			AreaData devideArea = GetMaxSizeArea();
-			bool isVertical = devideArea.width < devideArea.height;
+			AreaData divideArea = GetMaxSizeArea();
+			bool isVertical = divideArea.width < divideArea.height;
 			// 三項演算子：条件 ? trueの際の処理 : falseの際の処理 ;
-			int maxSize = isVertical ? devideArea.height : devideArea.width;
+			int maxSize = isVertical ? divideArea.height : divideArea.width;
 			// 取得したエリアが分割可能か判定
 			if (maxSize < (_MIN_ROOM_SIZE + 2) * 2 + 1) break;
 			// 取得したエリアを分割
-			DevideArea(devideArea, isVertical);
+			DivideArea(divideArea, isVertical);
 		}
 	}
 
-	private void DevideArea(AreaData devideArea, bool isVertical) {
+	private void DivideArea(AreaData divideArea, bool isVertical) {
 		if (isVertical) {
 			// 水平に線を引いて縦に分割
-			DevideAreaVertical(devideArea);
+			DivideAreaVertical(divideArea);
 		}
 		else {
 			// 垂直に線を引いて横に分割
-			DevideAreaHorizontal(devideArea);
+			DivideAreaHorizontal(divideArea);
 		}
 	}
 
 	/// <summary>
 	/// 水平に線を引いてエリアを縦に分割
 	/// </summary>
-	/// <param name="devideArea"></param>
-	private void DevideAreaVertical(AreaData devideArea) {
+	/// <param name="divideArea"></param>
+	private void DivideAreaVertical(AreaData divideArea) {
 		// 分割位置の決定
-		int randomMax = devideArea.height - (_MIN_ROOM_SIZE + 2) * 2;
-		int devidePos = Random.Range(0, randomMax);
-		devidePos += _MIN_ROOM_SIZE + 2 + devideArea.startY;
+		int randomMax = divideArea.height - (_MIN_ROOM_SIZE + 2) * 2;
+		int dividePos = Random.Range(0, randomMax);
+		dividePos += _MIN_ROOM_SIZE + 2 + divideArea.startY;
 		// 新しいエリアを生成
-		int newAreaHeight = devideArea.startY + devideArea.height - devidePos - 1;
-		int newAreaY = devidePos + 1;
-		AreaData newArea = new AreaData(devideArea.startX, newAreaY, devideArea.width, newAreaHeight);
+		int newAreaHeight = divideArea.startY + divideArea.height - dividePos - 1;
+		int newAreaY = dividePos + 1;
+		AreaData newArea = new AreaData(divideArea.startX, newAreaY, divideArea.width, newAreaHeight);
 		_areaList.Add(newArea);
 		// 既存エリアの修正
-		devideArea.height = devidePos - devideArea.startY;
+		divideArea.height = dividePos - divideArea.startY;
 		// 分割線マスの追加
-		for (int x = 0; x < devideArea.width; x++) {
-			SquareObject square = MapSquareManager.instance.GetSquare(devideArea.startX + x, devidePos);
-			AddDevideLine(square);
+		for (int x = 0; x < divideArea.width; x++) {
+			SquareObject square = MapSquareManager.instance.GetSquare(divideArea.startX + x, dividePos);
+			AddDivideLine(square);
 		}
 	}
 
 	/// <summary>
 	/// 垂直に線を引いてエリアを横に分割
 	/// </summary>
-	/// <param name="devideArea"></param>
-	private void DevideAreaHorizontal(AreaData devideArea) {
+	/// <param name="divideArea"></param>
+	private void DivideAreaHorizontal(AreaData divideArea) {
 		// 分割位置の決定
-		int randomMax = devideArea.width - (_MIN_ROOM_SIZE + 2) * 2;
-		int devidePos = Random.Range(0, randomMax);
-		devidePos += _MIN_ROOM_SIZE + 2 + devideArea.startX;
+		int randomMax = divideArea.width - (_MIN_ROOM_SIZE + 2) * 2;
+		int dividePos = Random.Range(0, randomMax);
+		dividePos += _MIN_ROOM_SIZE + 2 + divideArea.startX;
 		// 新しいエリアを生成
-		int newAreaWidth = devideArea.startX + devideArea.width - devidePos - 1;
-		int newAreaX = devidePos + 1;
-		AreaData newArea = new AreaData(newAreaX, devideArea.startY, newAreaWidth, devideArea.height);
+		int newAreaWidth = divideArea.startX + divideArea.width - dividePos - 1;
+		int newAreaX = dividePos + 1;
+		AreaData newArea = new AreaData(newAreaX, divideArea.startY, newAreaWidth, divideArea.height);
 		_areaList.Add(newArea);
 		// 既存エリアの修正
-		devideArea.width = devidePos - devideArea.startX;
+		divideArea.width = dividePos - divideArea.startX;
 		// 分割線マスの追加
-		for (int y = 0; y < devideArea.height; y++) {
-			SquareObject square = MapSquareManager.instance.GetSquare(devidePos, devideArea.startY + y);
-			AddDevideLine(square);
+		for (int y = 0; y < divideArea.height; y++) {
+			SquareObject square = MapSquareManager.instance.GetSquare(dividePos, divideArea.startY + y);
+			AddDivideLine(square);
 		}
 	}
 
@@ -193,6 +193,92 @@ public class MapCreater {
 			}
 		}
 		return result;
+	}
+
+	/// <summary>
+	/// 全てのエリアに部屋を生成
+	/// </summary>
+	private void CreateAllRoom() {
+		for (int i = 0; i < _areaList.Count; i++) {
+			CreateRoom(_areaList[i]);
+		}
+	}
+
+	/// <summary>
+	/// エリアへの部屋配置
+	/// </summary>
+	/// <param name="area"></param>
+	private void CreateRoom(AreaData area) {
+		if (area == null) return;
+		// 部屋のサイズ決定
+		int roomWidth = Random.Range(_MIN_ROOM_SIZE, area.width - 1);
+		int roomHeight = Random.Range(_MIN_ROOM_SIZE, area.height - 1);
+		// 部屋の位置決定
+		int xRandomRange = area.width - roomWidth;
+		int yRandomRange = area.height - roomHeight;
+		int startX = area.startX + Random.Range(1, xRandomRange);
+		int startY = area.startY + Random.Range(1, yRandomRange);
+		// 部屋の生成
+		List<int> roomIDList = new List<int>(roomWidth * roomHeight);
+		for (int y = 0; y < roomHeight; y++) {
+			for (int x = 0; x < roomWidth; x++) {
+				SquareObject square = MapSquareManager.instance.GetSquare(startX + x, startY + y);
+				if (square == null) continue;
+				// マスを部屋地形に変更
+				square.SetTerrain(eTerrain.Room);
+				roomIDList.Add(square.squareData.ID);
+			}
+		}
+		MapSquareManager.instance.AddRoom(roomIDList);
+	}
+
+	/// <summary>
+	/// すべての部屋を繋げる
+	/// </summary>
+	private void ConnectAllRoom() {
+		// 掘削方向の決定
+		eDirectionFour digDir = (eDirectionFour)Random.Range(0, (int)eDirectionFour.Max);
+		for (int i = 0; i < _areaList.Count - 1; i++) {
+			// エリア1を分割線まで掘る
+			AreaData area1 = _areaList[i];
+
+			// 掘削方向の決定
+
+			// エリア2を分割線まで掘る
+			AreaData area2 = _areaList[i + 1];
+
+			// 分割線内で通路を繋げる
+
+			// 掘削方向の決定
+
+		}
+	}
+
+	/// <summary>
+	/// 指定エリアを指定方向に分割線まで掘る
+	/// </summary>
+	/// <param name="area"></param>
+	/// <param name="dir"></param>
+	private void DigToDivideLine(AreaData area, eDirectionFour dir) {
+		// 掘削開始マスの決定
+		// 掘削方向の逆方向を取得
+		eDirectionFour reverseDir = dir.ReverseDir();
+		// エリアの全てのマスから壁かつ、掘削と逆方向の隣接マスが部屋マスのマスを集約
+		int startX = area.startX;
+		int startY = area.startY;
+		for (int y = 0; y < area.height; y++) {
+			for (int x = 0; x < area.width; x++) {
+				SquareObject square = MapSquareManager.instance.GetSquare(startX + x, startY + y);
+				// 壁でなければ処理しない
+				if (square == null || square.squareData.terrain != eTerrain.Wall) continue;
+				// 掘削方向の逆の隣接マスを取得
+
+			}
+		}
+
+		// ↑からランダムに1マス抽選
+		// 分割線までの掘削
+
 	}
 
 }
