@@ -52,7 +52,7 @@ public class MapCreater {
 		// 部屋の配置
 		CreateAllRoom();
 		// 全部屋を連結
-
+		ConnectAllRoom();
 		// 階段を置く
 
 	}
@@ -241,16 +241,19 @@ public class MapCreater {
 		for (int i = 0; i < _areaList.Count - 1; i++) {
 			// エリア1を分割線まで掘る
 			AreaData area1 = _areaList[i];
-
+			DigToDivideLine(area1, digDir);
 			// 掘削方向の決定
-
+			digDir = (eDirectionFour)Random.Range(0, (int)eDirectionFour.Max);
 			// エリア2を分割線まで掘る
 			AreaData area2 = _areaList[i + 1];
-
+			DigToDivideLine(area2, digDir);
 			// 分割線内で通路を繋げる
 
 			// 掘削方向の決定
+			int digIndex = (int)digDir + Random.Range(1, (int)eDirectionFour.Max);
+			if (digIndex >= (int)eDirectionFour.Max) digIndex -= (int)eDirectionFour.Max;
 
+			digDir = (eDirectionFour)digIndex;
 		}
 	}
 
@@ -263,22 +266,37 @@ public class MapCreater {
 		// 掘削開始マスの決定
 		// 掘削方向の逆方向を取得
 		eDirectionFour reverseDir = dir.ReverseDir();
+		List<SquareObject> targetList = new List<SquareObject>();
 		// エリアの全てのマスから壁かつ、掘削と逆方向の隣接マスが部屋マスのマスを集約
 		int startX = area.startX;
 		int startY = area.startY;
 		for (int y = 0; y < area.height; y++) {
 			for (int x = 0; x < area.width; x++) {
-				SquareObject square = MapSquareManager.instance.GetSquare(startX + x, startY + y);
+				int squareX = startX + x;
+				int squareY = startY + y;
+				SquareObject square = MapSquareManager.instance.GetSquare(squareX, squareY);
 				// 壁でなければ処理しない
 				if (square == null || square.squareData.terrain != eTerrain.Wall) continue;
 				// 掘削方向の逆の隣接マスを取得
+				SquareObject dirSquare = MapSquareManager.instance.GetToDirSquare(squareX, squareY, reverseDir);
+				if (dirSquare == null || dirSquare.squareData.terrain != eTerrain.Room) continue;
 
+				targetList.Add(square);
 			}
 		}
-
+		if (CommonModule.IsEmpty(targetList)) return;
 		// ↑からランダムに1マス抽選
+		SquareObject currentSquare = targetList[Random.Range(0, targetList.Count)];
 		// 分割線までの掘削
-
+		while (true) {
+			// currentSquareを通路マスにする
+			currentSquare.SetTerrain(eTerrain.Passage);
+			// 分割線マスなら終了
+			if (_divideLineList.Exists(squareID => squareID == currentSquare.squareData.ID)) break;
+			// currentSquareを掘削方向の隣接マスにする
+			currentSquare = MapSquareManager.instance.GetToDirSquare(currentSquare.squareData.posX, currentSquare.squareData.posY, dir);
+		}
 	}
+
 
 }

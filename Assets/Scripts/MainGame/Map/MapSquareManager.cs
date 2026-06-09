@@ -82,7 +82,33 @@ public class MapSquareManager : MonoBehaviour {
 	/// <param name="dir"></param>
 	/// <returns></returns>
 	public SquareObject GetToDirSquare(int x, int y, eDirectionFour dir) {
-		return null;
+		// 隣接座標取得
+		ToDirPosition(ref x, ref y, dir);
+		// 座標指定のマス取得
+		return GetSquare(x, y);
+	}
+
+	/// <summary>
+	/// 指定座標の指定方向への隣接座標取得
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="dir"></param>
+	private void ToDirPosition(ref int x, ref int y, eDirectionFour dir) {
+		switch (dir) {
+			case eDirectionFour.Up:
+				y++;
+				break;
+			case eDirectionFour.Right:
+				x++;
+				break;
+			case eDirectionFour.Down:
+				y--;
+				break;
+			case eDirectionFour.Left:
+				x--;
+				break;
+		}
 	}
 
 	/// <summary>
