@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class RouteSearcher {
@@ -40,8 +41,9 @@ public class RouteSearcher {
 		public eDirectionFour prevDir { get; private set; } = eDirectionFour.Invalid;
 		// 親ノード
 		public DistanceNodeManhattan rootNode { get; private set; } = null;
-		public DistanceNodeManhattan(int distance, int squareID) : base(distance, squareID) {
-
+		public DistanceNodeManhattan(int distance, int squareID, eDirectionFour dir, DistanceNodeManhattan rootNode) : base(distance, squareID) {
+			prevDir = dir;
+			this.rootNode = rootNode;
 		}
 
 		// スコア取得処理
@@ -62,19 +64,19 @@ public class RouteSearcher {
 		// ゴールノード
 		public DistanceNodeManhattan goalNode = null;
 		// オープン済みのノード
-		public List<DistanceNodeManhattan> openNodeList = null;
+		public List<DistanceNodeManhattan> openList = null;
 		// クローズ済みのノード
 		public List<DistanceNodeManhattan> closeList = null;
 
 		public DistanceNodeManhattanTable() {
-			openNodeList = new List<DistanceNodeManhattan>();
+			openList = new List<DistanceNodeManhattan>();
 			closeList = new List<DistanceNodeManhattan>();
 		}
 
 		// 初期化
 		public void Clear() {
 			goalNode = null;
-			openNodeList.Clear();
+			openList.Clear();
 			closeList.Clear();
 		}
 	}
@@ -93,8 +95,7 @@ public class RouteSearcher {
 		// ゴールノードにたどり着くまでノードをオープンする
 		OpenNodeToGoalManhattan(startSquareID, goalSquareID, CanPass);
 		// ゴールノードからスタートまで親ノードを辿って経路を生成
-
-		return null;
+		return CreateRouteManhattan();
 	}
 
 	/// <summary>
@@ -109,7 +110,7 @@ public class RouteSearcher {
 			_manhattanTable.Clear();
 		}
 		// スタートノードの生成
-		_manhattanTable.openNodeList.Add(new DistanceNodeManhattan(0, startSquareID));
+		_manhattanTable.openList.Add(new DistanceNodeManhattan(0, startSquareID, eDirectionFour.Invalid, null));
 		// ゴール座標の取得
 		SquareObject goalSquare = MapSquareManager.instance.GetSquare(goalSquareID);
 		if (goalSquare == null || goalSquare.squareData == null) return;
@@ -118,19 +119,92 @@ public class RouteSearcher {
 		// ゴールをオープンするまでループ
 		while (_manhattanTable.goalNode == null) {
 			// スコア最小のノードを探す
-
+			DistanceNodeManhattan minScoreNode = GetMinScoreNodeManhattan(goalX, goalY);
 			// スコア最小のノードが見つからなければ終わり
-
+			if (minScoreNode == null) break;
 			// 周りをオープン
-
+			OpenNodeAroundManhattan(minScoreNode, goalSquareID, CanPass);
 			// クローズする
-
+			_manhattanTable.openList.Remove(minScoreNode);
+			_manhattanTable.closeList.Add(minScoreNode);
 		}
 	}
 
-	private DistanceNodeManhattan GetMinScoreNode(int goalX, int goalY) {
+	// 最少スコアのノードを返す
+	private DistanceNodeManhattan GetMinScoreNodeManhattan(int goalX, int goalY) {
+		if (CommonModule.IsEmpty(_manhattanTable.openList)) return null;
 
-		return null;
+		int minScore = -1;
+		DistanceNodeManhattan result = null;
+		List<DistanceNodeManhattan> openList = _manhattanTable.openList;
+		for (int i = 0; i < openList.Count; i++) {
+			DistanceNodeManhattan node = openList[i];
+			if (node == null) continue;
+			// 最少スコアチェック
+			int nodeScore = node.GetScore(goalX, goalY);
+			if (result != null && minScore <= nodeScore) continue;
+
+			result = node;
+			minScore = nodeScore;
+		}
+		return result;
+	}
+
+	/// <summary>
+	/// 指定ノードの周囲4マスをオープンする
+	/// </summary>
+	private void OpenNodeAroundManhattan(DistanceNodeManhattan baseNode, int goalSquareID, System.Func<MapSquare, bool> CanPass) {
+		if (baseNode == null) return;
+		// オープンするノードの実コスト決定
+		int distance = baseNode.distance + 1;
+
+		SquareObject square = MapSquareManager.instance.GetSquare(baseNode.squareID);
+		int baseX = square.squareData.posX, baseY = square.squareData.posY;
+		// 周囲4マスをオープンする
+		for (int i = 0; i < (int)eDirectionFour.Max; i++) {
+			eDirectionFour dir = (eDirectionFour)i;
+			// 指定ノードから指定方向に隣接するマスを取得
+			SquareObject openSquare = MapSquareManager.instance.GetToDirSquare(baseX, baseY, dir);
+			if (openSquare == null) continue;
+			// 既にクローズしたマスなら処理しない	ラムダ式
+			if (_manhattanTable.closeList.Exists(node => node.squareID == openSquare.squareData.ID)) continue;
+			// 既にオープンしているマスも処理しない
+			if (_manhattanTable.openList.Exists(node => node.squareID == openSquare.squareData.ID)) continue;
+			// 通行不可のマスなら処理しない
+			if (!CanPass(openSquare.squareData)) continue;
+			// ノードのオープン
+			DistanceNodeManhattan addNode = new DistanceNodeManhattan(distance, openSquare.squareData.ID, dir, baseNode);
+			_manhattanTable.openList.Add(addNode);
+			// ゴール判定
+			if (openSquare.squareData.ID != goalSquareID) continue;
+			// ゴールをオープンしたら終わり
+			_manhattanTable.goalNode = addNode;
+			return;
+		}
+	}
+
+	/// <summary>
+	/// 経路生成
+	/// </summary>
+	/// <returns></returns>
+	private List<ManhattanMoveData> CreateRouteManhattan() {
+		// ゴールに辿り着けていないか判定
+		if (_manhattanTable == null || _manhattanTable.goalNode == null) return null;
+		// 経路用のリストを生成
+		int routeCount = _manhattanTable.goalNode.distance;
+		List<ManhattanMoveData> route = new List<ManhattanMoveData>();
+		for (int i = 0; i < routeCount; i++) {
+			route.Add(null);
+		}
+		// ゴールから遡って経路を生成
+		DistanceNodeManhattan currentNode = _manhattanTable.goalNode;
+		for (int i = routeCount - 1; i >= 0; i--) {
+			ManhattanMoveData moveData = new ManhattanMoveData(currentNode.rootNode.squareID, currentNode.squareID, currentNode.prevDir);
+			route[i] = moveData;
+			// 親ノードをを現在のノードにする
+			currentNode = currentNode.rootNode;
+		}
+		return route;
 	}
 
 }

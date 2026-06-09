@@ -238,17 +238,17 @@ public class MapCreater {
 	private void ConnectAllRoom() {
 		// 掘削方向の決定
 		eDirectionFour digDir = (eDirectionFour)Random.Range(0, (int)eDirectionFour.Max);
-		for (int i = 0; i < _areaList.Count - 1; i++) {
+		for (int i = 0; i < _areaList.Count; i++) {
 			// エリア1を分割線まで掘る
 			AreaData area1 = _areaList[i];
-			DigToDivideLine(area1, digDir);
+			int startID = DigToDivideLine(area1, digDir);
 			// 掘削方向の決定
 			digDir = (eDirectionFour)Random.Range(0, (int)eDirectionFour.Max);
 			// エリア2を分割線まで掘る
 			AreaData area2 = _areaList[i + 1];
-			DigToDivideLine(area2, digDir);
+			int goalID = DigToDivideLine(area2, digDir);
 			// 分割線内で通路を繋げる
-
+			ConnectInDivideLine(startID, goalID);
 			// 掘削方向の決定
 			int digIndex = (int)digDir + Random.Range(1, (int)eDirectionFour.Max);
 			if (digIndex >= (int)eDirectionFour.Max) digIndex -= (int)eDirectionFour.Max;
@@ -262,7 +262,7 @@ public class MapCreater {
 	/// </summary>
 	/// <param name="area"></param>
 	/// <param name="dir"></param>
-	private void DigToDivideLine(AreaData area, eDirectionFour dir) {
+	private int DigToDivideLine(AreaData area, eDirectionFour dir) {
 		// 掘削開始マスの決定
 		// 掘削方向の逆方向を取得
 		eDirectionFour reverseDir = dir.ReverseDir();
@@ -284,7 +284,7 @@ public class MapCreater {
 				targetList.Add(square);
 			}
 		}
-		if (CommonModule.IsEmpty(targetList)) return;
+		if (CommonModule.IsEmpty(targetList)) return -1;
 		// ↑からランダムに1マス抽選
 		SquareObject currentSquare = targetList[Random.Range(0, targetList.Count)];
 		// 分割線までの掘削
@@ -296,7 +296,36 @@ public class MapCreater {
 			// currentSquareを掘削方向の隣接マスにする
 			currentSquare = MapSquareManager.instance.GetToDirSquare(currentSquare.squareData.posX, currentSquare.squareData.posY, dir);
 		}
+		return currentSquare.squareData.ID;
 	}
 
+	/// <summary>
+	/// スタートからゴールまで分割線内を掘る
+	/// </summary>
+	/// <param name="startID"></param>
+	/// <param name="goalID"></param>
+	private void ConnectInDivideLine(int startID, int goalID) {
+		// 分割線マス限定の経路探索
+		List<ManhattanMoveData> route = RouteSearcher.instance.RouteSearchManhattan(startID, goalID, IsDivideLine);
+		if (CommonModule.IsEmpty(route)) return;
+		// 経路のマスをすべて通路にする
+		for (int i = 0; i < route.Count; i++) {
+			ManhattanMoveData moveData = route[i];
+			SquareObject square = MapSquareManager.instance.GetSquare(moveData.targetSquareID);
+			if (square == null) continue;
+
+			square.SetTerrain(eTerrain.Passage);
+		}
+	}
+
+	/// <summary>
+	/// 分割線のマスか否か判定
+	/// </summary>
+	/// <param name="square"></param>
+	/// <returns></returns>
+	private bool IsDivideLine(MapSquare square) {
+		// 分割線マスリストに含まれているか
+		return _divideLineList.Exists(squareID => square.ID == squareID);
+	}
 
 }
