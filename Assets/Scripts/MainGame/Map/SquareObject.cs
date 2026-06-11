@@ -6,9 +6,12 @@ using UnityEngine;
 public class SquareObject : MonoBehaviour {
 	// 座標変換用係数
 	private static readonly float _SQUARE_SIZE_RATIO = 0.32f;
-
+	// 地形のスプライト
 	[SerializeField]
 	private SpriteRenderer _terrainSprite = null;
+	// キャラクター配置用のルートオブジェクト
+	[SerializeField]
+	private Transform _characterRoot = null;
 
 	public MapSquare squareData = null;
 
@@ -38,4 +41,11 @@ public class SquareObject : MonoBehaviour {
 		// 見た目の地形変更
 		_terrainSprite.sprite = TerrainSpriteAssignor.instance.GetTerrainSprite(setTerrain, index);
 	}
+
+	/// <summary>
+	/// キャラクター用ルートオブジェクト取得
+	/// </summary>
+	/// <returns></returns>
+	public Transform GetCharacterRoot() { return _characterRoot; }
+
 }

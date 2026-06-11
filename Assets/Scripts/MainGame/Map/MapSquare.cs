@@ -15,6 +15,8 @@ public class MapSquare {
 	// ガベージコレクション：特定のアルゴリズムに則った自動的な参照の破棄
 	// 参照カウンタ式のGC：参照されている個所をカウントしておく、参照されている数が0になったら解放される
 	public int roomID { get; private set; } = -1;
+	// マスに居るキャラクターのID
+	public int characterID { get; private set; } = -1;
 
 	/// <summary>
 	/// コンストラクタ
@@ -43,4 +45,19 @@ public class MapSquare {
 	public void SetRoomID(int roomID) {
 		this.roomID = roomID;
 	}
+
+	/// <summary>
+	/// マスに居るキャラクターの設定
+	/// </summary>
+	public void SetCharacter(int characterID) {
+		this.characterID = characterID;
+	}
+
+	/// <summary>
+	/// マスに居るキャラクターの削除
+	/// </summary>
+	public void RemoveCharacter() {
+		characterID = -1;
+	}
+
 }

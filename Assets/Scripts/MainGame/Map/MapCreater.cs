@@ -75,7 +75,7 @@ public class MapCreater {
 	/// </summary>
 	/// <param name="square"></param>
 	private void SetFirstWall(SquareObject square) {
-		square.SetTerrain(eTerrain.Wall, 0);
+		square.SetTerrain(eTerrain.Wall);
 		// 最初の分割線マスを追加
 		int x = square.squareData.posX;
 		int y = square.squareData.posY;
@@ -95,7 +95,7 @@ public class MapCreater {
 	/// <param name="square"></param>
 	private void AddDivideLine(SquareObject square) {
 		_divideLineList.Add(square.squareData.ID);
-		square.SetTerrain(eTerrain.Wall, 2);
+		square.SetTerrain(eTerrain.Wall);
 	}
 
 	/// <summary>
@@ -238,7 +238,7 @@ public class MapCreater {
 	private void ConnectAllRoom() {
 		// 掘削方向の決定
 		eDirectionFour digDir = (eDirectionFour)Random.Range(0, (int)eDirectionFour.Max);
-		for (int i = 0; i < _areaList.Count; i++) {
+		for (int i = 0; i < _areaList.Count - 1; i++) {
 			// エリア1を分割線まで掘る
 			AreaData area1 = _areaList[i];
 			int startID = DigToDivideLine(area1, digDir);
