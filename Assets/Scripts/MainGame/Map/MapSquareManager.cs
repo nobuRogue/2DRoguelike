@@ -69,6 +69,7 @@ public class MapSquareManager : MonoBehaviour {
 	/// <param name="ID"></param>
 	/// <returns></returns>
 	public SquareObject GetSquare(int ID) {
+		// 有効なインデクスか判定
 		if (!CommonModule.IsEnableIndex(_squareList, ID)) return null;
 
 		return _squareList[ID];
@@ -85,6 +86,19 @@ public class MapSquareManager : MonoBehaviour {
 		// 隣接座標取得
 		ToDirPosition(ref x, ref y, dir);
 		// 座標指定のマス取得
+		return GetSquare(x, y);
+	}
+
+	/// <summary>
+	/// 指定座標から指定方向の隣接マスを取得
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="dir"></param>
+	/// <returns></returns>
+	public SquareObject GetToDirSquare(int x, int y, eDirectionEight dir) {
+		// 隣接座標取得
+		ToDirPosition(ref x, ref y, dir);
 		return GetSquare(x, y);
 	}
 
@@ -106,6 +120,45 @@ public class MapSquareManager : MonoBehaviour {
 				y--;
 				break;
 			case eDirectionFour.Left:
+				x--;
+				break;
+		}
+	}
+
+	/// <summary>
+	/// 指定座標の指定方向への隣接座標取得
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="dir"></param>
+	private void ToDirPosition(ref int x, ref int y, eDirectionEight dir) {
+		switch (dir) {
+			case eDirectionEight.Up:
+				y++;
+				break;
+			case eDirectionEight.UpRight:
+				y++;
+				x++;
+				break;
+			case eDirectionEight.Right:
+				x++;
+				break;
+			case eDirectionEight.DownRight:
+				y--;
+				x++;
+				break;
+			case eDirectionEight.Down:
+				y--;
+				break;
+			case eDirectionEight.DownLeft:
+				y--;
+				x--;
+				break;
+			case eDirectionEight.Left:
+				x--;
+				break;
+			case eDirectionEight.UpLeft:
+				y++;
 				x--;
 				break;
 		}

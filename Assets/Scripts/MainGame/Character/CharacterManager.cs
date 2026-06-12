@@ -75,5 +75,54 @@ public class CharacterManager : MonoBehaviour {
 		player.SetSquare(MapSquareManager.instance.GetSquare(squareID));
 	}
 
+	/// <summary>
+	/// キャラクター削除
+	/// </summary>
+	/// <param name="ID"></param>
+	public void DeleteCharacter(CharacterObject deleteCharacter) {
+		if (deleteCharacter == null) return;
+		// 使用リストから取り除く
+		_useList[deleteCharacter.characterData.ID] = null;
+		// 片付け処理を呼ぶ
+		deleteCharacter.Teardown();
+		// 未使用リストに追加
+		if (deleteCharacter.characterData.IsPlayer()) {
+			_unusePlayerList.Add(deleteCharacter);
+		}
+		else {
+			_unuseEnemyList.Add(deleteCharacter);
+		}
+	}
+
+	/// <summary>
+	/// ID指定のキャラ取得
+	/// </summary>
+	/// <param name="ID"></param>
+	/// <returns></returns>
+	public CharacterObject GetCharacter(int ID) {
+		// 有効なインデクスか判定
+		if (!CommonModule.IsEnableIndex(_useList, ID)) return null;
+
+		return _useList[ID];
+	}
+
+	/// <summary>
+	/// プレイヤー取得
+	/// </summary>
+	/// <returns></returns>
+	public CharacterObject GetPlayer() {
+		if (CommonModule.IsEmpty(_useList)) return null;
+
+		for (int i = 0; i < _useList.Count; i++) {
+			CharacterObject character = _useList[i];
+			if (character == null) continue;
+			// プレイヤーでなければcontinue
+			if (!character.characterData.IsPlayer()) continue;
+
+			return character;
+		}
+		// プレイヤーが見つからないのでnullを返す
+		return null;
+	}
 
 }

@@ -7,7 +7,10 @@ using UnityEngine;
 public class MainPart : PartBase {
 	// マップマス管理クラス
 	[SerializeField]
-	private MapSquareManager mapManager = null;
+	private MapSquareManager _mapManager = null;
+	// キャラクター管理クラス
+	[SerializeField]
+	private CharacterManager _characterManager = null;
 
 	// ダンジョン実行
 	private DungeonProcessor _dungeonProcessor = null;
@@ -15,10 +18,18 @@ public class MainPart : PartBase {
 	public override async UniTask Initialize() {
 		await base.Initialize();
 		// マップ初期化
-		mapManager?.Initialize();
+		_mapManager?.Initialize();
+		// キャラクター初期化
+		_characterManager?.Initialize();
 		// ダンジョン実行処理初期化
 		_dungeonProcessor = new DungeonProcessor();
 		_dungeonProcessor.Initialize();
+	}
+
+	public override async UniTask Setup() {
+		await base.Setup();
+		// プレイヤーの生成
+		CharacterManager.instance.CreatePlayer(0, 0);
 	}
 
 	public override async UniTask Execute() {
@@ -36,4 +47,11 @@ public class MainPart : PartBase {
 				break;
 		}
 	}
+
+	public override async UniTask Teardown() {
+		await base.Teardown();
+		// プレイヤー破棄
+		CharacterManager.instance.DeleteCharacter(CharacterManager.instance.GetPlayer());
+	}
+
 }

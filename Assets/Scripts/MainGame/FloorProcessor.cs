@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// 1フロア実行
@@ -15,6 +16,7 @@ public class FloorProcessor {
 	/// </summary>
 	public void Initialize() {
 		_turnProcessor = new TurnProcessor();
+		_turnProcessor.Initialize();
 	}
 
 	/// <summary>
@@ -33,12 +35,27 @@ public class FloorProcessor {
 		TeardownFloor();
 	}
 
+
+
 	/// <summary>
 	/// フロア生成、準備
 	/// </summary>
 	private void SetupFloor() {
 		// ランダムフロア生成
 		MapCreater.instance.CreateMap();
+		// ランダムな部屋マスにプレイヤーを配置
+		List<SquareObject> roomSquareList = new List<SquareObject>();
+		// ラムダ式を用いた関数の実装
+		MapSquareManager.instance.ExecuteAllSquare(square => {
+			if (square == null || square.squareData.terrain != eTerrain.Room) return;
+
+			roomSquareList.Add(square);
+		});
+		if (!CommonModule.IsEmpty(roomSquareList)) {
+			SquareObject playerSquare = roomSquareList[Random.Range(0, roomSquareList.Count)];
+			CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
+		}
+
 		// フロア継続状態に設定
 		_endReason = eFloorEndReason.Invalid;
 	}

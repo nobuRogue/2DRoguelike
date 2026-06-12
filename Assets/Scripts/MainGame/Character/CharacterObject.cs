@@ -9,7 +9,7 @@ public class CharacterObject : MonoBehaviour {
 	[SerializeField]
 	private SpriteRenderer _characterSprite = null;
 	// キャラクターの情報
-	private CharacterBase characterData = null;
+	public CharacterBase characterData { get; private set; } = null;
 
 	/// <summary>
 	/// 初期化
