@@ -181,7 +181,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -478,6 +478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SystemManager
   _systemObjectList:
   - {fileID: 6884245447374580439, guid: d603dfe917dad9b4791e7ee35a8ddc72, type: 3}
+  - {fileID: 1946661862012463992, guid: 6b3573910b4211c498206ce823ce89c2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

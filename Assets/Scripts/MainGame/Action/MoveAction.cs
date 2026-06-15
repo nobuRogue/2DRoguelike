@@ -19,7 +19,7 @@ public class MoveAction {
 		_moveData = moveData;
 		// 内部的な移動
 		character.characterData.SetSquare(MapSquareManager.instance.GetSquare(moveData.targetSquareID));
-		character.characterData.SetDirection(moveData.dir);
+		character.SetDirection(moveData.dir);
 	}
 
 	/// <summary>
@@ -34,6 +34,8 @@ public class MoveAction {
 		Vector3 goalPos = goalSquare.GetCharacterRoot().position;
 		// 指定時間かけて補完移動
 		float elapsedSec = 0.0f;
+		// 歩行アニメーションに切り替え
+		_character.SetAnimation(eCharacterAnimation.Walk);
 		while (elapsedSec < durationSec) {
 			// 経過時間の累積
 			elapsedSec += Time.deltaTime;

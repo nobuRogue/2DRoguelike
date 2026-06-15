@@ -23,6 +23,10 @@ public class TurnProcessor {
 	/// </summary>
 	/// <returns></returns>
 	public async UniTask Execute() {
+		// 継続移動の判定
+
+		// 全キャラクターを待機アニメーションに戻す
+		
 		// プレイヤーの入力受付、行動実行
 		await _acceptPlayer.AcceptInput();
 		// 全エネミー思考
@@ -30,7 +34,7 @@ public class TurnProcessor {
 		// 全キャラクターの見た目の移動
 		List<UniTask> moveTaskList = new List<UniTask>(_moveList.Count);
 		for (int i = 0; i < _moveList.Count; i++) {
-			moveTaskList.Add(_moveList[i].ExecuteObject(0.5f));
+			moveTaskList.Add(_moveList[i].ExecuteObject(0.2f));
 		}
 		// リストのすべてのタスクの終了待ち
 		await UniTask.WhenAll(moveTaskList);

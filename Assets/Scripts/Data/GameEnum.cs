@@ -65,3 +65,12 @@ public enum eDungeonEndReason {
 	GameOver,   // ゲームオーバー
 	Clear,      // ダンジョンクリア
 }
+
+public enum eCharacterAnimation {
+	Invalid = -1,
+	Wait,
+	Walk,
+	Attack,
+	Damage,
+	Max,
+}

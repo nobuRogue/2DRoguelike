@@ -70,4 +70,13 @@ public static class ExpantionMethod {
 		return result;
 	}
 
+	/// <summary>
+	/// ループアニメーションか判定
+	/// </summary>
+	/// <param name="animation"></param>
+	/// <returns></returns>
+	public static bool IsLoopAnimation(this eCharacterAnimation animation) {
+		return animation != eCharacterAnimation.Attack && animation != eCharacterAnimation.Damage;
+	}
+
 }
