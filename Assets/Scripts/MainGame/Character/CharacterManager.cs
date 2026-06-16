@@ -125,4 +125,19 @@ public class CharacterManager : MonoBehaviour {
 		return null;
 	}
 
+	/// <summary>
+	/// すべてのキャラクターに指定処理実行
+	/// </summary>
+	/// <param name="action"></param>
+	public void ExecuteAllCharacter(System.Action<CharacterObject> action) {
+		if (action == null || CommonModule.IsEmpty(_useList)) return;
+
+		for (int i = 0; i < _useList.Count; i++) {
+			CharacterObject character = _useList[i];
+			if (character == null) continue;
+			// 指定処理の実行
+			action(character);
+		}
+	}
+
 }

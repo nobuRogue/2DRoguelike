@@ -10,12 +10,20 @@ public class TurnProcessor {
 	private List<MoveAction> _moveList = null;
 	// プレイヤーの入力受付
 	private AcceptPlayerInput _acceptPlayer = null;
+	// ターン継続フラグ
+	private bool _isContinueTurn = true;
+	// フロア終了処理
+	private System.Action<eFloorEndReason> _EndFloor = null;
 
-	public void Initialize() {
+	public void Initialize(System.Action<eFloorEndReason> EndFloor) {
 		_acceptPlayer = new AcceptPlayerInput();
 		_acceptPlayer.Initialize(AddMoveAction);
 
 		_moveList = new List<MoveAction>(GameConst.ENEMY_MAX_COUNT + 1);
+
+		_EndFloor = EndFloor;
+		// 移動アクションにフロア終了処理設定
+		MoveAction.EndFloor = EndFloorAndTurn;
 	}
 
 	/// <summary>
@@ -23,12 +31,9 @@ public class TurnProcessor {
 	/// </summary>
 	/// <returns></returns>
 	public async UniTask Execute() {
-		// 継続移動の判定
-
-		// 全キャラクターを待機アニメーションに戻す
-		
-		// プレイヤーの入力受付、行動実行
-		await _acceptPlayer.AcceptInput();
+		_isContinueTurn = true;
+		// プレイヤーの入力受付
+		await AcceptPlayerInput();
 		// 全エネミー思考
 
 		// 全キャラクターの見た目の移動
@@ -39,10 +44,33 @@ public class TurnProcessor {
 		// リストのすべてのタスクの終了待ち
 		await UniTask.WhenAll(moveTaskList);
 		_moveList.Clear();
+		// ターン終了の判定
+		if (!_isContinueTurn) return;
 		// 全エネミーの行動
 
 		// ターン終了時処理
 
+	}
+
+	/// <summary>
+	/// プレイヤーの入力受付
+	/// </summary>
+	/// <returns></returns>
+	private async UniTask AcceptPlayerInput() {
+		// 継続移動の判定
+		if (_acceptPlayer.AcceptMove()) return;
+		// 全キャラクターを待機アニメーションに戻す
+		CharacterManager.instance.ExecuteAllCharacter(SetWaitAnimation);
+		// プレイヤーの入力受付、行動実行
+		await _acceptPlayer.AcceptInput();
+	}
+
+	/// <summary>
+	/// キャラクターを待機アニメーションに設定
+	/// </summary>
+	/// <param name="character"></param>
+	private void SetWaitAnimation(CharacterObject character) {
+		character.SetAnimation(eCharacterAnimation.Wait);
 	}
 
 	/// <summary>
@@ -51,6 +79,23 @@ public class TurnProcessor {
 	/// <param name="moveAction"></param>
 	private void AddMoveAction(MoveAction moveAction) {
 		_moveList.Add(moveAction);
+	}
+
+	/// <summary>
+	/// ターンを終了させる
+	/// </summary>
+	private void EndTurn() {
+		_isContinueTurn = false;
+	}
+
+	/// <summary>
+	/// フロア終了処理
+	/// </summary>
+	private void EndFloorAndTurn(eFloorEndReason endReason) {
+		// フロア終了
+		_EndFloor?.Invoke(endReason);
+		// ターン終了
+		EndTurn();
 	}
 
 }

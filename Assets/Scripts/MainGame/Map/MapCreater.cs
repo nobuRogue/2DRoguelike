@@ -54,7 +54,7 @@ public class MapCreater {
 		// 全部屋を連結
 		ConnectAllRoom();
 		// 階段を置く
-
+		CreateStair();
 	}
 
 	/// <summary>
@@ -65,6 +65,7 @@ public class MapCreater {
 		_divideLineList = new List<int>();
 		// 全てのマスを壁にする
 		MapSquareManager.instance.ExecuteAllSquare(SetFirstWall);
+		MapSquareManager.instance.RemoveAllRoom();
 
 		AreaData firstArea = new AreaData(2, 2, GameConst.MAP_SQUARE_WIDTH_COUNT - 4, GameConst.MAP_SQUARE_HEIGHT_COUNT - 4);
 		_areaList.Add(firstArea);
@@ -326,6 +327,23 @@ public class MapCreater {
 	private bool IsDivideLine(MapSquare square) {
 		// 分割線マスリストに含まれているか
 		return _divideLineList.Exists(squareID => square.ID == squareID);
+	}
+
+	/// <summary>
+	/// 階段マスの生成
+	/// </summary>
+	private void CreateStair() {
+		List<SquareObject> roomSquareList = new List<SquareObject>();
+		// ラムダ式を用いた関数の実装
+		// roomSquareListにすべての部屋マスを集約
+		MapSquareManager.instance.ExecuteAllSquare(square => {
+			if (square == null || square.squareData.terrain != eTerrain.Room) return;
+
+			roomSquareList.Add(square);
+		});
+		if (CommonModule.IsEmpty(roomSquareList)) return;
+		// 集約された部屋マスからランダムに1つを選択、階段マスにする
+		roomSquareList[Random.Range(0, roomSquareList.Count)].SetTerrain(eTerrain.Stair);
 	}
 
 }

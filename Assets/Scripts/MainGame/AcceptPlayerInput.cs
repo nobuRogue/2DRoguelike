@@ -27,7 +27,7 @@ public class AcceptPlayerInput {
 	/// ˆÚ“®“ü—Í‚Ìó•t
 	/// </summary>
 	/// <returns>ˆÚ“®‚ğÀs‚µ‚½‚çtrue</returns>
-	private bool AcceptMove() {
+	public bool AcceptMove() {
 		// 8•ûŒü‚ÌˆÚ“®“ü—Í‚Ìó•t
 		eDirectionEight inputDir = AcceptDirInput();
 		if (inputDir == eDirectionEight.Invalid) return false;

@@ -5,6 +5,8 @@ using UnityEngine;
 /// 1回の移動アクション
 /// </summary>
 public class MoveAction {
+	// フロア終了処理
+	public static System.Action<eFloorEndReason> EndFloor = null;
 	// 移動キャラ
 	private CharacterObject _character = null;
 	// 移動情報
@@ -48,6 +50,34 @@ public class MoveAction {
 		}
 		// ゴール座標に設定
 		_character.SetPosition(goalPos);
+		// 通常移動後処理
+		AfterMoveProcess(goalSquare);
+	}
+
+	/// <summary>
+	/// 移動後処理
+	/// </summary>
+	private void AfterMoveProcess(SquareObject goalSquare) {
+		// プレイヤーでなければ処理しない
+		if (!_character.characterData.IsPlayer()) return;
+		// TODO:移動先のマスのアイテムを拾う処理
+
+		// 階段処理
+		ProcessStair(goalSquare);
+
+
+
+	}
+
+	/// <summary>
+	/// 階段による移動処理
+	/// </summary>
+	/// <param name="goalSquare"></param>
+	private void ProcessStair(SquareObject goalSquare) {
+		// 移動先が階段でなければ処理しない
+		if (goalSquare.squareData.terrain != eTerrain.Stair) return;
+		// 階段ならフロア終了
+		EndFloor?.Invoke(eFloorEndReason.Stair);
 	}
 
 }

@@ -16,7 +16,7 @@ public class FloorProcessor {
 	/// </summary>
 	public void Initialize() {
 		_turnProcessor = new TurnProcessor();
-		_turnProcessor.Initialize();
+		_turnProcessor.Initialize(EndFloor);
 	}
 
 	/// <summary>
@@ -26,16 +26,16 @@ public class FloorProcessor {
 	public async UniTask Execute() {
 		// フロア生成、準備
 		SetupFloor();
+		await FadeManager.instance.FadeIn();
 		// フロア終了するまでループ
 		while (_endReason == eFloorEndReason.Invalid) {
 			// 1ターン処理
 			await _turnProcessor.Execute();
 		}
+		await FadeManager.instance.FadeOut();
 		// フロア片付け
 		TeardownFloor();
 	}
-
-
 
 	/// <summary>
 	/// フロア生成、準備
@@ -46,11 +46,13 @@ public class FloorProcessor {
 		// ランダムな部屋マスにプレイヤーを配置
 		List<SquareObject> roomSquareList = new List<SquareObject>();
 		// ラムダ式を用いた関数の実装
+		// roomSquareListにすべての部屋マスを集約
 		MapSquareManager.instance.ExecuteAllSquare(square => {
 			if (square == null || square.squareData.terrain != eTerrain.Room) return;
 
 			roomSquareList.Add(square);
 		});
+		// 集約された部屋マスからランダムに1つを選択
 		if (!CommonModule.IsEmpty(roomSquareList)) {
 			SquareObject playerSquare = roomSquareList[Random.Range(0, roomSquareList.Count)];
 			CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
@@ -65,6 +67,13 @@ public class FloorProcessor {
 	/// </summary>
 	private void TeardownFloor() {
 
+	}
+
+	/// <summary>
+	/// フロアを終了させる
+	/// </summary>
+	public void EndFloor(eFloorEndReason endReason) {
+		_endReason = endReason;
 	}
 
 }
