@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: FloorData
     list:
     - floorCount: 1
-      spriteIndex: 0
+      spriteIndex: 2
       enemyTableID: 0
       itemTableID: 0
     - floorCount: 2
@@ -24,18 +24,6 @@ MonoBehaviour:
       enemyTableID: 0
       itemTableID: 0
     - floorCount: 3
-      spriteIndex: 1
-      enemyTableID: 0
-      itemTableID: 0
-    - floorCount: 4
-      spriteIndex: 1
-      enemyTableID: 0
-      itemTableID: 0
-    - floorCount: 5
-      spriteIndex: 2
-      enemyTableID: 0
-      itemTableID: 0
-    - floorCount: 6
       spriteIndex: 1
       enemyTableID: 0
       itemTableID: 0

@@ -8,7 +8,7 @@ public class DungeonProcessor {
 	// フロア実行クラス
 	private FloorProcessor _floorProcessor = null;
 	// ダンジョン終了要因
-	private eDungeonEndReason _eDungeonEndReason = eDungeonEndReason.Invalid;
+	private eDungeonEndReason _dungeonEndReason = eDungeonEndReason.Invalid;
 
 	/// <summary>
 	/// 初期化
@@ -16,7 +16,7 @@ public class DungeonProcessor {
 	public void Initialize() {
 		// フロア実行処理初期化
 		_floorProcessor = new FloorProcessor();
-		_floorProcessor.Initialize();
+		_floorProcessor.Initialize(EndDungeon);
 	}
 
 	/// <summary>
@@ -25,14 +25,22 @@ public class DungeonProcessor {
 	/// <returns></returns>
 	public async UniTask<eDungeonEndReason> Execute() {
 		// ダンジョン継続状態に設定
-		_eDungeonEndReason = eDungeonEndReason.Invalid;
+		_dungeonEndReason = eDungeonEndReason.Invalid;
 		// ダンジョンが終了するまでフロア実行処理をループ
-		while (_eDungeonEndReason == eDungeonEndReason.Invalid) {
+		while (_dungeonEndReason == eDungeonEndReason.Invalid) {
 			// 1フロアの実行
 			await _floorProcessor.Execute();
 		}
 		// 終了要因を返す
-		return _eDungeonEndReason;
+		return _dungeonEndReason;
+	}
+
+	/// <summary>
+	/// ダンジョン終了
+	/// </summary>
+	/// <param name="reason"></param>
+	private void EndDungeon(eDungeonEndReason reason) {
+		_dungeonEndReason = reason;
 	}
 
 }

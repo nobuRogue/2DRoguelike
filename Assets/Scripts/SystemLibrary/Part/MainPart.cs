@@ -30,6 +30,8 @@ public class MainPart : PartBase {
 		await base.Setup();
 		// プレイヤーの生成
 		CharacterManager.instance.CreatePlayer(0, 0);
+		// 階数を1にリセット
+		UserDataHolder.instance.currentData.SetFloorCount(1);
 	}
 
 	public override async UniTask Execute() {

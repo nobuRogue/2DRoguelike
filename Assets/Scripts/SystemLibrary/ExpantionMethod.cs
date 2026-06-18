@@ -79,4 +79,19 @@ public static class ExpantionMethod {
 		return animation != eCharacterAnimation.Attack && animation != eCharacterAnimation.Damage;
 	}
 
+	/// <summary>
+	/// ダンジョン終了要因からフロア終了要因の取得
+	/// </summary>
+	/// <param name="reason"></param>
+	/// <returns></returns>
+	public static eFloorEndReason GetFloorEndReason(this eDungeonEndReason reason) {
+		switch (reason) {
+			case eDungeonEndReason.GameOver:
+				return eFloorEndReason.GameOver;
+			case eDungeonEndReason.Clear:
+				return eFloorEndReason.Stair;
+		}
+		return eFloorEndReason.Invalid;
+	}
+
 }

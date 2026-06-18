@@ -556,6 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SystemManager
   _systemObjectList:
+  - {fileID: 6942556826968425186, guid: 856813ee43ade034c89fc03a1687c609, type: 3}
   - {fileID: 6884245447374580439, guid: d603dfe917dad9b4791e7ee35a8ddc72, type: 3}
   - {fileID: 1946661862012463992, guid: 6b3573910b4211c498206ce823ce89c2, type: 3}
   - {fileID: 7239366684230952526, guid: fb5fd9c4bd126a04da3093ebabc504a6, type: 3}

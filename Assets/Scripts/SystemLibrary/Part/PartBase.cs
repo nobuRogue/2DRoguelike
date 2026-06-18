@@ -13,6 +13,7 @@ public abstract class PartBase : MonoBehaviour {
 	public virtual async UniTask Initialize() {
 		// 自身を非アクティブにする
 		gameObject.SetActive(false);
+		await UniTask.CompletedTask;
 	}
 
 	/// <summary>
@@ -22,6 +23,7 @@ public abstract class PartBase : MonoBehaviour {
 	public virtual async UniTask Setup() {
 		// 自身をアクティブにする
 		gameObject.SetActive(true);
+		await UniTask.CompletedTask;
 	}
 
 	/// <summary>
@@ -37,6 +39,7 @@ public abstract class PartBase : MonoBehaviour {
 	public virtual async UniTask Teardown() {
 		// 自身を非アクティブにする
 		gameObject.SetActive(false);
+		await UniTask.CompletedTask;
 	}
 
 }

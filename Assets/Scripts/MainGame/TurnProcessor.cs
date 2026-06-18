@@ -14,16 +14,24 @@ public class TurnProcessor {
 	private bool _isContinueTurn = true;
 	// フロア終了処理
 	private System.Action<eFloorEndReason> _EndFloor = null;
+	// ダンジョン終了処理
+	private System.Action<eDungeonEndReason> _EndDungeon = null;
 
-	public void Initialize(System.Action<eFloorEndReason> EndFloor) {
+	public void Initialize(
+		System.Action<eFloorEndReason> EndFloor,
+		System.Action<eDungeonEndReason> EndDungeon
+		) {
 		_acceptPlayer = new AcceptPlayerInput();
 		_acceptPlayer.Initialize(AddMoveAction);
 
 		_moveList = new List<MoveAction>(GameConst.ENEMY_MAX_COUNT + 1);
 
 		_EndFloor = EndFloor;
+		_EndDungeon = EndDungeon;
 		// 移動アクションにフロア終了処理設定
 		MoveAction.EndFloor = EndFloorAndTurn;
+		// 移動アクションにダンジョン終了処理設定
+		MoveAction.EndDungeon = EndDungeonAndTurn;
 	}
 
 	/// <summary>
@@ -96,6 +104,15 @@ public class TurnProcessor {
 		_EndFloor?.Invoke(endReason);
 		// ターン終了
 		EndTurn();
+	}
+
+	/// <summary>
+	/// ダンジョン終了処理
+	/// </summary>
+	/// <param name="endReason"></param>
+	private void EndDungeonAndTurn(eDungeonEndReason endReason) {
+		_EndDungeon?.Invoke(endReason);
+		EndFloorAndTurn(endReason.GetFloorEndReason());
 	}
 
 }

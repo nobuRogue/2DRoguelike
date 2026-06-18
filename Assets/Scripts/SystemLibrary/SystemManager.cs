@@ -12,7 +12,7 @@ public class SystemManager : MonoBehaviour {
 	private SystemObject[] _systemObjectList = null;
 
 	void Start() {
-		Initialize();
+		UniTask task = Initialize();
 	}
 
 	private async UniTask Initialize() {

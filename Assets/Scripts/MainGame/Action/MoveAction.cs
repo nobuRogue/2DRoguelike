@@ -7,6 +7,9 @@ using UnityEngine;
 public class MoveAction {
 	// フロア終了処理
 	public static System.Action<eFloorEndReason> EndFloor = null;
+	// ダンジョン終了処理
+	public static System.Action<eDungeonEndReason> EndDungeon = null;
+
 	// 移動キャラ
 	private CharacterObject _character = null;
 	// 移動情報
@@ -76,8 +79,18 @@ public class MoveAction {
 	private void ProcessStair(SquareObject goalSquare) {
 		// 移動先が階段でなければ処理しない
 		if (goalSquare.squareData.terrain != eTerrain.Stair) return;
-		// 階段ならフロア終了
-		EndFloor?.Invoke(eFloorEndReason.Stair);
+		// 階数をインクリメント
+		UserData userData = UserDataHolder.instance.currentData;
+		userData.SetFloorCount(userData.floorCount + 1);
+		Entity_FloorData.Param floorMaster = MasterDataManager.instance.GetFloorData(userData.floorCount);
+		if (floorMaster != null) {
+			// 次の階があればフロア終了
+			EndFloor?.Invoke(eFloorEndReason.Stair);
+		}
+		else {
+			// 次の階がなければダンジョン終了
+			EndDungeon?.Invoke(eDungeonEndReason.Clear);
+		}
 	}
 
 }

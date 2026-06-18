@@ -14,9 +14,9 @@ public class FloorProcessor {
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	public void Initialize() {
+	public void Initialize(System.Action<eDungeonEndReason> EndDungeon) {
 		_turnProcessor = new TurnProcessor();
-		_turnProcessor.Initialize(EndFloor);
+		_turnProcessor.Initialize(EndFloor, EndDungeon);
 	}
 
 	/// <summary>
@@ -41,6 +41,10 @@ public class FloorProcessor {
 	/// フロア生成、準備
 	/// </summary>
 	private void SetupFloor() {
+		// 現在の階層の地形スプライトを設定
+		UserData userData = UserDataHolder.instance.currentData;
+		Entity_FloorData.Param floorMaster = MasterDataManager.instance.GetFloorData(userData.floorCount);
+		TerrainSpriteAssignor.instance.SetSpriteType(floorMaster.spriteIndex);
 		// ランダムフロア生成
 		MapCreater.instance.CreateMap();
 		// ランダムな部屋マスにプレイヤーを配置

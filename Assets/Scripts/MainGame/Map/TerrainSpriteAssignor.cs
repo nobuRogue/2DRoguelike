@@ -18,22 +18,31 @@ public class TerrainSpriteAssignor {
 	// スプライトリソースフォルダへのパス
 	private const string _MAP_SPRITE_PATH = "Design/Sprites/Map/";
 
-	private readonly string[] _MAP_SPRITE_NAME_LIST = new string[] {
-		"rogue_map_sand_floor","rogue_map_sand_wall","rogue_map_sand_stair"
+	private readonly string[][] _MAP_SPRITE_NAME_LIST = new string[][] {
+		new string[]{ "rogue_map_sand_floor","rogue_map_sand_wall","rogue_map_sand_stair" },
+		new string[]{ "rogue_map_snow_floor", "rogue_map_snow_wall", "rogue_map_snow_stair" },
+		new string[]{ "rogue_map_urban_floor", "rogue_map_urban_wall", "rogue_map_urban_stair" }
 	};
 
-	private List<Sprite[]> _terrainSpriteList = null;
+	private List<List<Sprite[]>> _terrainSpriteList = null;
+	// 地形スプライトの種類のインデクス
+	private int _spriteTypeIndex = -1;
 
 	/// <summary>
 	/// シングルトンなのでコンストラクタを private にしている（クラス外からnew（インスタンス化）できなくする）
 	/// </summary>
 	private TerrainSpriteAssignor() {
-		int spriteFileCount = _MAP_SPRITE_NAME_LIST.Length;
-		_terrainSpriteList = new List<Sprite[]>(spriteFileCount);
-		// 全ての使用スプライトの読み込み
-		for (int i = 0; i < spriteFileCount; i++) {
-			Sprite[] loadSpriteList = Resources.LoadAll<Sprite>(_MAP_SPRITE_PATH + _MAP_SPRITE_NAME_LIST[i]);
-			_terrainSpriteList.Add(loadSpriteList);
+		int spriteTypeCount = _MAP_SPRITE_NAME_LIST.Length;
+		int terrainSpriteCount = _MAP_SPRITE_NAME_LIST[0].Length;
+		_terrainSpriteList = new List<List<Sprite[]>>(spriteTypeCount);
+		// マップのタイプで回す
+		for (int typeIndex = 0; typeIndex < spriteTypeCount; typeIndex++) {
+			_terrainSpriteList.Add(new List<Sprite[]>(terrainSpriteCount));
+			// 地形ごとの使用スプライトの読み込み
+			for (int i = 0; i < spriteTypeCount; i++) {
+				Sprite[] loadSpriteList = Resources.LoadAll<Sprite>(_MAP_SPRITE_PATH + _MAP_SPRITE_NAME_LIST[typeIndex][i]);
+				_terrainSpriteList[typeIndex].Add(loadSpriteList);
+			}
 		}
 	}
 
@@ -43,7 +52,9 @@ public class TerrainSpriteAssignor {
 	/// <param name="terrain"></param>
 	/// <returns></returns>
 	public Sprite GetTerrainSprite(eTerrain terrain, int index = -1) {
-		Sprite[] terrainSprite = _terrainSpriteList[GetTerrainSpriteIndex(terrain)];
+		if (!CommonModule.IsEnableIndex(_terrainSpriteList, _spriteTypeIndex)) return null;
+
+		Sprite[] terrainSprite = _terrainSpriteList[_spriteTypeIndex][GetTerrainSpriteIndex(terrain)];
 		if (CommonModule.IsEmpty(terrainSprite)) return null;
 		// 無効なインデクスならランダムなスプライトを返す
 		if (!CommonModule.IsEnableIndex(terrainSprite, index)) index = Random.Range(0, terrainSprite.Length);
@@ -67,6 +78,14 @@ public class TerrainSpriteAssignor {
 				return 2;
 		}
 		return 0;
+	}
+
+	/// <summary>
+	/// 地形スプライトの種類を指定
+	/// </summary>
+	/// <param name="index"></param>
+	public void SetSpriteType(int index) {
+		_spriteTypeIndex = index;
 	}
 
 }
