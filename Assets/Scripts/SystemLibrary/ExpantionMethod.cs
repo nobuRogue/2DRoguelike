@@ -94,4 +94,13 @@ public static class ExpantionMethod {
 		return eFloorEndReason.Invalid;
 	}
 
+	/// <summary>
+	/// メッセージ取得
+	/// </summary>
+	/// <param name="messageID"></param>
+	/// <returns></returns>
+	public static string ToMessage(this int messageID) {
+		return MasterDataManager.instance.GetMessage(messageID);
+	}
+
 }

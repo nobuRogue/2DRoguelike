@@ -24,6 +24,9 @@ public class MainPart : PartBase {
 		// ダンジョン実行処理初期化
 		_dungeonProcessor = new DungeonProcessor();
 		_dungeonProcessor.Initialize();
+
+		// メニュー初期化
+		MenuManager.instance.Get<RogueMainMenu>("RogueMainCanvas").Initialize();
 	}
 
 	public override async UniTask Setup() {
@@ -35,8 +38,13 @@ public class MainPart : PartBase {
 	}
 
 	public override async UniTask Execute() {
+		// メインUI表示
+		RogueMainMenu mainMenu = MenuManager.instance.Get<RogueMainMenu>();
+		await mainMenu.Open();
 		// ダンジョン実行
 		eDungeonEndReason endReason = await _dungeonProcessor.Execute();
+		// メインUI非表示
+		await mainMenu.Close();
 		// ダンジョン結果処理
 		switch (endReason) {
 			case eDungeonEndReason.GameOver:

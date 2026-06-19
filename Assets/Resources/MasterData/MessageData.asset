@@ -1,0 +1,719 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fc5221111885b4480f94ed8478e29f, type: 3}
+  m_Name: MessageData
+  m_EditorClassIdentifier: Assembly-CSharp::Entity_MessageData
+  sheets:
+  - name: Menu
+    list:
+    - ID: 0
+      text:
+      - '{0}F'
+      - 
+      - 
+      - 
+    - ID: 1
+      text:
+      - '{0}/{1}'
+      - 
+      - 
+      - 
+    - ID: 2
+      text:
+      - '{0}%'
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+  - name: Character
+    list:
+    - ID: 1000
+      text:
+      - "\u30D7\u30EC\u30A4\u30E4\u30FC\u592A\u90CE"
+      - 
+      - 
+      - 
+    - ID: 1001
+      text:
+      - "\u30A8\u30CD\u30DF\u30FC1"
+      - 
+      - 
+      - 
+    - ID: 1002
+      text:
+      - "\u30A8\u30CD\u30DF\u30FC\u5F37"
+      - 
+      - 
+      - 
+    - ID: 1003
+      text:
+      - "\u5384\u4ECB\u306A\u6575"
+      - 
+      - 
+      - 
+    - ID: 1004
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1005
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1006
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1007
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1008
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1009
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1010
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1011
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1012
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1013
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1014
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1015
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1016
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1017
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1018
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1019
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1020
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1021
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1022
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1023
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1024
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1025
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1026
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1027
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 1028
+      text:
+      - 
+      - 
+      - 
+      - 
+  - name: Item
+    list:
+    - ID: 2000
+      text:
+      - "\u30A2\u30A4\u30C6\u30E0\u540D"
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+  - name: Log
+    list:
+    - ID: 3000
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 

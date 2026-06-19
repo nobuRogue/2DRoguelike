@@ -70,7 +70,7 @@ public class CharacterManager : MonoBehaviour {
 			_useList.Add(player);
 		}
 		// セットアップ
-		player.Setup(useID);
+		player.Setup(useID, masterID);
 		// 指定マスに置く
 		player.SetSquare(MapSquareManager.instance.GetSquare(squareID));
 	}

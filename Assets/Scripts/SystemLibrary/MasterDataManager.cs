@@ -18,15 +18,23 @@ public class MasterDataManager {
 	// マスターデーターのファイルパス
 	private const string _DATA_PATH = "MasterData/";
 
+	// メッセージ情報
+	private List<List<Entity_MessageData.Param>> _messageData = null;
 	// フロア情報
-	private List<List<Entity_FloorData.Param>> _floorData = null;
+	private List<Entity_FloorData.Param> _floorData = null;
+	// キャラクター情報
+	private List<Entity_CharacterData.Param> _characterData = null;
 
 	/// <summary>
 	/// 全マスターデータ読み込み
 	/// </summary>
 	private MasterDataManager() {
+		// メッセージ情報の読み込み
+		_messageData = Load<Entity_MessageData, Entity_MessageData.Sheet, Entity_MessageData.Param>("MessageData");
 		// フロア情報の読み込み
-		_floorData = Load<Entity_FloorData, Entity_FloorData.Sheet, Entity_FloorData.Param>("FloorData");
+		_floorData = Load<Entity_FloorData, Entity_FloorData.Sheet, Entity_FloorData.Param>("FloorData")[0];
+		// キャラクター情報の読み込み
+		_characterData = Load<Entity_CharacterData, Entity_CharacterData.Sheet, Entity_CharacterData.Param>("CharacterData")[0];
 	}
 
 	/// <summary>
@@ -60,13 +68,43 @@ public class MasterDataManager {
 	/// <param name="floorCount"></param>
 	/// <returns></returns>
 	public Entity_FloorData.Param GetFloorData(int floorCount) {
-		List<Entity_FloorData.Param> dataList = _floorData[0];
-		for (int i = 0; i < dataList.Count; i++) {
-			if (dataList[i].floorCount != floorCount) continue;
+		for (int i = 0; i < _floorData.Count; i++) {
+			if (_floorData[i].floorCount != floorCount) continue;
 			// データが一致するものを返す
-			return dataList[i];
+			return _floorData[i];
 		}
 		return null;
 	}
 
+	/// <summary>
+	/// DI指定のメッセージ取得
+	/// </summary>
+	/// <param name="messageID"></param>
+	/// <returns></returns>
+	public string GetMessage(int messageID) {
+		for (int i = 0; i < _messageData.Count; i++) {
+			List<Entity_MessageData.Param> messageList = _messageData[i];
+			for (int j = 0; j < messageList.Count; j++) {
+				if (messageList[j].ID != messageID) continue;
+				// IDに一致するマスターデータ発見
+				string[] textArray = messageList[j].text;
+				return textArray[0];
+			}
+		}
+		return string.Empty;// ""と同じ
+	}
+
+	/// <summary>
+	/// ID指定のキャラクターデータ取得
+	/// </summary>
+	/// <param name="characterID"></param>
+	/// <returns></returns>
+	public Entity_CharacterData.Param GetCharacterData(int characterID) {
+		for (int i = 0; i < _characterData.Count; i++) {
+			if (_characterData[i].ID != characterID) continue;
+
+			return _characterData[i];
+		}
+		return null;
+	}
 }

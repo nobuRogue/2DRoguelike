@@ -2,15 +2,22 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using System.Threading;
+using System.Text;
 
 /// <summary>
 /// キャラクターオブジェクトの見た目情報
 /// </summary>
 public class CharacterObject : MonoBehaviour {
+	// スプライトファイル名指定用
+	private static StringBuilder _spriteNameBuilder = null;
 	// カメラをプレイヤーから離す距離
 	private const float _CAMERA_DISTANCE = -10.0f;
 	// スプライトアニメーションの切り替え間隔ミリ秒
 	private const int _ANIMATION_DELAY_MILLISEC = 150;
+	// スプライト画像のパス
+	private const string _SPRITE_PATH = "Design/Sprites/Character/rogue_";
+	// アニメーション名の配列
+	private readonly string[] _ANIMATION_NAME = new string[] { "_wait", "_walk", "_attack", "_damage" };
 
 	// キャラクターの見た目スプライト
 	[SerializeField]
@@ -36,21 +43,29 @@ public class CharacterObject : MonoBehaviour {
 	public void Initialize(CharacterBase character) {
 		characterData = character;
 		gameObject.SetActive(false);
-		// アニメーションスプライトのキャッシュ
-		_animSpriteList = new Sprite[(int)eCharacterAnimation.Max][];
-		_animSpriteList[0] = Resources.LoadAll<Sprite>("Design/Sprites/Character/rogue_player_wait");
-		_animSpriteList[1] = Resources.LoadAll<Sprite>("Design/Sprites/Character/rogue_player_walk");
-		_animSpriteList[2] = Resources.LoadAll<Sprite>("Design/Sprites/Character/rogue_player_attack");
-		_animSpriteList[3] = Resources.LoadAll<Sprite>("Design/Sprites/Character/rogue_player_damage");
-
 		_ct = gameObject.GetCancellationTokenOnDestroy();
+		if (_spriteNameBuilder == null) _spriteNameBuilder = new StringBuilder();
+
 	}
 
 	/// <summary>
 	/// 使用前準備
 	/// </summary>
-	public void Setup(int ID) {
-		characterData.Setup(ID);
+	public void Setup(int ID, int masterID) {
+		// マスターデータ取得
+		Entity_CharacterData.Param characterMaster = MasterDataManager.instance.GetCharacterData(masterID);
+		// アニメーションスプライトのキャッシュ
+		int animCount = (int)eCharacterAnimation.Max;
+		_animSpriteList = new Sprite[animCount][];
+		for (int i = 0; i < animCount; i++) {
+			_spriteNameBuilder.Clear();
+			_spriteNameBuilder.Append(_SPRITE_PATH);
+			_spriteNameBuilder.Append(characterMaster.spriteName);
+			_spriteNameBuilder.Append(_ANIMATION_NAME[i]);
+			_animSpriteList[i] = Resources.LoadAll<Sprite>(_spriteNameBuilder.ToString());
+		}
+
+		characterData.Setup(ID, characterMaster);
 		gameObject.SetActive(true);
 		SetAnimation(eCharacterAnimation.Wait);
 

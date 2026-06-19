@@ -13,8 +13,9 @@ public class UserData {
 	/// </summary>
 	/// <param name="nextCount"></param>
 	public void SetFloorCount(int nextCount) {
-		// UI‚É”½‰f‚³‚¹‚é
 		floorCount = nextCount;
+		// UI‚É”½‰f‚³‚¹‚é
+		MenuManager.instance.Get<RogueMainMenu>()?.SetFloorCount(floorCount);
 	}
 
 }

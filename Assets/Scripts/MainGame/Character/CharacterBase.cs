@@ -12,6 +12,12 @@ public abstract class CharacterBase {
 	// 向き
 	public eDirectionEight direction { get; private set; } = eDirectionEight.Invalid;
 
+	public int nameID { get; private set; } = -1;
+	public int maxHP { get; private set; } = -1;
+	public int HP { get; private set; } = -1;
+	public int attack { get; private set; } = -1;
+	public int defense { get; private set; } = -1;
+
 	// プレイヤーか否か
 	public abstract bool IsPlayer();
 
@@ -19,8 +25,30 @@ public abstract class CharacterBase {
 	/// 使用間準備
 	/// </summary>
 	/// <param name="ID"></param>
-	public void Setup(int ID) {
+	public void Setup(int ID, Entity_CharacterData.Param characterMaster) {
 		this.ID = ID;
+
+		nameID = characterMaster.nameID;
+		SetMaxHP(characterMaster.HP);
+		SetHP(characterMaster.HP);
+		SetAttack(characterMaster.Attack);
+		SetDefense(characterMaster.Defense);
+	}
+
+	public virtual void SetMaxHP(int maxHP) {
+		this.maxHP = maxHP;
+	}
+
+	public virtual void SetHP(int HP) {
+		this.HP = HP;
+	}
+
+	public virtual void SetAttack(int attack) {
+		this.attack = attack;
+	}
+
+	public virtual void SetDefense(int defense) {
+		this.defense = defense;
 	}
 
 	/// <summary>
