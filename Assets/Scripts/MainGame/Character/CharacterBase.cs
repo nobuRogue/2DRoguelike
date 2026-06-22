@@ -25,7 +25,7 @@ public abstract class CharacterBase {
 	/// 使用間準備
 	/// </summary>
 	/// <param name="ID"></param>
-	public void Setup(int ID, Entity_CharacterData.Param characterMaster) {
+	public virtual void Setup(int ID, Entity_CharacterData.Param characterMaster) {
 		this.ID = ID;
 
 		nameID = characterMaster.nameID;
@@ -56,6 +56,8 @@ public abstract class CharacterBase {
 	/// </summary>
 	public void Teardown() {
 		this.ID = -1;
+		// 今いるマスから自身を取り除く
+		MapSquareManager.instance.GetSquare(posX, posY)?.squareData.RemoveCharacter();
 	}
 
 	/// <summary>
@@ -80,6 +82,13 @@ public abstract class CharacterBase {
 	/// <param name="dir"></param>
 	public void SetDirection(eDirectionEight dir) {
 		this.direction = dir;
+	}
+
+	/// <summary>
+	/// ターン終了時処理
+	/// </summary>
+	public virtual void OnEndTurn() {
+
 	}
 
 }

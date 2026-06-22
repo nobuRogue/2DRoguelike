@@ -32,6 +32,8 @@ public class TurnProcessor {
 		MoveAction.EndFloor = EndFloorAndTurn;
 		// 移動アクションにダンジョン終了処理設定
 		MoveAction.EndDungeon = EndDungeonAndTurn;
+		// キャラクターにダンジョン終了処理設定
+		CharacterObject.EndDungeon = EndDungeonAndTurn;
 	}
 
 	/// <summary>
@@ -57,7 +59,15 @@ public class TurnProcessor {
 		// 全エネミーの行動
 
 		// ターン終了時処理
+		CharacterManager.instance.ExecuteAllCharacter(OnEndTurnCharacter);
+	}
 
+	/// <summary>
+	/// キャラクターのターン終了時処理の実行
+	/// </summary>
+	/// <param name="character"></param>
+	private void OnEndTurnCharacter(CharacterObject character) {
+		character.OnEndTurn();
 	}
 
 	/// <summary>

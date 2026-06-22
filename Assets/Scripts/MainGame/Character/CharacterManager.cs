@@ -43,17 +43,29 @@ public class CharacterManager : MonoBehaviour {
 	/// プレイヤー生成
 	/// </summary>
 	public void CreatePlayer(int squareID, int masterID) {
-		// 使用可能なプレイヤーオブジェクトを取得
-		CharacterObject player;
-		if (CommonModule.IsEmpty(_unusePlayerList)) {
+		CreateCharacter<PlayerCharacter>(squareID, masterID, _unusePlayerList);
+	}
+	/// <summary>
+	/// エネミー生成
+	/// </summary>
+	/// <param name="squareID"></param>
+	/// <param name="masterID"></param>
+	public void CreateEnemy(int squareID, int masterID) {
+		CreateCharacter<EnemyCharacter>(squareID, masterID, _unuseEnemyList);
+	}
+
+	private void CreateCharacter<T>(int squareID, int masterID, List<CharacterObject> unuseList) where T : CharacterBase, new() {
+		// 使用可能なエネミークラスを取得
+		CharacterObject enemy;
+		if (CommonModule.IsEmpty(unuseList)) {
 			// 生成して使う
-			player = Instantiate(_characterOrigin, transform);
-			player.Initialize(new PlayerCharacter());
+			enemy = Instantiate(_characterOrigin, transform);
+			enemy.Initialize(new T());
 		}
 		else {
 			// 未使用リストから使う
-			player = _unusePlayerList[0];
-			_unusePlayerList.RemoveAt(0);
+			enemy = unuseList[0];
+			unuseList.RemoveAt(0);
 		}
 		// 使用可能なIDを取得して使用リストに追加
 		int useID = -1;
@@ -61,18 +73,18 @@ public class CharacterManager : MonoBehaviour {
 			if (_useList[i] != null) continue;
 			// 未使用箇所が見つかったので使う
 			useID = i;
-			_useList[i] = player;
+			_useList[i] = enemy;
 			break;
 		}
 		// 未使用箇所が見つからなければ末尾に追加
 		if (useID < 0) {
 			useID = _useList.Count;
-			_useList.Add(player);
+			_useList.Add(enemy);
 		}
 		// セットアップ
-		player.Setup(useID, masterID);
+		enemy.Setup(useID, masterID);
 		// 指定マスに置く
-		player.SetSquare(MapSquareManager.instance.GetSquare(squareID));
+		enemy.SetSquare(MapSquareManager.instance.GetSquare(squareID));
 	}
 
 	/// <summary>

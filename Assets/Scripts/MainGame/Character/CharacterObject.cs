@@ -8,6 +8,8 @@ using System.Text;
 /// キャラクターオブジェクトの見た目情報
 /// </summary>
 public class CharacterObject : MonoBehaviour {
+	// ダンジョン終了処理
+	public static System.Action<eDungeonEndReason> EndDungeon = null;
 	// スプライトファイル名指定用
 	private static StringBuilder _spriteNameBuilder = null;
 	// カメラをプレイヤーから離す距離
@@ -177,4 +179,28 @@ public class CharacterObject : MonoBehaviour {
 		_currentAnimIndex = 0;
 	}
 
+	/// <summary>
+	/// ターン終了時処理
+	/// </summary>
+	public void OnEndTurn() {
+		// ターン終了時処理
+		characterData?.OnEndTurn();
+		// 死亡判定
+		if (characterData.HP <= 0) Dead();
+
+	}
+
+	/// <summary>
+	/// 死亡処理
+	/// </summary>
+	public void Dead() {
+		if (characterData.IsPlayer()) {
+			// プレイヤーならゲームオーバー
+			EndDungeon(eDungeonEndReason.GameOver);
+		}
+		else {
+			// エネミーなら自身を削除する
+			CharacterManager.instance.DeleteCharacter(this);
+		}
+	}
 }

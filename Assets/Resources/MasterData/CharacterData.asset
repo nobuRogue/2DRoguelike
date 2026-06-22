@@ -18,7 +18,7 @@ MonoBehaviour:
     - ID: 0
       nameID: 1000
       spriteName: player
-      HP: 100
+      HP: 10
       Attack: 20
       Defense: 5
     - ID: 1

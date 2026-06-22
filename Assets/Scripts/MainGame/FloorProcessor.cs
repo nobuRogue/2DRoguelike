@@ -41,6 +41,8 @@ public class FloorProcessor {
 	/// フロア生成、準備
 	/// </summary>
 	private void SetupFloor() {
+		// フロア継続状態に設定
+		_endReason = eFloorEndReason.Invalid;
 		// 現在の階層の地形スプライトを設定
 		UserData userData = UserDataHolder.instance.currentData;
 		Entity_FloorData.Param floorMaster = MasterDataManager.instance.GetFloorData(userData.floorCount);
@@ -57,20 +59,26 @@ public class FloorProcessor {
 			roomSquareList.Add(square);
 		});
 		// 集約された部屋マスからランダムに1つを選択
-		if (!CommonModule.IsEmpty(roomSquareList)) {
-			SquareObject playerSquare = roomSquareList[Random.Range(0, roomSquareList.Count)];
-			CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
-		}
+		if (CommonModule.IsEmpty(roomSquareList)) return;
 
-		// フロア継続状態に設定
-		_endReason = eFloorEndReason.Invalid;
+		int randIndex = Random.Range(0, roomSquareList.Count);
+		SquareObject playerSquare = roomSquareList[randIndex];
+		CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
+		roomSquareList.RemoveAt(randIndex);
+		// エネミーを1体生成
+		if (CommonModule.IsEmpty(roomSquareList)) return;
+
+		randIndex = Random.Range(0, roomSquareList.Count);
+		SquareObject enemySquare = roomSquareList[randIndex];
+		CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, 1);
+
 	}
 
 	/// <summary>
 	/// フロア片付け
 	/// </summary>
 	private void TeardownFloor() {
-
+		// フロアのエネミーを全削除
 	}
 
 	/// <summary>
