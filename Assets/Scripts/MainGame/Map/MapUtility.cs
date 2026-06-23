@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data.SqlTypes;
 using UnityEngine;
 
@@ -41,6 +42,49 @@ public class MapUtility {
 			return false;
 		}
 		return true;
+	}
+
+	/// <summary>
+	/// 指定マスを起点にした視界の取得
+	/// </summary>
+	/// <param name="baseSquare"></param>
+	/// <returns></returns>
+	public List<SquareObject> GetVisibleArea(SquareObject baseSquare) {
+		List<SquareObject> result = new List<SquareObject>();
+		int dirMax = (int)eDirectionEight.Max;
+		List<int> roomIDList = new List<int>(dirMax);
+		// 周囲8マスを追加
+		int baseX = baseSquare.squareData.posX, baseY = baseSquare.squareData.posY;
+		for (int i = 0; i < dirMax; i++) {
+			eDirectionEight dir = (eDirectionEight)i;
+			SquareObject square = MapSquareManager.instance.GetToDirSquare(baseX, baseY, dir);
+			if (square == null) continue;
+			// 視界に追加
+			result.Add(square);
+			// 部屋マスならキャッシュしておく
+			int roomID = square.squareData.roomID;
+			if (roomID < 0) continue;
+			// 既に追加済みの部屋なら処理しない
+			if (roomIDList.Exists(element => element == roomID)) continue;
+			// 部屋リストに追加
+			roomIDList.Add(roomID);
+		}
+		// 部屋マスがあればその部屋内のマスを全て追加
+		for (int i = 0; i < roomIDList.Count; i++) {
+			RoomData room = MapSquareManager.instance.GetRoom(roomIDList[i]);
+			if (room == null) continue;
+
+			List<int> roomSquareList = room.squareIDList;
+			for (int j = 0; j < roomSquareList.Count; j++) {
+				SquareObject square = MapSquareManager.instance.GetSquare(roomSquareList[j]);
+				if (square == null) continue;
+				// 既に追加済みのマスなら追加しない
+				if (result.Exists(element => element == square)) continue;
+				// 視界に追加
+				result.Add(square);
+			}
+		}
+		return result;
 	}
 
 }

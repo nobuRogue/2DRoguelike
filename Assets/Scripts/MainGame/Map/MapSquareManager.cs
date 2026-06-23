@@ -213,6 +213,17 @@ public class MapSquareManager : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// IDw’è‚Ì•”‰®î•ñæ“¾
+	/// </summary>
+	/// <param name="ID"></param>
+	/// <returns></returns>
+	public RoomData GetRoom(int ID) {
+		if (!CommonModule.IsEnableIndex(_roomList, ID)) return null;
+
+		return _roomList[ID];
+	}
+
+	/// <summary>
 	/// ‘S‚Ä‚Ì•”‰®‚Ìíœ
 	/// </summary>
 	public void RemoveAllRoom() {

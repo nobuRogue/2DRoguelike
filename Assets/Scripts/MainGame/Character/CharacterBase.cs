@@ -91,4 +91,11 @@ public abstract class CharacterBase {
 
 	}
 
+	/// <summary>
+	/// s“®‚Ìvl
+	/// </summary>
+	public virtual void Think() {
+
+	}
+
 }

@@ -34,6 +34,8 @@ public class TurnProcessor {
 		MoveAction.EndDungeon = EndDungeonAndTurn;
 		// キャラクターにダンジョン終了処理設定
 		CharacterObject.EndDungeon = EndDungeonAndTurn;
+		// エネミーAIに移動アクション追加処理を譲渡
+		EnemyAIBase.addMove = AddMoveAction;
 	}
 
 	/// <summary>
@@ -44,8 +46,9 @@ public class TurnProcessor {
 		_isContinueTurn = true;
 		// プレイヤーの入力受付
 		await AcceptPlayerInput();
-		// 全エネミー思考
-
+		// TODO:全エネミー思考
+		CharacterManager.instance.ExecuteAllCharacter(ThinkCharacter);
+		//CharacterManager.instance.ExecuteAllCharacter(character => character.characterData.Think());
 		// 全キャラクターの見た目の移動
 		List<UniTask> moveTaskList = new List<UniTask>(_moveList.Count);
 		for (int i = 0; i < _moveList.Count; i++) {
@@ -60,6 +63,14 @@ public class TurnProcessor {
 
 		// ターン終了時処理
 		CharacterManager.instance.ExecuteAllCharacter(OnEndTurnCharacter);
+	}
+
+	/// <summary>
+	/// キャラクターの行動思考
+	/// </summary>
+	/// <param name="character"></param>
+	private void ThinkCharacter(CharacterObject character) {
+		character?.characterData.Think();
 	}
 
 	/// <summary>

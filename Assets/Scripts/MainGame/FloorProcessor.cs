@@ -79,6 +79,17 @@ public class FloorProcessor {
 	/// </summary>
 	private void TeardownFloor() {
 		// フロアのエネミーを全削除
+		CharacterManager.instance.ExecuteAllCharacter(DeleteEnemy);
+	}
+
+	/// <summary>
+	/// エネミーなら削除する
+	/// </summary>
+	/// <param name="character"></param>
+	private void DeleteEnemy(CharacterObject character) {
+		if (character.characterData.IsPlayer()) return;
+
+		CharacterManager.instance.DeleteCharacter(character);
 	}
 
 	/// <summary>

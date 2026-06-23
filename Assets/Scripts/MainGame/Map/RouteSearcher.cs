@@ -33,6 +33,9 @@ public class RouteSearcher {
 		// スコア取得処理
 		public abstract int GetScore(int goalX, int goalY);
 	}
+
+	#region Manhattan
+
 	/// <summary>
 	/// 四方向用A*経路探索ノード
 	/// </summary>
@@ -206,5 +209,161 @@ public class RouteSearcher {
 		}
 		return route;
 	}
+
+	#endregion
+
+	#region Chebyshev
+
+	private class DistanceNodeChebyshev : DistanceNode {
+		public eDirectionEight dir { get; private set; } = eDirectionEight.Invalid;
+		/// 親ノード
+		public DistanceNodeChebyshev rootNode { get; private set; } = null;
+
+		public DistanceNodeChebyshev(int distance, int squareID, eDirectionEight dir, DistanceNodeChebyshev rootNode) : base(distance, squareID) {
+			this.dir = dir;
+			this.rootNode = rootNode;
+		}
+
+		public override int GetScore(int goalX, int goalY) {
+			SquareObject square = MapSquareManager.instance.GetSquare(squareID);
+			if (square == null || square.squareData == null) return int.MaxValue;
+			// ゴールからの差
+			int dx = Mathf.Abs(goalX - square.squareData.posX);
+			int dy = Mathf.Abs(goalY - square.squareData.posY);
+			return Mathf.Max(dx, dy) + distance;
+		}
+	}
+
+	private class DistanceNodeTableChebyshev {
+		// ゴールのノード
+		public DistanceNodeChebyshev goalNode = null;
+		// オープンしたノードのリスト
+		public List<DistanceNodeChebyshev> openList = null;
+		// クローズしたノードのリスト
+		public List<DistanceNodeChebyshev> closeList = null;
+
+		public DistanceNodeTableChebyshev() {
+			openList = new List<DistanceNodeChebyshev>();
+			closeList = new List<DistanceNodeChebyshev>();
+		}
+
+		public void Clear() {
+			goalNode = null;
+			openList.Clear();
+			closeList.Clear();
+		}
+	}
+	// 8方向経路探索用のノードテーブル
+	private DistanceNodeTableChebyshev _nodeTableChebyshev = null;
+
+	/// <summary>
+	/// 8方向用経路探索
+	/// </summary>
+	/// <param name="startSquareID"></param>
+	/// <param name="goalSquareID"></param>
+	/// <param name="CanPass"></param>
+	/// <returns></returns>
+	public List<ChebyshevMoveData> RouteSearchChebyshev(int startSquareID, int goalSquareID, System.Func<SquareObject, SquareObject, eDirectionEight, bool> CanPass) {
+		// ゴールノードに辿り着くまでノードをオープンする
+		OpenNodeToGoalChebyshev(startSquareID, goalSquareID, CanPass);
+		// ゴールノードからスタートまで遡って経路を生成
+		return CreateRouteChebyshev();
+	}
+
+	private void OpenNodeToGoalChebyshev(int startSquareID, int goalSquareID, System.Func<SquareObject, SquareObject, eDirectionEight, bool> CanPass) {
+		if (_nodeTableChebyshev == null) {
+			_nodeTableChebyshev = new DistanceNodeTableChebyshev();
+		}
+		else {
+			_nodeTableChebyshev.Clear();
+		}
+		// スタートマスのノードを生成してオープンリストに追加
+		_nodeTableChebyshev.openList.Add(new DistanceNodeChebyshev(0, startSquareID, eDirectionEight.Invalid, null));
+		// ゴールマスの座標をキャッシュしておく
+		SquareObject goalSquare = MapSquareManager.instance.GetSquare(goalSquareID);
+		int goalX = goalSquare.squareData.posX, goalY = goalSquare.squareData.posY;
+		// ゴールマスをオープンするまでループ
+		while (_nodeTableChebyshev.goalNode == null) {
+			// スコア最小のノードを取得
+			DistanceNodeChebyshev minScoreNode = GetMinScoreNodeChebyshev(goalX, goalY);
+			if (minScoreNode == null) break;
+			// 周囲8マスをオープン
+			OpenNodeAroundChebyshev(minScoreNode, goalSquareID, CanPass);
+			// 周囲をオープンしたノードをオープンから除きクローズに追加
+			_nodeTableChebyshev.openList.Remove(minScoreNode);
+			_nodeTableChebyshev.closeList.Add(minScoreNode);
+		}
+	}
+
+	private DistanceNodeChebyshev GetMinScoreNodeChebyshev(int goalX, int goalY) {
+		List<DistanceNodeChebyshev> openList = _nodeTableChebyshev.openList;
+		if (CommonModule.IsEmpty(openList)) return null;
+
+		DistanceNodeChebyshev result = null;
+		int minScore = -1;
+		for (int i = 0; i < openList.Count; i++) {
+			DistanceNodeChebyshev node = openList[i];
+			if (node == null) continue;
+
+			int score = node.GetScore(goalX, goalY);
+			if (result != null && minScore <= score) continue;
+			// 最少スコアノードの更新
+			result = node;
+			minScore = score;
+		}
+		return result;
+	}
+
+	private void OpenNodeAroundChebyshev(DistanceNodeChebyshev baseNode, int goalSquareID, System.Func<SquareObject, SquareObject, eDirectionEight, bool> CanPass) {
+		// 実コストの決定
+		int distance = baseNode.distance + 1;
+		SquareObject baseSquare = MapSquareManager.instance.GetSquare(baseNode.squareID);
+		int baseX = baseSquare.squareData.posX, baseY = baseSquare.squareData.posY;
+		// 周囲8マスでループ
+		for (int i = 0; i < (int)eDirectionEight.Max; i++) {
+			// インデクスを方向にキャスト
+			eDirectionEight dir = (eDirectionEight)i;
+			SquareObject openSquare = MapSquareManager.instance.GetToDirSquare(baseX, baseY, dir);
+			// 既にオープン、クローズされたノードなら処理しない
+			if (_nodeTableChebyshev.openList.Exists(element => element.squareID == openSquare.squareData.ID) ||
+				_nodeTableChebyshev.closeList.Exists(element => element.squareID == openSquare.squareData.ID)) continue;
+			// 通行不可のマスなら処理しない
+			if (!CanPass(baseSquare, openSquare, dir)) continue;
+			// ノードのオープン
+			DistanceNodeChebyshev openNode = new DistanceNodeChebyshev(distance, openSquare.squareData.ID, dir, baseNode);
+			_nodeTableChebyshev.openList.Add(openNode);
+			// ゴール判定
+			if (openSquare.squareData.ID != goalSquareID) continue;
+			// ゴールをオープンしたので終わり
+			_nodeTableChebyshev.goalNode = openNode;
+			break;
+		}
+	}
+
+	/// <summary>
+	/// 8方向用経路生成
+	/// </summary>
+	/// <returns></returns>
+	private List<ChebyshevMoveData> CreateRouteChebyshev() {
+		// ゴールにたどり着いていないならnullを返す
+		if (_nodeTableChebyshev.goalNode == null) return null;
+		// あらかじめ経路のリストをキャッシュする
+		int routeCount = _nodeTableChebyshev.goalNode.distance;
+		List<ChebyshevMoveData> result = new List<ChebyshevMoveData>(routeCount);
+		for (int i = 0; i < routeCount; i++) {
+			result.Add(null);
+		}
+		// ゴールから遡って経路生成
+		DistanceNodeChebyshev currentNode = _nodeTableChebyshev.goalNode;
+		for (int i = routeCount - 1; i >= 0; i--) {
+			ChebyshevMoveData moveData = new ChebyshevMoveData(currentNode.rootNode.squareID, currentNode.squareID, currentNode.dir);
+			result[i] = moveData;
+			// 親ノードを現在ノードにする
+			currentNode = currentNode.rootNode;
+		}
+		return result;
+	}
+
+	#endregion
 
 }
