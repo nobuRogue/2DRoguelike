@@ -13,9 +13,12 @@ public class AcceptPlayerInput {
 		_addMove = addMove;
 	}
 
+	/// <summary>
+	/// プレイヤー入力の受付
+	/// </summary>
+	/// <returns></returns>
 	public async UniTask AcceptInput() {
 		while (true) {
-			// プレイヤー入力の受付
 			// 移動入力の受付
 			if (AcceptMove()) break;
 			// 方向転換入力の受付
