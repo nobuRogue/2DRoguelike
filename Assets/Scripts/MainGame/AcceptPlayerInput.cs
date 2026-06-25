@@ -18,6 +18,8 @@ public class AcceptPlayerInput {
 			// プレイヤー入力の受付
 			// 移動入力の受付
 			if (AcceptMove()) break;
+			// 方向転換入力の受付
+			await AcceptDirChange();
 			// 1フレーム待機
 			await UniTask.DelayFrame(1);
 		}
@@ -90,6 +92,66 @@ public class AcceptPlayerInput {
 		}
 		// 何も押されていない
 		return eDirectionEight.Invalid;
+	}
+
+	/// <summary>
+	/// 方向転換の入力受付、処理
+	/// </summary>
+	/// <returns></returns>
+	private async UniTask AcceptDirChange() {
+		// 入力の受付判定
+		if (!Input.GetKey(KeyCode.LeftControl)) return;
+		// トリガー入力なら隣接エネミーに自動的に方向転換
+		if (Input.GetKeyDown(KeyCode.LeftControl)) ChangeDirToEnemy();
+
+		CharacterObject player = CharacterManager.instance.GetPlayer();
+		int playerX = player.characterData.posX, playerY = player.characterData.posY;
+		// 方向転換キーが離されるまでループ
+		while (Input.GetKey(KeyCode.LeftControl)) {
+			// 入力に応じて向きを変える
+			ChangeCharacterDir(player, AcceptDirInput());
+			// 1フレーム待機
+			await UniTask.DelayFrame(1);
+		}
+		// プレイヤーが向いている方向のマスの色を消す
+		MapSquareManager.instance.GetToDirSquare(playerX, playerY, player.characterData.direction)?.HideMark();
+	}
+
+	/// <summary>
+	/// 隣接エネミーの方向を向く
+	/// </summary>
+	private void ChangeDirToEnemy() {
+		// 隣接エネミーの方向に自動的に向く
+		CharacterObject player = CharacterManager.instance.GetPlayer();
+		int startIndex = (int)player.characterData.direction + 1;
+		int playerX = player.characterData.posX, playerY = player.characterData.posY;
+		for (int i = 0; i < (int)eDirectionEight.Max; i++) {
+			eDirectionEight dir = (startIndex + i).ToDir8();
+			SquareObject square = MapSquareManager.instance.GetToDirSquare(playerX, playerY, dir);
+			if (square == null || square.squareData.characterID < 0) continue;
+			// エネミーが居るのでそちらを向く
+			ChangeCharacterDir(player, dir);
+			return;
+		}
+		// 隣接エネミーがいない場合、プレイヤーが向いている方向マスに色を付ける
+		ChangeCharacterDir(player, player.characterData.direction);
+	}
+
+	/// <summary>
+	/// 方向転換用キャラ向き変更処理
+	/// </summary>
+	/// <param name="character"></param>
+	/// <param name="dir"></param>
+	private void ChangeCharacterDir(CharacterObject character, eDirectionEight dir) {
+		if (dir == eDirectionEight.Invalid ||
+			dir == eDirectionEight.Max) return;
+		// 現在向いている方向のマスの色を消す
+		int characterX = character.characterData.posX, characterY = character.characterData.posY;
+		MapSquareManager.instance.GetToDirSquare(characterX, characterY, character.characterData.direction)?.HideMark();
+		// キャラクターの向きを変更
+		character.SetDirection(dir);
+		// 現在向いている方向のマスに色を付ける
+		MapSquareManager.instance.GetToDirSquare(characterX, characterY, character.characterData.direction)?.ShowMark(Color.red);
 	}
 
 }

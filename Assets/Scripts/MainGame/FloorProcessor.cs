@@ -65,13 +65,16 @@ public class FloorProcessor {
 		SquareObject playerSquare = roomSquareList[randIndex];
 		CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
 		roomSquareList.RemoveAt(randIndex);
-		// エネミーを1体生成
-		if (CommonModule.IsEmpty(roomSquareList)) return;
+		// エネミーを生成
+		int enemyCount = 3;
+		for (int i = 0; i < enemyCount; i++) {
+			if (CommonModule.IsEmpty(roomSquareList)) break;
 
-		randIndex = Random.Range(0, roomSquareList.Count);
-		SquareObject enemySquare = roomSquareList[randIndex];
-		CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, 1);
-
+			randIndex = Random.Range(0, roomSquareList.Count);
+			SquareObject enemySquare = roomSquareList[randIndex];
+			CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, 1);
+			roomSquareList.Remove(enemySquare);
+		}
 	}
 
 	/// <summary>
@@ -80,6 +83,8 @@ public class FloorProcessor {
 	private void TeardownFloor() {
 		// フロアのエネミーを全削除
 		CharacterManager.instance.ExecuteAllCharacter(DeleteEnemy);
+		// プレイヤーの移動軌跡をリセット
+		CharacterManager.instance.GetPlayer()?.characterData.ClearMoveTrail();
 	}
 
 	/// <summary>

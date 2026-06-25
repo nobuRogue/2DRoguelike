@@ -103,4 +103,19 @@ public static class ExpantionMethod {
 		return MasterDataManager.instance.GetMessage(messageID);
 	}
 
+	/// <summary>
+	/// 整数を8方向列挙子に変換
+	/// </summary>
+	/// <param name="dirIndex"></param>
+	/// <returns></returns>
+	public static eDirectionEight ToDir8(this int dirIndex) {
+		int maxIndex = (int)eDirectionEight.Max;
+		// 最小値チェック
+		while (dirIndex < 0) dirIndex += maxIndex;
+		// 最大値チェック
+		while (dirIndex >= maxIndex) dirIndex -= maxIndex;
+
+		return (eDirectionEight)dirIndex;
+	}
+
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCharacter : CharacterBase {
@@ -8,10 +9,18 @@ public class PlayerCharacter : CharacterBase {
 	// 満腹度表示用変換係数
 	private const int _SHOW_STAMINA_RATIO = 100;
 
+	// 移動軌跡のマスIDリスト
+	private List<int> _moveTrailList = null;
+	private const int _MOVE_TRAIL_COUNT = 3;
+
 	/// <summary>
 	/// 満腹度
 	/// </summary>
 	public int stamina { get; private set; } = -1;
+
+	public PlayerCharacter() {
+		_moveTrailList = new List<int>(_MOVE_TRAIL_COUNT);
+	}
 
 	// プレイヤーか否か
 	public override bool IsPlayer() {
@@ -23,6 +32,8 @@ public class PlayerCharacter : CharacterBase {
 		base.Setup(ID, characterMaster);
 		// 満腹度を最大値にする
 		SetStamina(_MAX_STAMINA);
+
+		_moveTrailList.Clear();
 	}
 
 	/// <summary>
@@ -97,4 +108,42 @@ public class PlayerCharacter : CharacterBase {
 		return (stamina + _SHOW_STAMINA_RATIO - 1) / _SHOW_STAMINA_RATIO;
 	}
 
+	/// <summary>
+	/// 移動の軌跡に追加
+	/// </summary>
+	/// <param name="square"></param>
+	public void AddMoveTrail(SquareObject square) {
+		// 既に軌跡に存在するマスは追加しない
+		if (_moveTrailList.Exists(element => element == square.squareData.ID)) return;
+		// 軌跡が3マス以上あったら最も古い要素を取り除く
+		if (_moveTrailList.Count >= _MOVE_TRAIL_COUNT) _moveTrailList.RemoveAt(0);
+		// 軌跡に追加
+		_moveTrailList.Add(square.squareData.ID);
+	}
+
+	/// <summary>
+	/// 移動の軌跡をクリア
+	/// </summary>
+	public override void ClearMoveTrail() {
+		_moveTrailList.Clear();
+	}
+
+	/// <summary>
+	/// キャラクターをマスに設置
+	/// </summary>
+	/// <param name="square"></param>
+	public override void SetSquare(SquareObject square) {
+		base.SetSquare(square);
+		// 軌跡に追加
+		AddMoveTrail(square);
+	}
+
+	/// <summary>
+	/// 移動の軌跡に含まれているか判定
+	/// </summary>
+	/// <param name="square"></param>
+	/// <returns></returns>
+	public override bool ExistMoveTrail(SquareObject square) {
+		return _moveTrailList.Exists(element => element == square.squareData.ID);
+	}
 }

@@ -27,6 +27,19 @@ public class MapUtility {
 	public bool CanMove(int startX, int startY, SquareObject moveSquare, eDirectionEight moveDir) {
 		// 移動先のマスにキャラが居たら移動不可
 		if (moveSquare.squareData.characterID >= 0) return false;
+		// 地形の移動可否判定
+		return CanMoveTerrain(startX, startY, moveSquare, moveDir);
+	}
+
+	/// <summary>
+	/// 地形の移動可否判定
+	/// </summary>
+	/// <param name="startX"></param>
+	/// <param name="startY"></param>
+	/// <param name="moveSquare"></param>
+	/// <param name="moveDir"></param>
+	/// <returns></returns>
+	public bool CanMoveTerrain(int startX, int startY, SquareObject moveSquare, eDirectionEight moveDir) {
 		// 移動先のマスが壁地形なら移動不可
 		if (!moveSquare.squareData.terrain.CanMove()) return false;
 		// 斜め移動でなければ移動可能

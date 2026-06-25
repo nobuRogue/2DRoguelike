@@ -18,17 +18,44 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 		List<SquareObject> visibleArea = MapUtility.instance.GetVisibleArea(sourceSquare);
 		CharacterObject player = CharacterManager.instance.GetPlayer();
 		SquareObject playerSquare = MapSquareManager.instance.GetSquare(player.characterData.posX, player.characterData.posY);
-		bool isInVisbleArea = visibleArea.Exists(element => element == playerSquare);
+		bool isInVisbleArea = visibleArea.Exists(player.characterData.ExistMoveTrail);
 		if (isInVisbleArea) {
 			// TODO:プレイヤーが視界に居るなら可能な移動以外の行動を思考
 
 			// 可能な移動以外の行動がなければプレイヤーに近づく移動
-
+			CloseMoveToPlayer(sourceCharacter, sourceSquare, playerSquare);
 		}
 		else {
 			// ランダム移動
-			RandomMove();
+			//RandomMove();
 		}
+	}
+
+	/// <summary>
+	/// プレイヤーに近づく移動実行
+	/// </summary>
+	/// <param name="sourceCharacter"></param>
+	/// <param name="sourceSquare"></param>
+	/// <param name="playerSquare"></param>
+	private void CloseMoveToPlayer(CharacterObject sourceCharacter, SquareObject sourceSquare, SquareObject playerSquare) {
+		List<ChebyshevMoveData> route = RouteSearcher.instance.RouteSearchChebyshev(sourceSquare.squareData.ID, playerSquare.squareData.ID, CanPass);
+		// 経路が1以下なら終了
+		if (CommonModule.IsEmpty(route) || route.Count <= 1) return;
+
+		MoveAction moveAction = new MoveAction();
+		moveAction.ExecuteData(sourceCharacter, route[0]);
+		addMove?.Invoke(moveAction);
+	}
+
+	// 経路探索用の通行可否判定
+	private bool CanPass(SquareObject sourceSquare, SquareObject targetSquare, eDirectionEight dir) {
+		// プレイヤーのいるマスには地形のみの移動可否判定
+		CharacterObject character = CharacterManager.instance.GetCharacter(targetSquare.squareData.characterID);
+		int sourceX = sourceSquare.squareData.posX, sourceY = sourceSquare.squareData.posY;
+		bool isPlayer = character != null && character.characterData.IsPlayer();
+		if (isPlayer) return MapUtility.instance.CanMoveTerrain(sourceX, sourceY, targetSquare, dir);
+		// 移動可否判定
+		return MapUtility.instance.CanMove(sourceX, sourceY, targetSquare, dir);
 	}
 
 	private void RandomMove() {

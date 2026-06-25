@@ -12,6 +12,9 @@ public class SquareObject : MonoBehaviour {
 	// キャラクター配置用のルートオブジェクト
 	[SerializeField]
 	private Transform _characterRoot = null;
+	// デバッグ用スプライト
+	[SerializeField]
+	private SpriteRenderer _markSprite = null;
 
 	public MapSquare squareData = null;
 
@@ -29,6 +32,7 @@ public class SquareObject : MonoBehaviour {
 		position.y = posY * _SQUARE_SIZE_RATIO;
 		position.z = posY * 0.1f;
 		transform.position = position;
+		HideMark();
 	}
 
 	/// <summary>
@@ -47,5 +51,20 @@ public class SquareObject : MonoBehaviour {
 	/// </summary>
 	/// <returns></returns>
 	public Transform GetCharacterRoot() { return _characterRoot; }
+
+	/// <summary>
+	/// デバッグ用スプライト表示
+	/// </summary>
+	public void ShowMark(Color color) {
+		_markSprite.color = color;
+		_markSprite.enabled = true;
+	}
+
+	/// <summary>
+	/// デバッグ用スプライト非表示
+	/// </summary>
+	public void HideMark() {
+		_markSprite.enabled = false;
+	}
 
 }

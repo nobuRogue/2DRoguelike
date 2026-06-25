@@ -64,7 +64,7 @@ public abstract class CharacterBase {
 	/// マスにキャラを置く
 	/// </summary>
 	/// <param name="square"></param>
-	public void SetSquare(SquareObject square) {
+	public virtual void SetSquare(SquareObject square) {
 		if (square == null) return;
 		// 現在のマスから取り除く
 		SquareObject current = MapSquareManager.instance.GetSquare(posX, posY);
@@ -96,6 +96,22 @@ public abstract class CharacterBase {
 	/// </summary>
 	public virtual void Think() {
 
+	}
+
+	/// <summary>
+	/// 移動の軌跡クリア
+	/// </summary>
+	public virtual void ClearMoveTrail() {
+
+	}
+
+	/// <summary>
+	/// 移動の軌跡に含まれているか判定
+	/// </summary>
+	/// <param name="square"></param>
+	/// <returns></returns>
+	public virtual bool ExistMoveTrail(SquareObject square) {
+		return false;
 	}
 
 }
