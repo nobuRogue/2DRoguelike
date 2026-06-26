@@ -24,6 +24,10 @@ public class MasterDataManager {
 	private List<Entity_FloorData.Param> _floorData = null;
 	// キャラクター情報
 	private List<Entity_CharacterData.Param> _characterData = null;
+	// アクション情報
+	private List<Entity_ActionData.Param> _actionData = null;
+	// アクション効果情報
+	private List<Entity_ActionEffectData.Param> _actionEffectData = null;
 
 	/// <summary>
 	/// 全マスターデータ読み込み
@@ -35,6 +39,10 @@ public class MasterDataManager {
 		_floorData = Load<Entity_FloorData, Entity_FloorData.Sheet, Entity_FloorData.Param>("FloorData")[0];
 		// キャラクター情報の読み込み
 		_characterData = Load<Entity_CharacterData, Entity_CharacterData.Sheet, Entity_CharacterData.Param>("CharacterData")[0];
+		// アクション情報読み込み
+		_actionData = Load<Entity_ActionData, Entity_ActionData.Sheet, Entity_ActionData.Param>("ActionData")[0];
+		// アクション効果情報読み込み
+		_actionEffectData = Load<Entity_ActionEffectData, Entity_ActionEffectData.Sheet, Entity_ActionEffectData.Param>("ActionEffectData")[0];
 	}
 
 	/// <summary>
@@ -104,6 +112,34 @@ public class MasterDataManager {
 			if (_characterData[i].ID != characterID) continue;
 
 			return _characterData[i];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// ID指定のアクション情報取得
+	/// </summary>
+	/// <param name="actionID"></param>
+	/// <returns></returns>
+	public Entity_ActionData.Param GetActionData(int actionID) {
+		for (int i = 0; i < _actionData.Count; i++) {
+			if (_actionData[i].ID != actionID) continue;
+
+			return _actionData[i];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// ID指定のアクション効果取得
+	/// </summary>
+	/// <param name="effectID"></param>
+	/// <returns></returns>
+	public Entity_ActionEffectData.Param GetActionEffectData(int effectID) {
+		for (int i = 0; i < _actionEffectData.Count; i++) {
+			if (_actionEffectData[i].ID != effectID) continue;
+
+			return _actionEffectData[i];
 		}
 		return null;
 	}

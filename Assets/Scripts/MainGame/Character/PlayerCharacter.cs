@@ -96,7 +96,7 @@ public class PlayerCharacter : CharacterBase {
 		}
 		else {
 			// –ž• “x‚ª0ˆÈ‰º‚È‚çHP‚ðŒ¸‚ç‚·
-			SetHP(HP - 1);
+			RemoveHP(1);
 		}
 	}
 

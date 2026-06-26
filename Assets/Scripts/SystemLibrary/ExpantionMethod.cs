@@ -27,6 +27,15 @@ public static class ExpantionMethod {
 	}
 
 	/// <summary>
+	/// ’nŒ`‚ÌË’ö‘ÎÛ‰Â”Û”»’è
+	/// </summary>
+	/// <param name="terrain"></param>
+	/// <returns></returns>
+	public static bool CanRangeTarget(this eTerrain terrain) {
+		return terrain != eTerrain.Wall;
+	}
+
+	/// <summary>
 	/// Î‚ß•ûŒü‚©”Û‚©
 	/// </summary>
 	/// <param name="dir"></param>

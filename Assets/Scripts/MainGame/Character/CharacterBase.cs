@@ -17,6 +17,10 @@ public abstract class CharacterBase {
 	public int HP { get; private set; } = -1;
 	public int attack { get; private set; } = -1;
 	public int defense { get; private set; } = -1;
+	/// <summary>
+	/// €–S”»’è
+	/// </summary>
+	public bool isDead { get { return HP <= 0; } }
 
 	// ƒvƒŒƒCƒ„[‚©”Û‚©
 	public abstract bool IsPlayer();
@@ -41,6 +45,14 @@ public abstract class CharacterBase {
 
 	public virtual void SetHP(int HP) {
 		this.HP = HP;
+	}
+
+	/// <summary>
+	/// HPŒ¸­ˆ—
+	/// </summary>
+	/// <param name="removeValue"></param>
+	public void RemoveHP(int removeValue) {
+		SetHP(HP - removeValue);
 	}
 
 	public virtual void SetAttack(int attack) {

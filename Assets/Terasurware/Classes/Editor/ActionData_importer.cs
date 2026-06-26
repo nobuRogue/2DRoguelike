@@ -7,10 +7,10 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 
-public class MessageData_importer : AssetPostprocessor {
-	private static readonly string filePath = "Assets/Resources/MasterData/MessageData.xlsx";
-	private static readonly string exportPath = "Assets/Resources/MasterData/MessageData.asset";
-	private static readonly string[] sheetNames = { "Menu","Character","Item","Log","Action", };
+public class ActionData_importer : AssetPostprocessor {
+	private static readonly string filePath = "Assets/Resources/MasterData/ActionData.xlsx";
+	private static readonly string exportPath = "Assets/Resources/MasterData/ActionData.asset";
+	private static readonly string[] sheetNames = { "ActionData", };
 	
 	static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 	{
@@ -18,9 +18,9 @@ public class MessageData_importer : AssetPostprocessor {
 			if (!filePath.Equals (asset))
 				continue;
 				
-			Entity_MessageData data = (Entity_MessageData)AssetDatabase.LoadAssetAtPath (exportPath, typeof(Entity_MessageData));
+			Entity_ActionData data = (Entity_ActionData)AssetDatabase.LoadAssetAtPath (exportPath, typeof(Entity_ActionData));
 			if (data == null) {
-				data = ScriptableObject.CreateInstance<Entity_MessageData> ();
+				data = ScriptableObject.CreateInstance<Entity_ActionData> ();
 				AssetDatabase.CreateAsset ((ScriptableObject)data, exportPath);
 				data.hideFlags = HideFlags.NotEditable;
 			}
@@ -41,21 +41,23 @@ public class MessageData_importer : AssetPostprocessor {
 						continue;
 					}
 
-					Entity_MessageData.Sheet s = new Entity_MessageData.Sheet ();
+					Entity_ActionData.Sheet s = new Entity_ActionData.Sheet ();
 					s.name = sheetName;
 				
 					for (int i=1; i<= sheet.LastRowNum; i++) {
 						IRow row = sheet.GetRow (i);
 						ICell cell = null;
 						
-						Entity_MessageData.Param p = new Entity_MessageData.Param ();
+						Entity_ActionData.Param p = new Entity_ActionData.Param ();
 						
 					cell = row.GetCell(0); p.ID = (int)(cell == null ? 0 : cell.NumericCellValue);
-					p.text = new string[4];
-					cell = row.GetCell(1); p.text[0] = (cell == null ? "" : cell.StringCellValue);
-					cell = row.GetCell(2); p.text[1] = (cell == null ? "" : cell.StringCellValue);
-					cell = row.GetCell(3); p.text[2] = (cell == null ? "" : cell.StringCellValue);
-					cell = row.GetCell(4); p.text[3] = (cell == null ? "" : cell.StringCellValue);
+					cell = row.GetCell(2); p.nameID = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(3); p.rangType = (int)(cell == null ? 0 : cell.NumericCellValue);
+					p.effectID = new int[4];
+					cell = row.GetCell(5); p.effectID[0] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(6); p.effectID[1] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(7); p.effectID[2] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(8); p.effectID[3] = (int)(cell == null ? 0 : cell.NumericCellValue);
 						s.list.Add (p);
 					}
 					data.sheets.Add(s);

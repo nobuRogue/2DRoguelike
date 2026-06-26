@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f51bc1aba54a584d81fb63695e4d36b, type: 3}
+  m_Name: ActionEffectData
+  m_EditorClassIdentifier: Assembly-CSharp::Entity_ActionEffectData
+  sheets:
+  - name: ActionEffectData
+    list:
+    - ID: 0
+      effectType: 0
+      param: 6400000000000000
+    - ID: 1
+      effectType: 0
+      param: 0000000000000000
+    - ID: 2
+      effectType: 0
+      param: 0000000000000000
+    - ID: 3
+      effectType: 0
+      param: 0000000000000000

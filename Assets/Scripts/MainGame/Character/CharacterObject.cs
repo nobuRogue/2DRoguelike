@@ -186,7 +186,7 @@ public class CharacterObject : MonoBehaviour {
 		// ƒ^[ƒ“I—¹ˆ—
 		characterData?.OnEndTurn();
 		// €–S”»’è
-		if (characterData.HP <= 0) Dead();
+		if (characterData.isDead) Dead();
 
 	}
 

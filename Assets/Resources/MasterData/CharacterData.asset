@@ -24,7 +24,7 @@ MonoBehaviour:
     - ID: 1
       nameID: 1001
       spriteName: sand_enemy1
-      HP: 10
+      HP: 20
       Attack: 10
       Defense: 1
     - ID: 2

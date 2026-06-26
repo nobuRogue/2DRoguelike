@@ -21,6 +21,8 @@ public class AcceptPlayerInput {
 		while (true) {
 			// 移動入力の受付
 			if (AcceptMove()) break;
+			// 通常攻撃入力の受付
+			if (await AcceptAttack()) break;
 			// 方向転換入力の受付
 			await AcceptDirChange();
 			// 1フレーム待機
@@ -155,6 +157,18 @@ public class AcceptPlayerInput {
 		character.SetDirection(dir);
 		// 現在向いている方向のマスに色を付ける
 		MapSquareManager.instance.GetToDirSquare(characterX, characterY, character.characterData.direction)?.ShowMark(Color.red);
+	}
+
+	/// <summary>
+	/// 攻撃入力の受付
+	/// </summary>
+	/// <returns></returns>
+	private async UniTask<bool> AcceptAttack() {
+		// Zキー入力判定
+		if (!Input.GetKeyDown(KeyCode.Z)) return false;
+		// 通常攻撃アクション実行
+		await ActionManager.instance.ExecuteAction(CharacterManager.instance.GetPlayer(), GameConst.NORMAL_ATTACK_ID);
+		return true;
 	}
 
 }
