@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyCharacter : CharacterBase {
@@ -20,6 +21,16 @@ public class EnemyCharacter : CharacterBase {
 	/// </summary>
 	public override void Think() {
 		_actionAI?.ThinkAction();
+	}
+
+	/// <summary>
+	/// AIó\íËçsìÆÇÃé¿çs
+	/// </summary>
+	/// <returns></returns>
+	public override async UniTask ExecuteScheduleAction() {
+		if (_actionAI == null) return;
+
+		await _actionAI.ExecuteScheduleAction();
 	}
 
 }

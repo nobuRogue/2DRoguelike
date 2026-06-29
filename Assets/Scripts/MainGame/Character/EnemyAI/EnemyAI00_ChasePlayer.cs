@@ -21,7 +21,15 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 		bool isInVisbleArea = visibleArea.Exists(player.characterData.ExistMoveTrail);
 		if (isInVisbleArea) {
 			// TODO:プレイヤーが視界に居るなら可能な移動以外の行動を思考
-
+			// NORMAL_ATTACK_IDのアクションの対象有無を判定
+			Entity_ActionData.Param actionData = MasterDataManager.instance.GetActionData(GameConst.NORMAL_ATTACK_ID);
+			ActionRangeBase actionRange = ActionRangeManager.instance.GetRange(actionData.rangType);
+			eDirectionEight canUseDir = eDirectionEight.Invalid;
+			if (actionRange.CanUse(sourceCharacter, ref canUseDir)) {
+				// 予定行動に設定
+				_scheduleActionID = GameConst.NORMAL_ATTACK_ID;
+				return;
+			}
 			// 可能な移動以外の行動がなければプレイヤーに近づく移動
 			CloseMoveToPlayer(sourceCharacter, sourceSquare, playerSquare);
 		}
@@ -29,6 +37,7 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 			// ランダム移動
 			//RandomMove();
 		}
+
 	}
 
 	/// <summary>

@@ -26,7 +26,7 @@ public class MapUtility {
 	/// <returns></returns>
 	public bool CanMove(int startX, int startY, SquareObject moveSquare, eDirectionEight moveDir) {
 		// 移動先のマスにキャラが居たら移動不可
-		if (moveSquare.squareData.characterID >= 0) return false;
+		if (moveSquare.existCharacter) return false;
 		// 地形の移動可否判定
 		return CanMoveTerrain(startX, startY, moveSquare, moveDir);
 	}

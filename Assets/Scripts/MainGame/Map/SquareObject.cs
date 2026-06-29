@@ -19,6 +19,17 @@ public class SquareObject : MonoBehaviour {
 	public MapSquare squareData = null;
 
 	/// <summary>
+	/// キャラクター有無
+	/// </summary>
+	public bool existCharacter {
+		get {
+			if (squareData == null) return false;
+
+			return squareData.characterID >= 0;
+		}
+	}
+
+	/// <summary>
 	/// 使用前の準備
 	/// </summary>
 	/// <param name="ID"></param>

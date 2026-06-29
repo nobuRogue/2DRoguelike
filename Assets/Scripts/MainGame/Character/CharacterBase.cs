@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -124,6 +125,10 @@ public abstract class CharacterBase {
 	/// <returns></returns>
 	public virtual bool ExistMoveTrail(SquareObject square) {
 		return false;
+	}
+
+	public virtual async UniTask ExecuteScheduleAction() {
+		await UniTask.CompletedTask;
 	}
 
 }

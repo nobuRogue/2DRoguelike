@@ -17,12 +17,13 @@ public class ActionManager {
 	}
 
 	// 効果リスト
-	List<ActionEffectBase> _effectList = null;
+	private List<ActionEffectBase> _effectList = null;
 
 	private ActionManager() {
 		// 使用する行動効果をすべてキャッシュしておく
 		_effectList = new List<ActionEffectBase>();
 		_effectList.Add(new ActionEffect000_Attack());
+
 	}
 
 	/// <summary>

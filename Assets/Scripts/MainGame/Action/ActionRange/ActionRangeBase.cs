@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.AdaptivePerformance.Editor;
 using UnityEngine;
 
 /// <summary>
@@ -16,4 +17,15 @@ public abstract class ActionRangeBase {
 	/// 対象取得の実行処理
 	/// </summary>
 	public abstract void Execute(CharacterObject sourceCharacter);
+
+	/// <summary>
+	/// AI用使用可否判定
+	/// </summary>
+	/// <param name="sourceCharacter"></param>
+	/// <param name="dir"></param>
+	/// <returns></returns>
+	public virtual bool CanUse(CharacterObject sourceCharacter, ref eDirectionEight dir) {
+		return true;
+	}
+
 }

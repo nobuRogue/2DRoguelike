@@ -60,7 +60,7 @@ public class TurnProcessor {
 		// ターン終了の判定
 		if (!_isContinueTurn) return;
 		// 全エネミーの行動
-
+		await CharacterManager.instance.ExecuteTaskAllCharacter(ExecuteScheduleAction);
 		// ターン終了時処理
 		CharacterManager.instance.ExecuteAllCharacter(OnEndTurnCharacter);
 	}
@@ -71,6 +71,15 @@ public class TurnProcessor {
 	/// <param name="character"></param>
 	private void ThinkCharacter(CharacterObject character) {
 		character?.characterData.Think();
+	}
+
+	/// <summary>
+	/// キャラクターの予定行動実行
+	/// </summary>
+	/// <param name="character"></param>
+	/// <returns></returns>
+	private async UniTask ExecuteScheduleAction(CharacterObject character) {
+		await character.characterData.ExecuteScheduleAction();
 	}
 
 	/// <summary>

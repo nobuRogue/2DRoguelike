@@ -133,7 +133,7 @@ public class AcceptPlayerInput {
 		for (int i = 0; i < (int)eDirectionEight.Max; i++) {
 			eDirectionEight dir = (startIndex + i).ToDir8();
 			SquareObject square = MapSquareManager.instance.GetToDirSquare(playerX, playerY, dir);
-			if (square == null || square.squareData.characterID < 0) continue;
+			if (square == null || !square.existCharacter) continue;
 			// エネミーが居るのでそちらを向く
 			ChangeCharacterDir(player, dir);
 			return;

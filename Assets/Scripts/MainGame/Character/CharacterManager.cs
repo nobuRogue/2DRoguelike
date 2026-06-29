@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
@@ -149,6 +150,22 @@ public class CharacterManager : MonoBehaviour {
 			if (character == null) continue;
 			// 指定処理の実行
 			action(character);
+		}
+	}
+
+	/// <summary>
+	/// すべてのキャラクターに指定タスク実行
+	/// </summary>
+	/// <param name="task"></param>
+	/// <returns></returns>
+	public async UniTask ExecuteTaskAllCharacter(System.Func<CharacterObject, UniTask> task) {
+		if (task == null || CommonModule.IsEmpty(_useList)) return;
+
+		for (int i = 0; i < _useList.Count; i++) {
+			CharacterObject character = _useList[i];
+			if (character == null) continue;
+			// 指定タスクの実行
+			await task(character);
 		}
 	}
 
