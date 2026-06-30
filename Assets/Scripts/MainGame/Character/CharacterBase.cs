@@ -41,11 +41,11 @@ public abstract class CharacterBase {
 	}
 
 	public virtual void SetMaxHP(int maxHP) {
-		this.maxHP = maxHP;
+		this.maxHP = Mathf.Clamp(maxHP, 1, GameConst.CHARACTER_MAX_HP_MAX);
 	}
 
 	public virtual void SetHP(int HP) {
-		this.HP = HP;
+		this.HP = Mathf.Clamp(HP, 0, maxHP);
 	}
 
 	/// <summary>
@@ -129,6 +129,14 @@ public abstract class CharacterBase {
 
 	public virtual async UniTask ExecuteScheduleAction() {
 		await UniTask.CompletedTask;
+	}
+
+	/// <summary>
+	/// –¼‘OŽæ“¾
+	/// </summary>
+	/// <returns></returns>
+	public string GetName() {
+		return nameID.ToMessage();
 	}
 
 }

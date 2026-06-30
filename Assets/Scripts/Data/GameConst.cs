@@ -9,4 +9,6 @@ public class GameConst {
 	public static readonly int ENEMY_MAX_COUNT = 31;
 	// 通常攻撃のアクションID
 	public static readonly int NORMAL_ATTACK_ID = 0;
+	// 最大HPの最大値
+	public static readonly int CHARACTER_MAX_HP_MAX = 999;
 }

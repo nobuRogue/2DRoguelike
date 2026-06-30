@@ -12,24 +12,14 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 	/// 行動の思考
 	/// </summary>
 	public override void ThinkAction() {
-		// プレイヤーが視界に居るか判定
 		CharacterObject sourceCharacter = CharacterManager.instance.GetCharacter(_sourceCharacterID);
 		SquareObject sourceSquare = MapSquareManager.instance.GetSquare(sourceCharacter.characterData.posX, sourceCharacter.characterData.posY);
-		List<SquareObject> visibleArea = MapUtility.instance.GetVisibleArea(sourceSquare);
 		CharacterObject player = CharacterManager.instance.GetPlayer();
 		SquareObject playerSquare = MapSquareManager.instance.GetSquare(player.characterData.posX, player.characterData.posY);
-		bool isInVisbleArea = visibleArea.Exists(player.characterData.ExistMoveTrail);
-		if (isInVisbleArea) {
-			// TODO:プレイヤーが視界に居るなら可能な移動以外の行動を思考
-			// NORMAL_ATTACK_IDのアクションの対象有無を判定
-			Entity_ActionData.Param actionData = MasterDataManager.instance.GetActionData(GameConst.NORMAL_ATTACK_ID);
-			ActionRangeBase actionRange = ActionRangeManager.instance.GetRange(actionData.rangType);
-			eDirectionEight canUseDir = eDirectionEight.Invalid;
-			if (actionRange.CanUse(sourceCharacter, ref canUseDir)) {
-				// 予定行動に設定
-				_scheduleActionID = GameConst.NORMAL_ATTACK_ID;
-				return;
-			}
+		// プレイヤーが視界に居るか判定
+		if (IsInVisbleArea(sourceSquare, player)) {
+			// プレイヤーが視界に居るなら可能な移動以外の行動を思考
+			if (ScheduleAction(sourceCharacter)) return;
 			// 可能な移動以外の行動がなければプレイヤーに近づく移動
 			CloseMoveToPlayer(sourceCharacter, sourceSquare, playerSquare);
 		}
@@ -37,7 +27,33 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 			// ランダム移動
 			//RandomMove();
 		}
+	}
 
+	/// <summary>
+	/// プレイヤーが視界に居るか（否か）判定
+	/// </summary>
+	/// <param name="sourceSquare"></param>
+	/// <param name="player"></param>
+	/// <returns>プレイヤーが視界に居るならtrue、居なければfalse</returns>
+	private bool IsInVisbleArea(SquareObject sourceSquare, CharacterObject player) {
+		List<SquareObject> visibleArea = MapUtility.instance.GetVisibleArea(sourceSquare);
+		return visibleArea.Exists(player.characterData.ExistMoveTrail);
+	}
+
+	/// <summary>
+	/// 実行可能な行動を予約
+	/// </summary>
+	/// <param name="sourceCharacter"></param>
+	/// <returns></returns>
+	private bool ScheduleAction(CharacterObject sourceCharacter) {
+		// NORMAL_ATTACK_IDのアクションの対象有無を判定
+		Entity_ActionData.Param actionData = MasterDataManager.instance.GetActionData(GameConst.NORMAL_ATTACK_ID);
+		ActionRangeBase actionRange = ActionRangeManager.instance.GetRange(actionData.rangType);
+		eDirectionEight canUseDir = eDirectionEight.Invalid;
+		if (!actionRange.CanUse(sourceCharacter, ref canUseDir)) return false;
+		// 予定行動に設定
+		_scheduleActionID = GameConst.NORMAL_ATTACK_ID;
+		return true;
 	}
 
 	/// <summary>

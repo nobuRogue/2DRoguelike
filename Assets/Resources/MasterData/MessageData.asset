@@ -545,77 +545,77 @@ MonoBehaviour:
     list:
     - ID: 3000
       text:
+      - "{0}\u306B{1}\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u305F"
       - 
       - 
       - 
-      - 
-    - ID: 0
+    - ID: 3001
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3002
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3003
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3004
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3005
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3006
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3007
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3008
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3009
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3010
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3011
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3012
       text:
       - 
       - 

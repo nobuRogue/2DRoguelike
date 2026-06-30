@@ -9,7 +9,7 @@ public class TitlePart : PartBase {
 	public override async UniTask Initialize() {
 		await base.Initialize();
 		// ƒƒjƒ…[‚Ì‰Šú‰»
-		MenuManager.instance.Get<TitleMenu>("TitleCanvas").Initialize();
+		MenuManager.instance.Get<TitleMenu>("TitleCanvas");
 	}
 
 	public override async UniTask Execute() {

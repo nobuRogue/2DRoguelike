@@ -6,6 +6,9 @@ using UnityEngine;
 /// 通常攻撃ダメージ効果
 /// </summary>
 public class ActionEffect000_Attack : ActionEffectBase {
+	// ダメージ付与ログメッセージID
+	private const int _ADD_DAMAGE_LOG_ID = 3000;
+
 	/// <summary>
 	/// 効果の実行
 	/// </summary>
@@ -56,7 +59,12 @@ public class ActionEffect000_Attack : ActionEffectBase {
 		while (target.currentAnim == eCharacterAnimation.Damage) await UniTask.DelayFrame(1);
 		// ダメージの付与
 		target.characterData.RemoveHP(damage);
-		Debug.Log("Add damage " + damage + " to " + target);
+		string logMessage = string.Format(_ADD_DAMAGE_LOG_ID.ToMessage(), target.characterData.GetName(), damage);
+		Debug.Log(logMessage);
+		// ログメニューの取得
+		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+		// メニューにログを追加
+		logMenu.AddLog(logMessage);
 		// 死亡判定
 		if (target.characterData.isDead) target.Dead();
 

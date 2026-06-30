@@ -54,7 +54,7 @@ public class PlayerCharacter : CharacterBase {
 	public override void SetHP(int HP) {
 		base.SetHP(HP);
 		// UIXV
-		MenuManager.instance.Get<RogueMainMenu>().SetHP(HP, maxHP);
+		MenuManager.instance.Get<RogueMainMenu>().SetHP(base.HP, maxHP);
 	}
 	/// <summary>
 	/// UŒ‚—Íİ’è
