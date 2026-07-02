@@ -9,9 +9,12 @@ public class SquareObject : MonoBehaviour {
 	// 地形のスプライト
 	[SerializeField]
 	private SpriteRenderer _terrainSprite = null;
-	// キャラクター配置用のルートオブジェクト
+	// キャラクター配置用のルートポシジョン
 	[SerializeField]
 	private Transform _characterRoot = null;
+	// 配置オブジェクトのルートポジション
+	[SerializeField]
+	private Transform _objectRoot = null;
 	// デバッグ用スプライト
 	[SerializeField]
 	private SpriteRenderer _markSprite = null;
@@ -58,10 +61,15 @@ public class SquareObject : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// キャラクター用ルートオブジェクト取得
+	/// キャラクター用ルートポジション取得
 	/// </summary>
 	/// <returns></returns>
 	public Transform GetCharacterRoot() { return _characterRoot; }
+	/// <summary>
+	/// 配置物用ルートポジション取得
+	/// </summary>
+	/// <returns></returns>
+	public Transform GetObjectRoot() { return _objectRoot; }
 
 	/// <summary>
 	/// デバッグ用スプライト表示

@@ -75,6 +75,16 @@ public class FloorProcessor {
 			CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, 1);
 			roomSquareList.Remove(enemySquare);
 		}
+		// ÉAÉCÉeÉÄÇê∂ê¨
+		randIndex = Random.Range(0, roomSquareList.Count);
+		SquareObject itemSquare = roomSquareList[randIndex];
+		ItemManager.instance.CreateFloorItem(0, itemSquare);
+		roomSquareList.RemoveAt(randIndex);
+
+		randIndex = Random.Range(0, roomSquareList.Count);
+		itemSquare = roomSquareList[randIndex];
+		ItemManager.instance.CreateFloorItem(100, itemSquare);
+		roomSquareList.RemoveAt(randIndex);
 	}
 
 	/// <summary>

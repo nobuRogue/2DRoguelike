@@ -17,6 +17,8 @@ public class MapSquare {
 	public int roomID { get; private set; } = -1;
 	// マスに居るキャラクターのID
 	public int characterID { get; private set; } = -1;
+	// マスにあるアイテムのID
+	public int itemID { get; private set; } = -1;
 
 	/// <summary>
 	/// コンストラクタ
@@ -58,6 +60,21 @@ public class MapSquare {
 	/// </summary>
 	public void RemoveCharacter() {
 		characterID = -1;
+	}
+
+	/// <summary>
+	/// マスにアイテムを設定
+	/// </summary>
+	/// <param name="itemID"></param>
+	public void SetItem(int itemID) {
+		this.itemID = itemID;
+	}
+
+	/// <summary>
+	/// マスにあるアイテムの削除
+	/// </summary>
+	public void RemoveItem() {
+		itemID = -1;
 	}
 
 }

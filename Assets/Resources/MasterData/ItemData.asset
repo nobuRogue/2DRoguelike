@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad313b16035b72e43834938a92bc5adb, type: 3}
+  m_Name: ItemData
+  m_EditorClassIdentifier: Assembly-CSharp::Entity_ItemData
+  sheets:
+  - name: ItemData
+    list:
+    - ID: 0
+      nameID: 2000
+      category: 0
+      actionID: -1
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 1
+      nameID: 2001
+      category: 0
+      actionID: -1
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 100
+      nameID: 2100
+      category: 1
+      actionID: -1
+      burnID: 101
+      lotID: 103
+      minValue: -1
+      maxValue: -1
+    - ID: 101
+      nameID: 2101
+      category: 1
+      actionID: -1
+      burnID: 102
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 102
+      nameID: 2102
+      category: 1
+      actionID: -1
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 103
+      nameID: 2103
+      category: 1
+      actionID: -1
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 200
+      nameID: 2200
+      category: 2
+      actionID: -1
+      burnID: -1
+      lotID: -1
+      minValue: 2
+      maxValue: 7

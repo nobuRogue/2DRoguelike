@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -12,17 +13,18 @@ public abstract class CharacterBase {
 	public int posY { get; private set; } = -1;
 	// 向き
 	public eDirectionEight direction { get; private set; } = eDirectionEight.Invalid;
-
-	public int nameID { get; private set; } = -1;
+	// 名前メッセージID
+	private int _nameID = -1;
 	public int maxHP { get; private set; } = -1;
 	public int HP { get; private set; } = -1;
 	public int attack { get; private set; } = -1;
 	public int defense { get; private set; } = -1;
-	/// <summary>
-	/// 死亡判定
-	/// </summary>
+	// 死亡判定
 	public bool isDead { get { return HP <= 0; } }
-
+	// 所持アイテムIDリスト
+	public List<int> possessItemList { get; private set; } = null;
+	// 所持アイテム最大数
+	private const int _POSSESS_ITEM_MAX = 10;
 	// プレイヤーか否か
 	public abstract bool IsPlayer();
 
@@ -32,12 +34,13 @@ public abstract class CharacterBase {
 	/// <param name="ID"></param>
 	public virtual void Setup(int ID, Entity_CharacterData.Param characterMaster) {
 		this.ID = ID;
-
-		nameID = characterMaster.nameID;
+		_nameID = characterMaster.nameID;
 		SetMaxHP(characterMaster.HP);
 		SetHP(characterMaster.HP);
 		SetAttack(characterMaster.Attack);
 		SetDefense(characterMaster.Defense);
+		// 所持アイテムリスト初期化
+		possessItemList = new List<int>(_POSSESS_ITEM_MAX);
 	}
 
 	public virtual void SetMaxHP(int maxHP) {
@@ -136,7 +139,31 @@ public abstract class CharacterBase {
 	/// </summary>
 	/// <returns></returns>
 	public string GetName() {
-		return nameID.ToMessage();
+		return _nameID.ToMessage();
+	}
+
+	/// <summary>
+	/// アイテムを取得可能か判定
+	/// </summary>
+	/// <returns></returns>
+	public bool CanAddItem() {
+		return possessItemList.Count < _POSSESS_ITEM_MAX;
+	}
+
+	/// <summary>
+	/// 所持アイテムへ追加
+	/// </summary>
+	/// <param name="itemID"></param>
+	public void AddItem(int itemID) {
+		possessItemList.Add(itemID);
+	}
+
+	/// <summary>
+	/// 所持アイテムの削除
+	/// </summary>
+	/// <param name="itemID"></param>
+	public void RemoveItem(int itemID) {
+		possessItemList.Remove(itemID);
 	}
 
 }

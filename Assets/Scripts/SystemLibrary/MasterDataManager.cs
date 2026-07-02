@@ -28,6 +28,9 @@ public class MasterDataManager {
 	private List<Entity_ActionData.Param> _actionData = null;
 	// アクション効果情報
 	private List<Entity_ActionEffectData.Param> _actionEffectData = null;
+	// アイテム情報
+	private List<Entity_ItemData.Param> _itemData = null;
+
 
 	/// <summary>
 	/// 全マスターデータ読み込み
@@ -43,6 +46,8 @@ public class MasterDataManager {
 		_actionData = Load<Entity_ActionData, Entity_ActionData.Sheet, Entity_ActionData.Param>("ActionData")[0];
 		// アクション効果情報読み込み
 		_actionEffectData = Load<Entity_ActionEffectData, Entity_ActionEffectData.Sheet, Entity_ActionEffectData.Param>("ActionEffectData")[0];
+		// アイテム情報読み込み
+		_itemData = Load<Entity_ItemData, Entity_ItemData.Sheet, Entity_ItemData.Param>("ItemData")[0];
 	}
 
 	/// <summary>
@@ -140,6 +145,20 @@ public class MasterDataManager {
 			if (_actionEffectData[i].ID != effectID) continue;
 
 			return _actionEffectData[i];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// ID指定のアイテムデータ取得
+	/// </summary>
+	/// <param name="itemID"></param>
+	/// <returns></returns>
+	public Entity_ItemData.Param GetItemData(int itemID) {
+		for (int i = 0; i < _itemData.Count; i++) {
+			if (_itemData[i].ID != itemID) continue;
+
+			return _itemData[i];
 		}
 		return null;
 	}

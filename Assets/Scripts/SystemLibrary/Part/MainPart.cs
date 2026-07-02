@@ -11,6 +11,9 @@ public class MainPart : PartBase {
 	// キャラクター管理クラス
 	[SerializeField]
 	private CharacterManager _characterManager = null;
+	// アイテム管理クラス
+	[SerializeField]
+	private ItemManager _itemManager = null;
 
 	// ダンジョン実行
 	private DungeonProcessor _dungeonProcessor = null;
@@ -21,6 +24,8 @@ public class MainPart : PartBase {
 		_mapManager?.Initialize();
 		// キャラクター初期化
 		_characterManager?.Initialize();
+		// アイテム初期化
+		_itemManager?.Initialize();
 		// ダンジョン実行処理初期化
 		_dungeonProcessor = new DungeonProcessor();
 		_dungeonProcessor.Initialize();
