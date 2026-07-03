@@ -27,7 +27,9 @@ public abstract class ItemBase {
 	/// 使用後片付け
 	/// </summary>
 	public void Teardown() {
-		this.ID = -1;
+		// 現在の場所から取り除く
+		RemoveCurrentPlace();
+		ID = -1;
 	}
 
 	/// <summary>
@@ -41,7 +43,7 @@ public abstract class ItemBase {
 	}
 
 	/// <summary>
-	/// マスにアイテムを配置
+	/// マスに配置
 	/// </summary>
 	/// <param name="square"></param>
 	public void SetSquare(SquareObject square) {
@@ -51,6 +53,19 @@ public abstract class ItemBase {
 		square.squareData.SetItem(ID);
 		posX = square.squareData.posX;
 		posY = square.squareData.posY;
+	}
+
+	/// <summary>
+	/// キャラクターの手持ちに追加
+	/// </summary>
+	/// <param name="character"></param>
+	public void SetCharacter(CharacterObject character) {
+		// 現在の場所から取り除く
+		RemoveCurrentPlace();
+		// キャラクターのアイテムリストに追加
+		character.characterData.AddItem(ID);
+		// 所持キャラクターIDの設定
+		possessCharacterID = character.characterData.ID;
 	}
 
 	/// <summary>

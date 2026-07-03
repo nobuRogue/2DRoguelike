@@ -21,14 +21,20 @@ public class SquareObject : MonoBehaviour {
 
 	public MapSquare squareData = null;
 
-	/// <summary>
-	/// キャラクター有無
-	/// </summary>
+	// キャラクター有無
 	public bool existCharacter {
 		get {
 			if (squareData == null) return false;
 
 			return squareData.characterID >= 0;
+		}
+	}
+	// アイテム有無
+	public bool existItem {
+		get {
+			if (squareData == null) return false;
+
+			return squareData.itemID >= 0;
 		}
 	}
 

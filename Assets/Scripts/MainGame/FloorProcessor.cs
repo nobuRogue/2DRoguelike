@@ -93,8 +93,22 @@ public class FloorProcessor {
 	private void TeardownFloor() {
 		// フロアのエネミーを全削除
 		CharacterManager.instance.ExecuteAllCharacter(DeleteEnemy);
+		// フロアのアイテムを全削除
+		// 全てのアイテムに対して、床落ちアイテムなら削除処理を実行
+		ItemManager.instance.ExecuteAllItem(DeleteFloorItem);
 		// プレイヤーの移動軌跡をリセット
 		CharacterManager.instance.GetPlayer()?.characterData.ClearMoveTrail();
+	}
+
+	/// <summary>
+	/// 床落ちアイテムなら削除
+	/// </summary>
+	/// <param name="item"></param>
+	private void DeleteFloorItem(ItemObject item) {
+		// 床落ちアイテムでなければ終了
+		if (!item.isFloorItem) return;
+		// 床落ちアイテムなので削除
+		ItemManager.instance.DeleteItem(item);
 	}
 
 	/// <summary>

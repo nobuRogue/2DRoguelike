@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// 1回の移動アクション
@@ -9,6 +10,11 @@ public class MoveAction {
 	public static System.Action<eFloorEndReason> EndFloor = null;
 	// ダンジョン終了処理
 	public static System.Action<eDungeonEndReason> EndDungeon = null;
+
+	// アイテムを拾った時のログメッセージID
+	private const int _ADD_ITEM_LOG_ID = 3001;
+	// アイテムを拾えなかった時のログメッセージID
+	private const int _NOT_ADD_LOG_ID = 3002;
 
 	// 移動キャラ
 	private CharacterObject _character = null;
@@ -63,13 +69,27 @@ public class MoveAction {
 	private void AfterMoveProcess(SquareObject goalSquare) {
 		// プレイヤーでなければ処理しない
 		if (!_character.characterData.IsPlayer()) return;
-		// TODO:移動先のマスのアイテムを拾う処理
-
+		// 移動先のマスのアイテムを拾う処理
+		ProcessAddItem(goalSquare);
 		// 階段処理
 		ProcessStair(goalSquare);
+	}
 
-
-
+	private void ProcessAddItem(SquareObject square) {
+		// 移動先のマスにアイテムがあるか判定
+		ItemObject item = ItemManager.instance.GetItem(square.squareData.itemID);
+		if (item == null) return;
+		// アイテムがあるなら獲得可否判定（プレイヤーがアイテムを拾えるか）
+		CharacterObject player = CharacterManager.instance.GetPlayer();
+		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+		if (!player.characterData.CanAddItem()) {
+			// 拾えなければログを表示して終了
+			logMenu.AddLog(string.Format(_NOT_ADD_LOG_ID.ToMessage(), item.itemData.GetName()));
+			return;
+		}
+		// 拾えるならアイテム獲得、ログ表示
+		item.SetCharacter(player);
+		logMenu.AddLog(string.Format(_ADD_ITEM_LOG_ID.ToMessage(), item.itemData.GetName()));
 	}
 
 	/// <summary>

@@ -126,4 +126,42 @@ public class ItemManager : MonoBehaviour {
 		return null;
 	}
 
+	/// <summary>
+	/// ID指定のアイテム取得
+	/// </summary>
+	/// <param name="ID"></param>
+	/// <returns></returns>
+	public ItemObject GetItem(int ID) {
+		if (!CommonModule.IsEnableIndex(_useList, ID)) return null;
+
+		return _useList[ID];
+	}
+
+	/// <summary>
+	/// 全てのアイテムに指定処理実行
+	/// </summary>
+	/// <param name="action"></param>
+	public void ExecuteAllItem(System.Action<ItemObject> action) {
+		if (action == null || CommonModule.IsEmpty(_useList)) return;
+
+		for (int i = 0; i < _useList.Count; i++) {
+			ItemObject item = _useList[i];
+			if (item == null) continue;
+			// 指定処理の実行
+			action(item);
+		}
+	}
+
+	/// <summary>
+	/// アイテムカテゴリに対応したスプライト取得
+	/// </summary>
+	/// <param name="category"></param>
+	/// <returns></returns>
+	public Sprite GetItemCategorySprite(eItemCategory category) {
+		int categoryIndex = (int)category;
+		if (!CommonModule.IsEnableIndex(_itemCategorySpriteList, categoryIndex)) return null;
+
+		return _itemCategorySpriteList[categoryIndex];
+	}
+
 }
