@@ -11,8 +11,9 @@ public class ItemList : ListMenu {
 	/// アイテムリスト項目の生成
 	/// </summary>
 	/// <returns></returns>
-	public async UniTask Setup(List<int> itemIDList) {
-		// TODO:コールバックの設定
+	public async UniTask Setup(List<int> itemIDList, ListMenuCallbackFormat format) {
+		// コールバックの設定
+		SetCallbackFormat(format);
 
 		// すべての項目削除
 		RemoveAllItem();

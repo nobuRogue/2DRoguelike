@@ -32,6 +32,7 @@ public class MainPart : PartBase {
 		// ƒƒjƒ…[‰Šú‰»
 		MenuManager.instance.Get<RogueMainMenu>("RogueMainCanvas");
 		MenuManager.instance.Get<RogueLogMenu>("RogueLogCanvas");
+		MenuManager.instance.Get<ItemList>("ItemListCanvas");
 	}
 
 	public override async UniTask Setup() {

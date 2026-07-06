@@ -8,9 +8,12 @@ public class AcceptPlayerInput {
 
 	// 移動アクションの追加時コールバック
 	private System.Action<MoveAction> _addMove = null;
+	// アイテムリスト入力の受付
+	private AcceptItemList _acceptItemList = null;
 
 	public void Initialize(System.Action<MoveAction> addMove) {
 		_addMove = addMove;
+		_acceptItemList = new AcceptItemList();
 	}
 
 	/// <summary>
@@ -23,6 +26,8 @@ public class AcceptPlayerInput {
 			if (AcceptMove()) break;
 			// 通常攻撃入力の受付
 			if (await AcceptAttack()) break;
+			// アイテムリストメニュー入力の受付
+			if (await AcceptItemList()) break;
 			// 方向転換入力の受付
 			await AcceptDirChange();
 			// 1フレーム待機
@@ -169,6 +174,17 @@ public class AcceptPlayerInput {
 		// 通常攻撃アクション実行
 		await ActionManager.instance.ExecuteAction(CharacterManager.instance.GetPlayer(), GameConst.NORMAL_ATTACK_ID);
 		return true;
+	}
+
+	/// <summary>
+	/// アイテムリスト入力の受付
+	/// </summary>
+	/// <returns></returns>
+	private async UniTask<bool> AcceptItemList() {
+		// Cキー入力判定
+		if (!Input.GetKeyDown(KeyCode.C)) return false;
+		// アイテムリスト処理
+		return await _acceptItemList.Accept();
 	}
 
 }

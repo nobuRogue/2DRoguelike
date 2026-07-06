@@ -12,7 +12,7 @@ public abstract class ItemBase {
 	// 所持キャラクターID
 	public int possessCharacterID { get; private set; } = -1;
 	// マスターデータ
-	protected Entity_ItemData.Param _itemMaster = null;
+	public Entity_ItemData.Param itemMaster { get; protected set; } = null;
 	// カテゴリ取得
 	public abstract eItemCategory GetCategory();
 	/// <summary>
@@ -21,7 +21,7 @@ public abstract class ItemBase {
 	/// <param name="ID"></param>
 	public void Setup(int ID, Entity_ItemData.Param itemMaster) {
 		this.ID = ID;
-		_itemMaster = itemMaster;
+		this.itemMaster = itemMaster;
 	}
 	/// <summary>
 	/// 使用後片付け
@@ -37,9 +37,9 @@ public abstract class ItemBase {
 	/// </summary>
 	/// <returns></returns>
 	public string GetName() {
-		if (_itemMaster == null) return string.Empty;
+		if (itemMaster == null) return string.Empty;
 
-		return _itemMaster.nameID.ToMessage();
+		return itemMaster.nameID.ToMessage();
 	}
 
 	/// <summary>
