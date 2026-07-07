@@ -75,9 +75,7 @@ public enum eCharacterAnimation {
 	Max,
 }
 
-/// <summary>
-/// アイテムカテゴリ
-/// </summary>
+// アイテムカテゴリ
 public enum eItemCategory {
 	Potion, // 薬
 	Food,   // 食べ物
@@ -88,4 +86,13 @@ public enum eItemCategory {
 	Weapon, // 武器
 	Armor,  // 防具
 	Max,
+}
+
+// アイテムのコマンド
+public enum eItemCommand {
+	Invalid = -1,
+	Use,        // 使う
+	Puton,      // 置く
+	Equip,      // 装備
+	Remove,     // 装備を外す
 }

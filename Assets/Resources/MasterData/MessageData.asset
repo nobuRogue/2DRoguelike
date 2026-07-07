@@ -33,43 +33,43 @@ MonoBehaviour:
       - 
       - 
       - 
-    - ID: 0
+    - ID: 20
+      text:
+      - "\u4F7F\u3046"
+      - 
+      - 
+      - 
+    - ID: 21
+      text:
+      - "\u7F6E\u304F"
+      - 
+      - 
+      - 
+    - ID: 22
+      text:
+      - "\u88C5\u5099"
+      - 
+      - 
+      - 
+    - ID: 23
+      text:
+      - "\u5916\u3059"
+      - 
+      - 
+      - 
+    - ID: 24
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 25
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
-      text:
-      - 
-      - 
-      - 
-      - 
-    - ID: 0
-      text:
-      - 
-      - 
-      - 
-      - 
-    - ID: 0
-      text:
-      - 
-      - 
-      - 
-      - 
-    - ID: 0
-      text:
-      - 
-      - 
-      - 
-      - 
-    - ID: 0
+    - ID: 26
       text:
       - 
       - 
@@ -563,13 +563,13 @@ MonoBehaviour:
       - 
     - ID: 3003
       text:
-      - 
+      - "\u30A2\u30A4\u30C6\u30E0\u3092\u7F6E\u3051\u306A\u304B\u3063\u305F"
       - 
       - 
       - 
     - ID: 3004
       text:
-      - 
+      - "{0}\u3092\u7F6E\u3044\u305F"
       - 
       - 
       - 

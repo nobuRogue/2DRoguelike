@@ -17,7 +17,7 @@ MonoBehaviour:
     list:
     - ID: 0
       nameID: 2000
-      category: 0
+      category: 6
       actionID: -1
       burnID: -1
       lotID: -1

@@ -17,6 +17,8 @@ public class MainPart : PartBase {
 
 	// ダンジョン実行
 	private DungeonProcessor _dungeonProcessor = null;
+	// ダンジョンBGMのID
+	private const int _BGM_ID = 0;
 
 	public override async UniTask Initialize() {
 		await base.Initialize();
@@ -33,6 +35,7 @@ public class MainPart : PartBase {
 		MenuManager.instance.Get<RogueMainMenu>("RogueMainCanvas");
 		MenuManager.instance.Get<RogueLogMenu>("RogueLogCanvas");
 		MenuManager.instance.Get<ItemList>("ItemListCanvas");
+		MenuManager.instance.Get<ItemCommandList>("ItemCommandListCanvas");
 	}
 
 	public override async UniTask Setup() {
@@ -50,8 +53,12 @@ public class MainPart : PartBase {
 		// ログメニュー表示
 		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
 		await logMenu.Open();
+		// BGM再生
+		SoundManager.instance.PlayBGM(_BGM_ID);
 		// ダンジョン実行
 		eDungeonEndReason endReason = await _dungeonProcessor.Execute();
+		// BGM停止
+		SoundManager.instance.StopBGM();
 		// メインUI非表示
 		await mainMenu.Close();
 		// ログメニュー非表示
