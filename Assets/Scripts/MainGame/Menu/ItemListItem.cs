@@ -12,6 +12,10 @@ public class ItemListItem : ListItem {
 	// アイテム名テキスト
 	[SerializeField]
 	private TextMeshProUGUI _itemNameText = null;
+	// コマンドリストの表示位置
+	[SerializeField]
+	private Transform _commandRoot = null;
+
 	// 対応するアイテムのID
 	public int itemID { get; private set; } = -1;
 
@@ -23,5 +27,13 @@ public class ItemListItem : ListItem {
 		_itemIconImage.sprite = ItemManager.instance.GetItemCategorySprite(itemCategory);
 		// アイテム名の設定
 		_itemNameText.text = item.itemData.GetName();
+	}
+
+	/// <summary>
+	/// アイテムコマンドリスト表示位置取得
+	/// </summary>
+	/// <returns></returns>
+	public Vector3 GetCommandRoot() {
+		return _commandRoot.position;
 	}
 }

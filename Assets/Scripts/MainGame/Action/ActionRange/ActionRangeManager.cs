@@ -22,6 +22,7 @@ public class ActionRangeManager {
 		// 使用する射程をすべてキャッシュしておく
 		_rangeList = new List<ActionRangeBase>();
 		_rangeList.Add(new ActionRange00_DirForward());
+		_rangeList.Add(new ActionRange01_Self());
 	}
 
 	/// <summary>

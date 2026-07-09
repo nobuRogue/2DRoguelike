@@ -19,7 +19,7 @@ public abstract class ItemBase {
 	/// 使用前準備
 	/// </summary>
 	/// <param name="ID"></param>
-	public void Setup(int ID, Entity_ItemData.Param itemMaster) {
+	public virtual void Setup(int ID, Entity_ItemData.Param itemMaster) {
 		this.ID = ID;
 		this.itemMaster = itemMaster;
 	}
@@ -36,7 +36,7 @@ public abstract class ItemBase {
 	/// 名前取得
 	/// </summary>
 	/// <returns></returns>
-	public string GetName() {
+	public virtual string GetName() {
 		if (itemMaster == null) return string.Empty;
 
 		return itemMaster.nameID.ToMessage();
@@ -85,6 +85,15 @@ public abstract class ItemBase {
 			possessCharacter.characterData.RemoveItem(ID);
 			possessCharacterID = -1;
 		}
+	}
+
+	/// <summary>
+	/// 消費する
+	/// </summary>
+	public virtual void Consume() {
+		// 自身を削除
+		ItemObject item = ItemManager.instance.GetItem(ID);
+		ItemManager.instance.DeleteItem(item);
 	}
 
 }

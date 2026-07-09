@@ -475,6 +475,12 @@ MonoBehaviour:
       - 
       - 
       - 
+    - ID: 2299
+      text:
+      - '{0}[{1}]'
+      - 
+      - 
+      - 
     - ID: 2300
       text:
       - "\u5DFB\u7269"
@@ -575,19 +581,19 @@ MonoBehaviour:
       - 
     - ID: 3005
       text:
-      - 
+      - "{0}\u3092\u4F7F\u3063\u305F"
       - 
       - 
       - 
     - ID: 3006
       text:
-      - 
+      - "{0}\u306EHP\u304C{1}\u56DE\u5FA9\u3057\u305F"
       - 
       - 
       - 
     - ID: 3007
       text:
-      - 
+      - "{0}\u306E\u6E80\u8179\u5EA6\u304C{1}\u56DE\u5FA9\u3057\u305F"
       - 
       - 
       - 

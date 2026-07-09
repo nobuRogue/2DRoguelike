@@ -76,15 +76,14 @@ public class FloorProcessor {
 			roomSquareList.Remove(enemySquare);
 		}
 		// ÉAÉCÉeÉÄÇê∂ê¨
-		randIndex = Random.Range(0, roomSquareList.Count);
-		SquareObject itemSquare = roomSquareList[randIndex];
-		ItemManager.instance.CreateFloorItem(0, itemSquare);
-		roomSquareList.RemoveAt(randIndex);
+		int itemCount = 16;
+		for (int i = 0; i < itemCount; i++) {
+			randIndex = Random.Range(0, roomSquareList.Count);
+			SquareObject itemSquare = roomSquareList[randIndex];
+			ItemManager.instance.CreateFloorItem(Random.Range(100, 102), itemSquare);
+			roomSquareList.RemoveAt(randIndex);
+		}
 
-		randIndex = Random.Range(0, roomSquareList.Count);
-		itemSquare = roomSquareList[randIndex];
-		ItemManager.instance.CreateFloorItem(100, itemSquare);
-		roomSquareList.RemoveAt(randIndex);
 	}
 
 	/// <summary>

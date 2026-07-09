@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class ActionManager {
 	private static ActionManager _instance;
+	// アイテム使用時のログID
+	private const int _USE_ITEM_LOG_ID = 3005;
 
 	public static ActionManager instance {
 		get {
@@ -23,7 +26,21 @@ public class ActionManager {
 		// 使用する行動効果をすべてキャッシュしておく
 		_effectList = new List<ActionEffectBase>();
 		_effectList.Add(new ActionEffect000_Attack());
+		_effectList.Add(new ActionEffect001_HealHP());
+		_effectList.Add(new ActionEffect002_HealStamina());
+		_effectList.Add(new ActionEffect003_FixDamage());
+	}
 
+	public async UniTask UseItem(CharacterObject useCharacter, ItemObject useItem) {
+		// アイテムのマスターデータを取得する
+		Entity_ItemData.Param itemMaster = useItem.itemData.itemMaster;
+		// ログの表示
+		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+		logMenu.AddLog(string.Format(_USE_ITEM_LOG_ID.ToMessage(), useItem.itemData.GetName()));
+		// アクションの実行
+		await ExecuteAction(useCharacter, itemMaster.actionID);
+		// アイテムの消費
+		useItem.itemData.Consume();
 	}
 
 	/// <summary>

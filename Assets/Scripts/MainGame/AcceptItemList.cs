@@ -64,6 +64,7 @@ public class AcceptItemList {
 		switch (_decideCommand) {
 			case eItemCommand.Use:
 				// アイテムを使う処理実行
+				await ActionManager.instance.UseItem(player, item);
 				break;
 			case eItemCommand.Puton:
 				// アイテムを置く処理実行
@@ -139,7 +140,7 @@ public class AcceptItemList {
 		ItemObject itemObject = ItemManager.instance.GetItem(_decideItemID);
 		// アイテムコマンドリストの入力受付
 		ItemCommandList commandList = MenuManager.instance.Get<ItemCommandList>();
-		await commandList.Setup(itemObject.itemData.GetCategory(), _commandListCallbackFormat);
+		await commandList.Setup(itemObject.itemData.GetCategory(), _commandListCallbackFormat, itemListItem.GetCommandRoot());
 		// 直後のリスト選択で決定入力が行われないように1フレーム待機
 		await UniTask.DelayFrame(1, cancellationToken: ct);
 		await commandList.Open();

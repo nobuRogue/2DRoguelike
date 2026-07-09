@@ -79,10 +79,26 @@ public class PlayerCharacter : CharacterBase {
 	/// 満腹度設定
 	/// </summary>
 	/// <param name="stamina"></param>
-	public void SetStamina(int stamina) {
+	public override void SetStamina(int stamina) {
 		this.stamina = Mathf.Clamp(stamina, 0, _MAX_STAMINA);
 		// UI更新
 		MenuManager.instance.Get<RogueMainMenu>().SetStamina(GetShowStamina());
+	}
+
+	/// <summary>
+	/// 満腹度回復
+	/// </summary>
+	/// <param name="addValue"></param>
+	public override void AddStamina(int addValue) {
+		SetStamina(stamina + addValue);
+	}
+
+	/// <summary>
+	/// 満腹度減少
+	/// </summary>
+	/// <param name="removeValue"></param>
+	public override void RemoveStamina(int removeValue) {
+		SetStamina(stamina - removeValue);
 	}
 
 	/// <summary>

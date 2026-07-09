@@ -222,6 +222,7 @@ MonoBehaviour:
   _itemOrigin: {fileID: 887979289258833841, guid: a07f28b5e77b7cc409286c11d724d5a2, type: 3}
   _contentRoot: {fileID: 451826457557758041}
   _unuseRoot: {fileID: 881113475269380302}
+  _listRoot: {fileID: 241241408744770773}
 --- !u!1 &8083519049859722862
 GameObject:
   m_ObjectHideFlags: 0

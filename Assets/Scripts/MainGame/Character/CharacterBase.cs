@@ -52,6 +52,14 @@ public abstract class CharacterBase {
 	}
 
 	/// <summary>
+	/// HP‰ñ•œ
+	/// </summary>
+	/// <param name="addValue"></param>
+	public void AddHP(int addValue) {
+		SetHP(HP + addValue);
+	}
+
+	/// <summary>
 	/// HPŒ¸­ˆ—
 	/// </summary>
 	/// <param name="removeValue"></param>
@@ -65,6 +73,18 @@ public abstract class CharacterBase {
 
 	public virtual void SetDefense(int defense) {
 		this.defense = defense;
+	}
+
+	public virtual void SetStamina(int stamina) {
+
+	}
+
+	public virtual void AddStamina(int addValue) {
+
+	}
+
+	public virtual void RemoveStamina(int removeValue) {
+
 	}
 
 	/// <summary>

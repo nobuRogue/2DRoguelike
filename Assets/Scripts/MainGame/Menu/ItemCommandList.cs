@@ -5,8 +5,12 @@ using UnityEngine;
 /// アイテムのコマンドリスト
 /// </summary>
 public class ItemCommandList : ListMenu {
+	[SerializeField]
+	private Transform _listRoot = null;
 
-	public async UniTask Setup(eItemCategory itemCategory, ListMenuCallbackFormat format) {
+	public async UniTask Setup(eItemCategory itemCategory, ListMenuCallbackFormat format, Vector3 position) {
+		// 表示位置設定
+		_listRoot.position = position;
 		// コールバックの設定
 		SetCallbackFormat(format);
 		// 全ての項目を削除

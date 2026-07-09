@@ -20,14 +20,30 @@ MonoBehaviour:
       rangType: 0
       effectID: 00000000ffffffffffffffffffffffff
     - ID: 1
-      nameID: 0
-      rangType: 0
-      effectID: ffffffffffffffffffffffffffffffff
+      nameID: -1
+      rangType: 1
+      effectID: 01000000ffffffffffffffffffffffff
     - ID: 2
+      nameID: -1
+      rangType: 1
+      effectID: 0200000001000000ffffffffffffffff
+    - ID: 3
+      nameID: -1
+      rangType: 1
+      effectID: 03000000ffffffffffffffffffffffff
+    - ID: 4
       nameID: 0
       rangType: 0
       effectID: ffffffffffffffffffffffffffffffff
-    - ID: 3
+    - ID: 5
+      nameID: 0
+      rangType: 0
+      effectID: ffffffffffffffffffffffffffffffff
+    - ID: 6
+      nameID: 0
+      rangType: 0
+      effectID: ffffffffffffffffffffffffffffffff
+    - ID: 7
       nameID: 0
       rangType: 0
       effectID: ffffffffffffffffffffffffffffffff
