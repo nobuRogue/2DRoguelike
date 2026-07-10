@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,9 +12,19 @@ public abstract class EnemyAIBase {
 	protected int _sourceCharacterID = -1;
 	// 予定行動ID
 	protected int _scheduleActionID = -1;
+	// 行動のIDリスト
+	protected List<int> _actionIDList = null;
 
-	public EnemyAIBase(int characterID) {
+	public EnemyAIBase(int characterID, int[] actionIDList) {
 		_sourceCharacterID = characterID;
+		// 不正値を取り除いた行動IDリストをキャッシュしておく
+		int actionCount = actionIDList.Length;
+		_actionIDList = new List<int>(actionCount);
+		for (int i = 0; i < actionCount; i++) {
+			if (actionIDList[i] < 0) continue;
+			// 0以上の値だけをリストに追加
+			_actionIDList.Add(actionIDList[i]);
+		}
 	}
 
 	/// <summary>

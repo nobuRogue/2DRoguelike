@@ -71,3 +71,19 @@ MonoBehaviour:
       lotID: -1
       minValue: 2
       maxValue: 7
+    - ID: 300
+      nameID: 2300
+      category: 3
+      actionID: 4
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1
+    - ID: 301
+      nameID: 2301
+      category: 3
+      actionID: 5
+      burnID: -1
+      lotID: -1
+      minValue: -1
+      maxValue: -1

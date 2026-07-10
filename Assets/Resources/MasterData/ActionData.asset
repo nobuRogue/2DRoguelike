@@ -32,13 +32,13 @@ MonoBehaviour:
       rangType: 1
       effectID: 03000000ffffffffffffffffffffffff
     - ID: 4
-      nameID: 0
-      rangType: 0
-      effectID: ffffffffffffffffffffffffffffffff
+      nameID: -1
+      rangType: 3
+      effectID: 04000000ffffffffffffffffffffffff
     - ID: 5
-      nameID: 0
-      rangType: 0
-      effectID: ffffffffffffffffffffffffffffffff
+      nameID: -1
+      rangType: 3
+      effectID: 05000000ffffffffffffffffffffffff
     - ID: 6
       nameID: 0
       rangType: 0

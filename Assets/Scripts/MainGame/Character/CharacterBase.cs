@@ -34,6 +34,7 @@ public abstract class CharacterBase {
 	/// <param name="ID"></param>
 	public virtual void Setup(int ID, Entity_CharacterData.Param characterMaster) {
 		this.ID = ID;
+
 		_nameID = characterMaster.nameID;
 		SetMaxHP(characterMaster.HP);
 		SetHP(characterMaster.HP);

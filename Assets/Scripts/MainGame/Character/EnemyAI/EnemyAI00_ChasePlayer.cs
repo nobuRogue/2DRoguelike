@@ -5,7 +5,7 @@ using UnityEngine;
 /// 視界内のプレイヤー追跡AI
 /// </summary>
 public class EnemyAI00_ChasePlayer : EnemyAIBase {
-	public EnemyAI00_ChasePlayer(int characterID) : base(characterID) {
+	public EnemyAI00_ChasePlayer(int characterID, int[] actionIDList) : base(characterID, actionIDList) {
 	}
 
 	/// <summary>
@@ -46,13 +46,16 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 	/// <param name="sourceCharacter"></param>
 	/// <returns></returns>
 	private bool ScheduleAction(CharacterObject sourceCharacter) {
-		// NORMAL_ATTACK_IDのアクションの対象有無を判定
-		Entity_ActionData.Param actionData = MasterDataManager.instance.GetActionData(GameConst.NORMAL_ATTACK_ID);
+		if (CommonModule.IsEmpty(_actionIDList)) return false;
+		// 行動リストからランダムな1つを選択する
+		int actionID = _actionIDList[Random.Range(0, _actionIDList.Count)];
+		// 選択された行動の対象有無を判定
+		Entity_ActionData.Param actionData = MasterDataManager.instance.GetActionData(actionID);
 		ActionRangeBase actionRange = ActionRangeManager.instance.GetRange(actionData.rangType);
 		eDirectionEight canUseDir = eDirectionEight.Invalid;
 		if (!actionRange.CanUse(sourceCharacter, ref canUseDir)) return false;
 		// 予定行動に設定
-		_scheduleActionID = GameConst.NORMAL_ATTACK_ID;
+		_scheduleActionID = actionID;
 		return true;
 	}
 

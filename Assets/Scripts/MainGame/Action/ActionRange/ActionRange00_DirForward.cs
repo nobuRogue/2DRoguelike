@@ -74,15 +74,4 @@ public class ActionRange00_DirForward : ActionRangeBase {
 		}
 		return false;
 	}
-
-	/// <summary>
-	/// 相対敵か否か判定
-	/// </summary>
-	/// <returns></returns>
-	private bool IsRelativeEnemy(CharacterObject source, CharacterObject target) {
-		if (source == null || target == null) return false;
-		// プレイヤーならエネミーを、エネミーならプレイヤーを敵とみなす
-		return source.characterData.IsPlayer() != target.characterData.IsPlayer();
-	}
-
 }

@@ -66,24 +66,64 @@ public class FloorProcessor {
 		CharacterManager.instance.GetPlayer()?.SetSquare(playerSquare);
 		roomSquareList.RemoveAt(randIndex);
 		// エネミーを生成
-		int enemyCount = 3;
-		for (int i = 0; i < enemyCount; i++) {
+		CreateFloorEnemy(8, floorMaster.enemyTableID, roomSquareList);
+		// アイテムを生成
+		CreateFloorItem(16, floorMaster.itemTableID, roomSquareList);
+	}
+
+	/// <summary>
+	/// フロア内にエネミー生成
+	/// </summary>
+	/// <param name="createCount"></param>
+	/// <param name="enemyTableID"></param>
+	/// <param name="roomSquareList"></param>
+	private void CreateFloorEnemy(int createCount, int enemyTableID, List<SquareObject> roomSquareList) {
+		// エネミーテーブルを取得
+		Entity_EnemyTable.Param enemyTable = MasterDataManager.instance.GetEnemyTable(enemyTableID);
+		// 不正値を取り除いたテーブルを生成
+		int tableEnemyCount = enemyTable.enemyID.Length;
+		List<int> useTable = new List<int>(tableEnemyCount);
+		for (int i = 0; i < tableEnemyCount; i++) {
+			if (enemyTable.enemyID[i] < 0) continue;
+
+			useTable.Add(enemyTable.enemyID[i]);
+		}
+
+		for (int i = 0; i < createCount; i++) {
 			if (CommonModule.IsEmpty(roomSquareList)) break;
 
-			randIndex = Random.Range(0, roomSquareList.Count);
+			int randIndex = Random.Range(0, roomSquareList.Count);
 			SquareObject enemySquare = roomSquareList[randIndex];
-			CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, 1);
+			// テーブルからランダムに生成
+			CharacterManager.instance.CreateEnemy(enemySquare.squareData.ID, useTable[Random.Range(0, useTable.Count)]);
 			roomSquareList.Remove(enemySquare);
 		}
-		// アイテムを生成
-		int itemCount = 16;
-		for (int i = 0; i < itemCount; i++) {
-			randIndex = Random.Range(0, roomSquareList.Count);
+	}
+
+	/// <summary>
+	/// フロアに落ちているアイテムの生成
+	/// </summary>
+	/// <param name="itemTableID"></param>
+	private void CreateFloorItem(int createCount, int itemTableID, List<SquareObject> roomSquareList) {
+		// ドロップテーブルを取得
+		Entity_ItemDropTable.Param itemDropTable = MasterDataManager.instance.GetItemDropTable(itemTableID);
+		// 不正値を取り除いたテーブル生成
+		int tableItemCount = itemDropTable.itemID.Length;
+		List<int> useTable = new List<int>(tableItemCount);
+		for (int i = 0; i < tableItemCount; i++) {
+			if (itemDropTable.itemID[i] < 0) continue;
+
+			useTable.Add(itemDropTable.itemID[i]);
+		}
+		if (CommonModule.IsEmpty(useTable)) return;
+
+		for (int i = 0; i < createCount; i++) {
+			int randIndex = Random.Range(0, roomSquareList.Count);
 			SquareObject itemSquare = roomSquareList[randIndex];
-			ItemManager.instance.CreateFloorItem(Random.Range(100, 102), itemSquare);
+			// テーブルからランダムに生成
+			ItemManager.instance.CreateFloorItem(useTable[Random.Range(0, useTable.Count)], itemSquare);
 			roomSquareList.RemoveAt(randIndex);
 		}
-
 	}
 
 	/// <summary>

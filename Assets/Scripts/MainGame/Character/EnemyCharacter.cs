@@ -8,7 +8,7 @@ public class EnemyCharacter : CharacterBase {
 	public override void Setup(int ID, Entity_CharacterData.Param characterMaster) {
 		base.Setup(ID, characterMaster);
 
-		_actionAI = new EnemyAI00_ChasePlayer(ID);
+		_actionAI = new EnemyAI00_ChasePlayer(ID, characterMaster.actionID);
 	}
 
 	// ƒvƒŒƒCƒ„[‚©”Û‚©

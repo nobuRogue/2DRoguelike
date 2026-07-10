@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Entity_CharacterData : ScriptableObject
+public class Entity_ItemDropTable : ScriptableObject
 {	
 	public List<Sheet> sheets = new List<Sheet> ();
 
@@ -18,12 +18,7 @@ public class Entity_CharacterData : ScriptableObject
 	{
 		
 		public int ID;
-		public int nameID;
-		public string spriteName;
-		public int HP;
-		public int Attack;
-		public int Defense;
-		public int[] actionID;
+		public int[] itemID;
 	}
 }
 

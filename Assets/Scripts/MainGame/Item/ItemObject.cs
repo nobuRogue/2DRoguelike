@@ -59,4 +59,13 @@ public class ItemObject : MonoBehaviour {
 		transform.position = position;
 	}
 
+	/// <summary>
+	/// マスターデータ変更
+	/// </summary>
+	/// <param name="itemMaster"></param>
+	public void SetMasterData(Entity_ItemData.Param itemMaster) {
+		// 情報の反映
+		itemData.SetMasterData(itemMaster);
+	}
+
 }

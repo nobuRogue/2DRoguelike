@@ -217,13 +217,13 @@ MonoBehaviour:
       - 
     - ID: 1004
       text:
-      - 
+      - "\u90FD\u4F1A\u65751"
       - 
       - 
       - 
     - ID: 1005
       text:
-      - 
+      - "\u90FD\u4F1A\u65752"
       - 
       - 
       - 
@@ -483,13 +483,13 @@ MonoBehaviour:
       - 
     - ID: 2300
       text:
-      - "\u5DFB\u7269"
+      - "\u90E8\u5C4B31\u30C0\u30E1\u5DFB\u7269"
       - 
       - 
       - 
-    - ID: 0
+    - ID: 2301
       text:
-      - 
+      - "\u7BC4\u56F250\u30C0\u30E1"
       - 
       - 
       - 

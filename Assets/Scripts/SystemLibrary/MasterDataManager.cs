@@ -24,13 +24,16 @@ public class MasterDataManager {
 	private List<Entity_FloorData.Param> _floorData = null;
 	// キャラクター情報
 	private List<Entity_CharacterData.Param> _characterData = null;
+	// エネミー出現テーブル
+	private List<Entity_EnemyTable.Param> _enemyTable = null;
 	// アクション情報
 	private List<Entity_ActionData.Param> _actionData = null;
 	// アクション効果情報
 	private List<Entity_ActionEffectData.Param> _actionEffectData = null;
 	// アイテム情報
 	private List<Entity_ItemData.Param> _itemData = null;
-
+	// アイテムドロップテーブル
+	private List<Entity_ItemDropTable.Param> _itemDropTable = null;
 
 	/// <summary>
 	/// 全マスターデータ読み込み
@@ -42,12 +45,16 @@ public class MasterDataManager {
 		_floorData = Load<Entity_FloorData, Entity_FloorData.Sheet, Entity_FloorData.Param>("FloorData")[0];
 		// キャラクター情報の読み込み
 		_characterData = Load<Entity_CharacterData, Entity_CharacterData.Sheet, Entity_CharacterData.Param>("CharacterData")[0];
+		// エネミーテーブル読み込み
+		_enemyTable = Load<Entity_EnemyTable, Entity_EnemyTable.Sheet, Entity_EnemyTable.Param>("EnemyTable")[0];
 		// アクション情報読み込み
 		_actionData = Load<Entity_ActionData, Entity_ActionData.Sheet, Entity_ActionData.Param>("ActionData")[0];
 		// アクション効果情報読み込み
 		_actionEffectData = Load<Entity_ActionEffectData, Entity_ActionEffectData.Sheet, Entity_ActionEffectData.Param>("ActionEffectData")[0];
 		// アイテム情報読み込み
 		_itemData = Load<Entity_ItemData, Entity_ItemData.Sheet, Entity_ItemData.Param>("ItemData")[0];
+		// アイテムドロップテーブル読み込み
+		_itemDropTable = Load<Entity_ItemDropTable, Entity_ItemDropTable.Sheet, Entity_ItemDropTable.Param>("ItemDropTable")[0];
 	}
 
 	/// <summary>
@@ -90,7 +97,7 @@ public class MasterDataManager {
 	}
 
 	/// <summary>
-	/// DI指定のメッセージ取得
+	/// ID指定のメッセージ取得
 	/// </summary>
 	/// <param name="messageID"></param>
 	/// <returns></returns>
@@ -117,6 +124,21 @@ public class MasterDataManager {
 			if (_characterData[i].ID != characterID) continue;
 
 			return _characterData[i];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// ID指定のエネミー出現テーブル取得
+	/// </summary>
+	/// <param name="tableID"></param>
+	/// <returns></returns>
+	public Entity_EnemyTable.Param GetEnemyTable(int tableID) {
+		for (int i = 0; i < _enemyTable.Count; i++) {
+			if (_enemyTable[i].ID != tableID) continue;
+
+			return _enemyTable[i];
+
 		}
 		return null;
 	}
@@ -159,6 +181,19 @@ public class MasterDataManager {
 			if (_itemData[i].ID != itemID) continue;
 
 			return _itemData[i];
+		}
+		return null;
+	}
+	/// <summary>
+	/// ID指定のアイテムドロップテーブル取得
+	/// </summary>
+	/// <param name="tableID"></param>
+	/// <returns></returns>
+	public Entity_ItemDropTable.Param GetItemDropTable(int tableID) {
+		for (int i = 0; i < _itemDropTable.Count; i++) {
+			if (_itemDropTable[i].ID != tableID) continue;
+
+			return _itemDropTable[i];
 		}
 		return null;
 	}

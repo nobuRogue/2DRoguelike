@@ -21,8 +21,17 @@ public abstract class ItemBase {
 	/// <param name="ID"></param>
 	public virtual void Setup(int ID, Entity_ItemData.Param itemMaster) {
 		this.ID = ID;
+		SetMasterData(itemMaster);
+	}
+
+	/// <summary>
+	/// マスターデータ変更
+	/// </summary>
+	/// <param name="itemMaster"></param>
+	public void SetMasterData(Entity_ItemData.Param itemMaster) {
 		this.itemMaster = itemMaster;
 	}
+
 	/// <summary>
 	/// 使用後片付け
 	/// </summary>
