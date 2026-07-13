@@ -46,7 +46,7 @@ public abstract class EnemyAIBase {
 		if (range.CanUse(sourceCharacter, ref canUseDir)) {
 			// é¿çs
 			sourceCharacter.SetDirection(canUseDir);
-			await ActionManager.instance.ExecuteAction(sourceCharacter, _scheduleActionID);
+			await ActionManager.instance.UseAction(sourceCharacter, _scheduleActionID);
 		}
 		_scheduleActionID = -1;
 	}

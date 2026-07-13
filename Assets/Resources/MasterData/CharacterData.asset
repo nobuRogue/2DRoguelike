@@ -35,25 +35,25 @@ MonoBehaviour:
       HP: 30
       Attack: 15
       Defense: 2
-      actionID: 0000000001000000ffffffffffffffff
+      actionID: 07000000ffffffffffffffffffffffff
     - ID: 3
       nameID: 1003
       spriteName: snow_enemy1
       HP: 21
       Attack: 20
       Defense: 3
-      actionID: 0000000001000000ffffffffffffffff
+      actionID: 06000000ffffffffffffffffffffffff
     - ID: 4
       nameID: 1004
       spriteName: urban_enemy1
       HP: 40
       Attack: 25
       Defense: 4
-      actionID: 0000000001000000ffffffffffffffff
+      actionID: 06000000ffffffffffffffffffffffff
     - ID: 5
       nameID: 1005
       spriteName: urban_enemy2
       HP: 51
       Attack: 30
       Defense: 5
-      actionID: 0000000001000000ffffffffffffffff
+      actionID: 06000000ffffffffffffffffffffffff

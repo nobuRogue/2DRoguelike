@@ -9,7 +9,6 @@ public class ActionRange00_DirForward : ActionRangeBase {
 	/// </summary>
 	public override void Execute(CharacterObject sourceCharacter) {
 		targetCharacterList.Clear();
-		// 行動者の取得
 		if (sourceCharacter == null) return;
 		// 行動者の向いている方向隣接1マスの取得
 		CharacterBase character = sourceCharacter.characterData;

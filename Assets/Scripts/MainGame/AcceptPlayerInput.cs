@@ -172,7 +172,7 @@ public class AcceptPlayerInput {
 		// Zキー入力判定
 		if (!Input.GetKeyDown(KeyCode.Z)) return false;
 		// 通常攻撃アクション実行
-		await ActionManager.instance.ExecuteAction(CharacterManager.instance.GetPlayer(), GameConst.NORMAL_ATTACK_ID);
+		await ActionManager.instance.UseAction(CharacterManager.instance.GetPlayer(), GameConst.NORMAL_ATTACK_ID);
 		return true;
 	}
 

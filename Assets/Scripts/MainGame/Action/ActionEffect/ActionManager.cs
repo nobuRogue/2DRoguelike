@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ using UnityEngine;
 /// </summary>
 public class ActionManager {
 	private static ActionManager _instance;
+	// 行動実行時のログID
+	private const int _USE_ACTION_LOG_ID = 3010;
 	// アイテム使用時のログID
 	private const int _USE_ITEM_LOG_ID = 3005;
 
@@ -29,8 +32,33 @@ public class ActionManager {
 		_effectList.Add(new ActionEffect001_HealHP());
 		_effectList.Add(new ActionEffect002_HealStamina());
 		_effectList.Add(new ActionEffect003_FixDamage());
+		_effectList.Add(new ActionEffect004_BurnItem());
+		_effectList.Add(new ActionEffect005_LotItem());
 	}
 
+	/// <summary>
+	/// ログありのアクション実行
+	/// </summary>
+	/// <param name="sourceCharacter"></param>
+	/// <param name="actionID"></param>
+	/// <returns></returns>
+	public async UniTask UseAction(CharacterObject sourceCharacter, int actionID) {
+		// 行動のマスターデータ取得
+		Entity_ActionData.Param actionMaster = MasterDataManager.instance.GetActionData(actionID);
+		if (actionMaster == null) return;
+		// ログ表示
+		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+		logMenu.AddLog(string.Format(_USE_ACTION_LOG_ID.ToMessage(), sourceCharacter.characterData.GetName(), actionMaster.nameID.ToMessage()));
+		// アクション実行
+		await ExecuteAction(sourceCharacter, actionID);
+	}
+
+	/// <summary>
+	/// アイテム効果実行
+	/// </summary>
+	/// <param name="useCharacter"></param>
+	/// <param name="useItem"></param>
+	/// <returns></returns>
 	public async UniTask UseItem(CharacterObject useCharacter, ItemObject useItem) {
 		// アイテムのマスターデータを取得する
 		Entity_ItemData.Param itemMaster = useItem.itemData.itemMaster;
@@ -47,7 +75,7 @@ public class ActionManager {
 	/// 行動の実行
 	/// </summary>
 	/// <returns></returns>
-	public async UniTask ExecuteAction(CharacterObject sourceCharacter, int actionID) {
+	private async UniTask ExecuteAction(CharacterObject sourceCharacter, int actionID) {
 		// アクションマスターデータ取得
 		Entity_ActionData.Param actionMaster = MasterDataManager.instance.GetActionData(actionID);
 		if (actionMaster == null) return;

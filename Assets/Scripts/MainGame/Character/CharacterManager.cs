@@ -56,16 +56,16 @@ public class CharacterManager : MonoBehaviour {
 	}
 
 	private void CreateCharacter<T>(int squareID, int masterID, List<CharacterObject> unuseList) where T : CharacterBase, new() {
-		// 使用可能なエネミークラスを取得
-		CharacterObject enemy;
+		// 使用可能なキャラクタークラスを取得
+		CharacterObject character;
 		if (CommonModule.IsEmpty(unuseList)) {
 			// 生成して使う
-			enemy = Instantiate(_characterOrigin, transform);
-			enemy.Initialize(new T());
+			character = Instantiate(_characterOrigin, transform);
+			character.Initialize(new T());
 		}
 		else {
 			// 未使用リストから使う
-			enemy = unuseList[0];
+			character = unuseList[0];
 			unuseList.RemoveAt(0);
 		}
 		// 使用可能なIDを取得して使用リストに追加
@@ -74,18 +74,20 @@ public class CharacterManager : MonoBehaviour {
 			if (_useList[i] != null) continue;
 			// 未使用箇所が見つかったので使う
 			useID = i;
-			_useList[i] = enemy;
+			_useList[i] = character;
 			break;
 		}
 		// 未使用箇所が見つからなければ末尾に追加
 		if (useID < 0) {
 			useID = _useList.Count;
-			_useList.Add(enemy);
+			_useList.Add(character);
 		}
 		// セットアップ
-		enemy.Setup(useID, masterID);
+		character.Setup(useID, masterID);
 		// 指定マスに置く
-		enemy.SetSquare(MapSquareManager.instance.GetSquare(squareID));
+		character.SetSquare(MapSquareManager.instance.GetSquare(squareID));
+		// 下を向く
+		character.SetDirection(eDirectionEight.Down);
 	}
 
 	/// <summary>

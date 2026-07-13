@@ -40,10 +40,10 @@ MonoBehaviour:
       rangType: 3
       effectID: 05000000ffffffffffffffffffffffff
     - ID: 6
-      nameID: 0
+      nameID: 4001
       rangType: 0
-      effectID: ffffffffffffffffffffffffffffffff
+      effectID: 0700000006000000ffffffffffffffff
     - ID: 7
-      nameID: 0
+      nameID: 4002
       rangType: 0
-      effectID: ffffffffffffffffffffffffffffffff
+      effectID: 08000000ffffffffffffffffffffffff

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 対象の所持アイテムを全て焼く
+/// 対象の所持アイテムを腐らせる
 /// </summary>
-public class ActionEffect004_BurnItem : ActionEffectBase {
-	// アイテムが焼かれた時のログメッセージID
-	private const int _BURN_ITEM_LOG_ID = 3008;
+public class ActionEffect005_LotItem : ActionEffectBase {
+
+	// アイテムが腐った時のログメッセージID
+	private const int _LOT_ITEM_LOG_ID = 3009;
 
 	public override async UniTask Execute(CharacterObject sourceCharacter, ActionRangeBase range, int[] param) {
 		// 対象毎に効果の適用
@@ -16,17 +17,17 @@ public class ActionEffect004_BurnItem : ActionEffectBase {
 			// キャラクターデータの取得
 			CharacterObject target = CharacterManager.instance.GetCharacter(targetList[i]);
 			if (target == null) continue;
-			// 所持アイテムを全て焼く
-			BurnItemList(target.characterData.possessItemList);
+			// 所持アイテムを全て腐らせる
+			LotItemList(target.characterData.possessItemList);
 		}
 		await UniTask.DelayFrame(5);
 	}
 
 	/// <summary>
-	/// 引数のIDのアイテムを焼く
+	/// 引数のIDのアイテムを腐らせる
 	/// </summary>
 	/// <param name="itemIDList"></param>
-	private void BurnItemList(List<int> itemIDList) {
+	private void LotItemList(List<int> itemIDList) {
 		if (CommonModule.IsEmpty(itemIDList)) return;
 
 		for (int i = 0; i < itemIDList.Count; i++) {
@@ -36,15 +37,14 @@ public class ActionEffect004_BurnItem : ActionEffectBase {
 			// 変化前の名前をキャッシュ
 			string beforeItemName = item.itemData.GetName();
 			// 変化先のマスターデータ取得
-			Entity_ItemData.Param burnItemMaster = MasterDataManager.instance.GetItemData(item.itemData.itemMaster.burnID);
+			Entity_ItemData.Param lotItemMaster = MasterDataManager.instance.GetItemData(item.itemData.itemMaster.lotID);
 			// 変化先がなければ終了
-			if (burnItemMaster == null) continue;
+			if (lotItemMaster == null) continue;
 			// アイテムマスターデータの変更
-			item.SetMasterData(burnItemMaster);
+			item.SetMasterData(lotItemMaster);
 			// ログ表示
 			RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
-			logMenu.AddLog(string.Format(_BURN_ITEM_LOG_ID.ToMessage(), beforeItemName, item.itemData.GetName()));
+			logMenu.AddLog(string.Format(_LOT_ITEM_LOG_ID.ToMessage(), beforeItemName, item.itemData.GetName()));
 		}
 	}
-
 }
