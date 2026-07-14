@@ -98,14 +98,25 @@ public abstract class CharacterBase {
 	}
 
 	/// <summary>
+	/// マスから取り除く
+	/// </summary>
+	public void RemoveSquare() {
+		// 現在のマスから取り除く
+		SquareObject current = MapSquareManager.instance.GetSquare(posX, posY);
+		if (current != null) current.squareData.RemoveCharacter();
+
+		posX = -1;
+		posY = -1;
+	}
+
+	/// <summary>
 	/// マスにキャラを置く
 	/// </summary>
 	/// <param name="square"></param>
 	public virtual void SetSquare(SquareObject square) {
 		if (square == null) return;
 		// 現在のマスから取り除く
-		SquareObject current = MapSquareManager.instance.GetSquare(posX, posY);
-		if (current != null) current.squareData.RemoveCharacter();
+		RemoveSquare();
 		// 座標の変更
 		posX = square.squareData.posX;
 		posY = square.squareData.posY;

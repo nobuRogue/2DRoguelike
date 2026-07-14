@@ -16,8 +16,8 @@ MonoBehaviour:
   - name: ItemDropTable
     list:
     - ID: 0
-      itemID: 00000000010000006400000065000000ffffffffffffffffffffffffffffffff
+      itemID: 00000000010000006400000065000000cb000000ffffffffffffffffffffffff
     - ID: 1
-      itemID: 65000000c80000002c0100002d010000ffffffffffffffffffffffffffffffff
+      itemID: 65000000c80000002c0100002d010000cb000000ffffffffffffffffffffffff
     - ID: 2
-      itemID: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+      itemID: cb000000c9000000ffffffffffffffffffffffffffffffffffffffffffffffff

@@ -20,14 +20,15 @@ public class ActionRange02_Shoot : ActionRangeBase {
 			if (square == null) break;
 			// キャラクターが居るなら対象に加えて終了
 			if (square.existCharacter) {
-
+				targetCharacterList.Add(square.squareData.characterID);
+				break;
 			}
 			// 壁マスなら終了
-
+			if (square.squareData.terrain == eTerrain.Wall) break;
 			// 現在座標を隣接マスのものに変更
-
+			currentX = square.squareData.posX;
+			currentY = square.squareData.posY;
 		}
-
 	}
 
 }

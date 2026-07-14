@@ -66,10 +66,34 @@ MonoBehaviour:
     - ID: 200
       nameID: 2200
       category: 2
-      actionID: -1
+      actionID: 8
       burnID: -1
       lotID: -1
-      minValue: 2
+      minValue: 4
+      maxValue: 7
+    - ID: 201
+      nameID: 2201
+      category: 2
+      actionID: 9
+      burnID: -1
+      lotID: -1
+      minValue: 4
+      maxValue: 7
+    - ID: 202
+      nameID: 2202
+      category: 2
+      actionID: 10
+      burnID: -1
+      lotID: -1
+      minValue: 4
+      maxValue: 7
+    - ID: 203
+      nameID: 2203
+      category: 2
+      actionID: 11
+      burnID: -1
+      lotID: -1
+      minValue: 4
       maxValue: 7
     - ID: 300
       nameID: 2300

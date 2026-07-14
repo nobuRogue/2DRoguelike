@@ -47,3 +47,19 @@ MonoBehaviour:
       nameID: 4002
       rangType: 0
       effectID: 08000000ffffffffffffffffffffffff
+    - ID: 8
+      nameID: -1
+      rangType: 2
+      effectID: 09000000ffffffffffffffffffffffff
+    - ID: 9
+      nameID: -1
+      rangType: 2
+      effectID: 0a000000ffffffffffffffffffffffff
+    - ID: 10
+      nameID: -1
+      rangType: 2
+      effectID: 0b000000ffffffffffffffffffffffff
+    - ID: 11
+      nameID: -1
+      rangType: 2
+      effectID: 0c000000ffffffffffffffffffffffff

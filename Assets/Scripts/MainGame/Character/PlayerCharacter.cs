@@ -109,6 +109,8 @@ public class PlayerCharacter : CharacterBase {
 		if (stamina >= 1) {
 			// –• “x‚ª1ˆÈã‚È‚ç–• “x‚ğŒ¸‚ç‚·
 			SetStamina(stamina - _TURN_DECREASE_STAMINA);
+			// HP1‰ñ•œ
+			AddHP(1);
 		}
 		else {
 			// –• “x‚ª0ˆÈ‰º‚È‚çHP‚ğŒ¸‚ç‚·

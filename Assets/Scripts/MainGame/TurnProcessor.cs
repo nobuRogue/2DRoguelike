@@ -46,7 +46,7 @@ public class TurnProcessor {
 		_isContinueTurn = true;
 		// プレイヤーの入力受付
 		await AcceptPlayerInput();
-		// TODO:全エネミー思考
+		// 全エネミー思考
 		CharacterManager.instance.ExecuteAllCharacter(ThinkCharacter);
 		//CharacterManager.instance.ExecuteAllCharacter(character => character.characterData.Think());
 		// 全キャラクターの見た目の移動

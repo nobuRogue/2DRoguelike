@@ -53,6 +53,7 @@ public class MoveAction {
 			// 補完座標の取得
 			float t = elapsedSec / durationSec;
 			Vector3 movePos = Vector3.Lerp(startPos, goalPos, t);
+			// キャラクターの移動
 			_character.SetPosition(movePos);
 			// 1フレーム待ち
 			await UniTask.DelayFrame(1);
