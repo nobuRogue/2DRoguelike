@@ -27,6 +27,11 @@ public class SoundManager : SystemObject {
 		await UniTask.CompletedTask;
 	}
 
+
+	public void SetBGMVolume(float volume) {
+		_bgmAudioSource.volume = volume;
+	}
+
 	/// <summary>
 	/// BGMÄ¶
 	/// </summary>

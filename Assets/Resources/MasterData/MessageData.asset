@@ -375,7 +375,7 @@ MonoBehaviour:
       - 
     - ID: 2001
       text:
-      - "\u85AC2"
+      - "\u76EE\u85AC"
       - 
       - 
       - 
@@ -617,29 +617,29 @@ MonoBehaviour:
       - 
     - ID: 3011
       text:
-      - 
+      - "{0}\u3092\u8E0F\u3093\u3060"
       - 
       - 
       - 
     - ID: 3012
       text:
+      - "{0}\u306F\u767A\u52D5\u3057\u306A\u304B\u3063\u305F"
       - 
       - 
       - 
-      - 
-    - ID: 0
+    - ID: 3013
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3014
       text:
       - 
       - 
       - 
       - 
-    - ID: 0
+    - ID: 3015
       text:
       - 
       - 
@@ -740,6 +740,182 @@ MonoBehaviour:
     - ID: 4002
       text:
       - "\u8150\u3089\u305B\u308B"
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+    - ID: 0
+      text:
+      - 
+      - 
+      - 
+      - 
+  - name: Trap
+    list:
+    - ID: 5000
+      text:
+      - "\u30C0\u30E1\u30FC\u30B8\u306E\u7F60"
+      - 
+      - 
+      - 
+    - ID: 5001
+      text:
+      - "\u5439\u304D\u98DB\u3070\u3057\u306E\u7F60"
+      - 
+      - 
+      - 
+    - ID: 5002
+      text:
+      - "\u30EF\u30FC\u30D7\u306E\u7F60"
       - 
       - 
       - 

@@ -34,7 +34,7 @@ public class SquareObject : MonoBehaviour {
 		get {
 			if (squareData == null) return false;
 
-			return squareData.itemID >= 0;
+			return squareData.objectID >= 0;
 		}
 	}
 

@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +12,10 @@ public class ActionManager {
 	private const int _USE_ACTION_LOG_ID = 3010;
 	// アイテム使用時のログID
 	private const int _USE_ITEM_LOG_ID = 3005;
+	// 罠を踏んだ際のログID
+	private const int _STEPON_TRAP_LOG_ID = 3011;
+	// 罠が発動しなかった際のログID
+	private const int _NOT_ACTIVATE_TRAP_LOG_ID = 3012;
 
 	public static ActionManager instance {
 		get {
@@ -37,6 +40,37 @@ public class ActionManager {
 		_effectList.Add(new ActionEffect006_Replace());
 		_effectList.Add(new ActionEffect007_Warp());
 		_effectList.Add(new ActionEffect008_Knockback());
+		_effectList.Add(new ActionEffect009_ShowTrap());
+	}
+
+	/// <summary>
+	/// 罠を踏んだ際の処理
+	/// </summary>
+	/// <param name="steponCharacter"></param>
+	/// <param name="trapID"></param>
+	/// <returns></returns>
+	public async UniTask StepOnTrap(CharacterObject steponCharacter, int trapID) {
+		TrapObject trap = TrapManager.instance.GetTrap(trapID);
+		if (trap == null) return;
+		// 罠の可視化
+		trap.Show();
+		// ログの表示
+		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+		logMenu.AddLog(string.Format(_STEPON_TRAP_LOG_ID.ToMessage(), trap.GetName()));
+		// 発動判定
+		int activateRatio = trap.trapData.trapMaster.activateRatio;
+		if (UnityEngine.Random.Range(0, 100) >= activateRatio) {
+			// 発動しなかったログ表示
+			logMenu.AddLog(string.Format(_NOT_ACTIVATE_TRAP_LOG_ID.ToMessage(), trap.GetName()));
+			return;
+		}
+		// 効果実行
+		await ExecuteAction(steponCharacter, trap.trapData.trapMaster.actionID);
+		// 消滅判定
+		int deleteRatio = trap.trapData.trapMaster.deleteRatio;
+		if (UnityEngine.Random.Range(0, 100) >= deleteRatio) return;
+		// 罠の消滅
+		TrapManager.instance.RemoveTrap(trap);
 	}
 
 	/// <summary>

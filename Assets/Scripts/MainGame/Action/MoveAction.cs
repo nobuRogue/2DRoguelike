@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -61,36 +62,43 @@ public class MoveAction {
 		// ゴール座標に設定
 		_character.SetPosition(goalPos);
 		// 通常移動後処理
-		AfterMoveProcess(goalSquare);
+		await AfterMoveProcess(goalSquare);
 	}
 
 	/// <summary>
 	/// 移動後処理
 	/// </summary>
-	private void AfterMoveProcess(SquareObject goalSquare) {
+	private async UniTask AfterMoveProcess(SquareObject goalSquare) {
 		// プレイヤーでなければ処理しない
 		if (!_character.characterData.IsPlayer()) return;
 		// 移動先のマスのアイテムを拾う処理
-		ProcessAddItem(goalSquare);
+		await ProcessSquareObject(goalSquare);
 		// 階段処理
 		ProcessStair(goalSquare);
 	}
 
-	private void ProcessAddItem(SquareObject square) {
-		// 移動先のマスにアイテムがあるか判定
-		ItemObject item = ItemManager.instance.GetItem(square.squareData.itemID);
-		if (item == null) return;
-		// アイテムがあるなら獲得可否判定（プレイヤーがアイテムを拾えるか）
-		CharacterObject player = CharacterManager.instance.GetPlayer();
-		RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
-		if (!player.characterData.CanAddItem()) {
-			// 拾えなければログを表示して終了
-			logMenu.AddLog(string.Format(_NOT_ADD_LOG_ID.ToMessage(), item.itemData.GetName()));
-			return;
+	private async UniTask ProcessSquareObject(SquareObject square) {
+		switch (square.squareData.objectType) {
+			case eSqaureObjectType.Item:
+				// 移動先のマスにアイテムがあるか判定
+				ItemObject item = ItemManager.instance.GetItem(square.squareData.objectID);
+				if (item == null) return;
+				// アイテムがあるなら獲得可否判定（プレイヤーがアイテムを拾えるか）
+				RogueLogMenu logMenu = MenuManager.instance.Get<RogueLogMenu>();
+				if (!_character.characterData.CanAddItem()) {
+					// 拾えなければログを表示して終了
+					logMenu.AddLog(string.Format(_NOT_ADD_LOG_ID.ToMessage(), item.itemData.GetName()));
+					return;
+				}
+				// 拾えるならアイテム獲得、ログ表示
+				item.SetCharacter(_character);
+				logMenu.AddLog(string.Format(_ADD_ITEM_LOG_ID.ToMessage(), item.itemData.GetName()));
+				break;
+			case eSqaureObjectType.Trap:
+				// 罠を踏んだ際の処理
+				await ActionManager.instance.StepOnTrap(_character, square.squareData.objectID);
+				break;
 		}
-		// 拾えるならアイテム獲得、ログ表示
-		item.SetCharacter(player);
-		logMenu.AddLog(string.Format(_ADD_ITEM_LOG_ID.ToMessage(), item.itemData.GetName()));
 	}
 
 	/// <summary>

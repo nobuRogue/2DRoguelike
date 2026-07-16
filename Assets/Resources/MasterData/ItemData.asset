@@ -21,12 +21,12 @@ MonoBehaviour:
       actionID: 1
       burnID: -1
       lotID: -1
-      minValue: 2
-      maxValue: 5
+      minValue: -1
+      maxValue: -1
     - ID: 1
       nameID: 2001
       category: 0
-      actionID: -1
+      actionID: 15
       burnID: -1
       lotID: -1
       minValue: -1

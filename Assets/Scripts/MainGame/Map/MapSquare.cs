@@ -17,8 +17,10 @@ public class MapSquare {
 	public int roomID { get; private set; } = -1;
 	// マスに居るキャラクターのID
 	public int characterID { get; private set; } = -1;
-	// マスにあるアイテムのID
-	public int itemID { get; private set; } = -1;
+	// マスに置かれているオブジェクトの種類
+	public eSqaureObjectType objectType { get; private set; } = eSqaureObjectType.Invalid;
+	// マスにあるオブジェクトのID
+	public int objectID { get; private set; } = -1;
 
 	/// <summary>
 	/// コンストラクタ
@@ -67,14 +69,21 @@ public class MapSquare {
 	/// </summary>
 	/// <param name="itemID"></param>
 	public void SetItem(int itemID) {
-		this.itemID = itemID;
+		objectType = eSqaureObjectType.Item;
+		this.objectID = itemID;
 	}
 
 	/// <summary>
 	/// マスにあるアイテムの削除
 	/// </summary>
-	public void RemoveItem() {
-		itemID = -1;
+	public void RemoveObject() {
+		objectType = eSqaureObjectType.Invalid;
+		objectID = -1;
+	}
+
+	public void SetTrap(int trapID) {
+		objectType = eSqaureObjectType.Trap;
+		objectID = trapID;
 	}
 
 }

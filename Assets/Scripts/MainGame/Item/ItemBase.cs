@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// アイテムデータの基底
+/// アイテムの内部情報の基底
 /// </summary>
 public abstract class ItemBase {
 	// 識別用のID
@@ -84,7 +84,7 @@ public abstract class ItemBase {
 		SquareObject currentSquare = MapSquareManager.instance.GetSquare(posX, posY);
 		if (currentSquare != null) {
 			// マスから取り除く
-			currentSquare.squareData.RemoveItem();
+			currentSquare.squareData.RemoveObject();
 			posX = -1;
 			posY = -1;
 		}

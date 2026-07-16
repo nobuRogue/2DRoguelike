@@ -96,3 +96,10 @@ public enum eItemCommand {
 	Equip,      // 装備
 	Remove,     // 装備を外す
 }
+
+// マスに設置されるオブジェクトの種類
+public enum eSqaureObjectType {
+	Invalid = -1,
+	Item,
+	Trap
+}

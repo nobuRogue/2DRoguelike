@@ -14,6 +14,9 @@ public class MainPart : PartBase {
 	// アイテム管理クラス
 	[SerializeField]
 	private ItemManager _itemManager = null;
+	// 罠管理クラス
+	[SerializeField]
+	private TrapManager _trapManager = null;
 
 	// ダンジョン実行
 	private DungeonProcessor _dungeonProcessor = null;
@@ -28,6 +31,8 @@ public class MainPart : PartBase {
 		_characterManager?.Initialize();
 		// アイテム初期化
 		_itemManager?.Initialize();
+		// 罠初期化
+		_trapManager.Initialize();
 		// ダンジョン実行処理初期化
 		_dungeonProcessor = new DungeonProcessor();
 		_dungeonProcessor.Initialize();

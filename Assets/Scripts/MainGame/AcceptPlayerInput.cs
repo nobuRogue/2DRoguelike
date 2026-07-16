@@ -41,7 +41,7 @@ public class AcceptPlayerInput {
 	/// <returns>移動を実行したらtrue</returns>
 	public bool AcceptMove() {
 		// 8方向の移動入力の受付
-		eDirectionEight inputDir = AcceptDirInput();
+		eDirectionEight inputDir = AcceptPlayerDirInput();
 		if (inputDir == eDirectionEight.Invalid) return false;
 		// 移動可否の判定
 		CharacterObject player = CharacterManager.instance.GetPlayer();
@@ -58,6 +58,19 @@ public class AcceptPlayerInput {
 		// TurnProcessorの移動リストに追加
 		_addMove?.Invoke(moveAction);
 		return true;
+	}
+
+	/// <summary>
+	/// 斜めキー入力受け付け付きの8方向入力受付
+	/// </summary>
+	/// <returns></returns>
+	private eDirectionEight AcceptPlayerDirInput() {
+		// 8方向入力の受付
+		eDirectionEight inputDir = AcceptDirInput();
+		// 斜めキー入力中かつ、斜め入力でなければ無効な方向を返す
+		if (Input.GetKey(KeyCode.X) && !inputDir.IsSlant()) return eDirectionEight.Invalid;
+		// 受け付けた入力方向を返す
+		return inputDir;
 	}
 
 	/// <summary>
@@ -119,7 +132,7 @@ public class AcceptPlayerInput {
 		// 方向転換キーが離されるまでループ
 		while (Input.GetKey(KeyCode.LeftControl)) {
 			// 入力に応じて向きを変える
-			ChangeCharacterDir(player, AcceptDirInput());
+			ChangeCharacterDir(player, AcceptPlayerDirInput());
 			// 1フレーム待機
 			await UniTask.DelayFrame(1);
 		}

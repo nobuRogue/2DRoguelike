@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 
 /// <summary>
 /// 1フロア実行
@@ -69,6 +70,14 @@ public class FloorProcessor {
 		CreateFloorEnemy(8, floorMaster.enemyTableID, roomSquareList);
 		// アイテムを生成
 		CreateFloorItem(16, floorMaster.itemTableID, roomSquareList);
+		// 罠の生成
+		int trapCount = 32;
+		for (int i = 0; i < trapCount; i++) {
+			if (CommonModule.IsEmpty(roomSquareList)) break;
+
+			SquareObject square = roomSquareList[Random.Range(0, roomSquareList.Count)];
+			TrapManager.instance.CreateTrap(2, square);
+		}
 	}
 
 	/// <summary>
@@ -135,6 +144,8 @@ public class FloorProcessor {
 		// フロアのアイテムを全削除
 		// 全てのアイテムに対して、床落ちアイテムなら削除処理を実行
 		ItemManager.instance.ExecuteAllItem(DeleteFloorItem);
+		// すべての罠の削除
+		TrapManager.instance.ExecuteAllTrap(TrapManager.instance.RemoveTrap);
 		// プレイヤーの移動軌跡をリセット
 		CharacterManager.instance.GetPlayer()?.characterData.ClearMoveTrail();
 	}
