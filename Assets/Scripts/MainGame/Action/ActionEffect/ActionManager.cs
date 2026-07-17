@@ -41,6 +41,7 @@ public class ActionManager {
 		_effectList.Add(new ActionEffect007_Warp());
 		_effectList.Add(new ActionEffect008_Knockback());
 		_effectList.Add(new ActionEffect009_ShowTrap());
+		_effectList.Add(new ActionEffect010_ExplosionDamage());
 	}
 
 	/// <summary>

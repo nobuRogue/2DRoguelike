@@ -79,3 +79,11 @@ MonoBehaviour:
       nameID: -1
       rangType: 1
       effectID: 0d000000ffffffffffffffffffffffff
+    - ID: 16
+      nameID: -1
+      rangType: 4
+      effectID: 0e000000ffffffffffffffffffffffff
+    - ID: 17
+      nameID: -1
+      rangType: 4
+      effectID: 0f000000ffffffffffffffffffffffff

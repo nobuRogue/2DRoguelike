@@ -198,4 +198,12 @@ public abstract class CharacterBase {
 		possessItemList.Remove(itemID);
 	}
 
+	/// <summary>
+	/// 爆発ダメージ効果
+	/// </summary>
+	public virtual void ExplosionDamage(int damageRatio) {
+		// 現在HP分のダメージを受ける
+		RemoveHP(HP);
+	}
+
 }

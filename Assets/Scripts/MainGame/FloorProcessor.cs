@@ -69,15 +69,9 @@ public class FloorProcessor {
 		// エネミーを生成
 		CreateFloorEnemy(8, floorMaster.enemyTableID, roomSquareList);
 		// アイテムを生成
-		CreateFloorItem(16, floorMaster.itemTableID, roomSquareList);
+		CreateFloorItem(4, floorMaster.itemTableID, roomSquareList);
 		// 罠の生成
-		int trapCount = 32;
-		for (int i = 0; i < trapCount; i++) {
-			if (CommonModule.IsEmpty(roomSquareList)) break;
-
-			SquareObject square = roomSquareList[Random.Range(0, roomSquareList.Count)];
-			TrapManager.instance.CreateTrap(2, square);
-		}
+		CreateFloorTrap(8, floorMaster.trapTableID, roomSquareList);
 	}
 
 	/// <summary>
@@ -89,6 +83,7 @@ public class FloorProcessor {
 	private void CreateFloorEnemy(int createCount, int enemyTableID, List<SquareObject> roomSquareList) {
 		// エネミーテーブルを取得
 		Entity_EnemyTable.Param enemyTable = MasterDataManager.instance.GetEnemyTable(enemyTableID);
+		if (enemyTable == null) return;
 		// 不正値を取り除いたテーブルを生成
 		int tableEnemyCount = enemyTable.enemyID.Length;
 		List<int> useTable = new List<int>(tableEnemyCount);
@@ -97,6 +92,7 @@ public class FloorProcessor {
 
 			useTable.Add(enemyTable.enemyID[i]);
 		}
+		if (CommonModule.IsEmpty(useTable)) return;
 
 		for (int i = 0; i < createCount; i++) {
 			if (CommonModule.IsEmpty(roomSquareList)) break;
@@ -116,6 +112,7 @@ public class FloorProcessor {
 	private void CreateFloorItem(int createCount, int itemTableID, List<SquareObject> roomSquareList) {
 		// ドロップテーブルを取得
 		Entity_ItemDropTable.Param itemDropTable = MasterDataManager.instance.GetItemDropTable(itemTableID);
+		if (itemDropTable == null) return;
 		// 不正値を取り除いたテーブル生成
 		int tableItemCount = itemDropTable.itemID.Length;
 		List<int> useTable = new List<int>(tableItemCount);
@@ -127,11 +124,44 @@ public class FloorProcessor {
 		if (CommonModule.IsEmpty(useTable)) return;
 
 		for (int i = 0; i < createCount; i++) {
+			if (CommonModule.IsEmpty(roomSquareList)) break;
+
 			int randIndex = Random.Range(0, roomSquareList.Count);
 			SquareObject itemSquare = roomSquareList[randIndex];
 			// テーブルからランダムに生成
 			ItemManager.instance.CreateFloorItem(useTable[Random.Range(0, useTable.Count)], itemSquare);
 			roomSquareList.RemoveAt(randIndex);
+		}
+	}
+
+	/// <summary>
+	/// フロアの罠生成
+	/// </summary>
+	/// <param name="createCount"></param>
+	/// <param name="trapTableID"></param>
+	/// <param name="roomSquareList"></param>
+	private void CreateFloorTrap(int createCount, int trapTableID, List<SquareObject> roomSquareList) {
+		// 罠テーブルを取得
+		Entity_TrapTable.Param trapTable = MasterDataManager.instance.GetTrapTable(trapTableID);
+		if (trapTable == null) return;
+		// 不正値を取り除いたテーブルを生成
+		int tableTrapCount = trapTable.trapID.Length;
+		List<int> useTable = new List<int>(tableTrapCount);
+		for (int i = 0; i < tableTrapCount; i++) {
+			if (trapTable.trapID[i] < 0) continue;
+
+			useTable.Add(trapTable.trapID[i]);
+		}
+		// テーブルが空なら終了
+		if (CommonModule.IsEmpty(useTable)) return;
+		// 指定個数生成
+		for (int i = 0; i < createCount; i++) {
+			if (CommonModule.IsEmpty(roomSquareList)) break;
+			// テーブルからランダムに生成
+			SquareObject square = roomSquareList[Random.Range(0, roomSquareList.Count)];
+			int trapMasterID = useTable[Random.Range(0, useTable.Count)];
+			TrapManager.instance.CreateTrap(trapMasterID, square);
+			roomSquareList.Remove(square);
 		}
 	}
 

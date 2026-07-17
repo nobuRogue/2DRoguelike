@@ -7,6 +7,9 @@ public class MapSquareManager : MonoBehaviour {
 	// マスオブジェクトのオリジナル
 	[SerializeField]
 	private SquareObject _originObject;
+	// 背景用スプライト
+	[SerializeField]
+	private SpriteRenderer _BGSprite = null;
 
 	/// <summary>
 	/// 生成された管理中のマスオブジェクトリスト
@@ -237,6 +240,14 @@ public class MapSquareManager : MonoBehaviour {
 			_unuseRoomList.Add(roomData);
 		}
 		_roomList.Clear();
+	}
+
+	/// <summary>
+	/// 背景スプライト設定
+	/// </summary>
+	/// <param name="sprite"></param>
+	public void SetBGSprite(Sprite sprite) {
+		_BGSprite.sprite = sprite;
 	}
 
 }

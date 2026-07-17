@@ -7,10 +7,10 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 
-public class FloorData_importer : AssetPostprocessor {
-	private static readonly string filePath = "Assets/Resources/MasterData/FloorData.xlsx";
-	private static readonly string exportPath = "Assets/Resources/MasterData/FloorData.asset";
-	private static readonly string[] sheetNames = { "FloorData", };
+public class TrapTable_importer : AssetPostprocessor {
+	private static readonly string filePath = "Assets/Resources/MasterData/TrapTable.xlsx";
+	private static readonly string exportPath = "Assets/Resources/MasterData/TrapTable.asset";
+	private static readonly string[] sheetNames = { "TrapTable", };
 	
 	static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 	{
@@ -18,9 +18,9 @@ public class FloorData_importer : AssetPostprocessor {
 			if (!filePath.Equals (asset))
 				continue;
 				
-			Entity_FloorData data = (Entity_FloorData)AssetDatabase.LoadAssetAtPath (exportPath, typeof(Entity_FloorData));
+			Entity_TrapTable data = (Entity_TrapTable)AssetDatabase.LoadAssetAtPath (exportPath, typeof(Entity_TrapTable));
 			if (data == null) {
-				data = ScriptableObject.CreateInstance<Entity_FloorData> ();
+				data = ScriptableObject.CreateInstance<Entity_TrapTable> ();
 				AssetDatabase.CreateAsset ((ScriptableObject)data, exportPath);
 				data.hideFlags = HideFlags.NotEditable;
 			}
@@ -41,20 +41,25 @@ public class FloorData_importer : AssetPostprocessor {
 						continue;
 					}
 
-					Entity_FloorData.Sheet s = new Entity_FloorData.Sheet ();
+					Entity_TrapTable.Sheet s = new Entity_TrapTable.Sheet ();
 					s.name = sheetName;
 				
 					for (int i=1; i<= sheet.LastRowNum; i++) {
 						IRow row = sheet.GetRow (i);
 						ICell cell = null;
 						
-						Entity_FloorData.Param p = new Entity_FloorData.Param ();
+						Entity_TrapTable.Param p = new Entity_TrapTable.Param ();
 						
-					cell = row.GetCell(0); p.floorCount = (int)(cell == null ? 0 : cell.NumericCellValue);
-					cell = row.GetCell(1); p.spriteIndex = (int)(cell == null ? 0 : cell.NumericCellValue);
-					cell = row.GetCell(3); p.enemyTableID = (int)(cell == null ? 0 : cell.NumericCellValue);
-					cell = row.GetCell(4); p.itemTableID = (int)(cell == null ? 0 : cell.NumericCellValue);
-					cell = row.GetCell(5); p.trapTableID = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(0); p.ID = (int)(cell == null ? 0 : cell.NumericCellValue);
+					p.trapID = new int[8];
+					cell = row.GetCell(1); p.trapID[0] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(2); p.trapID[1] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(3); p.trapID[2] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(4); p.trapID[3] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(5); p.trapID[4] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(6); p.trapID[5] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(7); p.trapID[6] = (int)(cell == null ? 0 : cell.NumericCellValue);
+					cell = row.GetCell(8); p.trapID[7] = (int)(cell == null ? 0 : cell.NumericCellValue);
 						s.list.Add (p);
 					}
 					data.sheets.Add(s);

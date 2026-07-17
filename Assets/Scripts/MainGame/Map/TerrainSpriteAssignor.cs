@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -86,6 +87,9 @@ public class TerrainSpriteAssignor {
 	/// <param name="index"></param>
 	public void SetSpriteType(int index) {
 		_spriteTypeIndex = index;
+		// マップ背景画像にランダムな壁地形画像を設定
+		Sprite BGSprite = GetTerrainSprite(eTerrain.Wall);
+		MapSquareManager.instance.SetBGSprite(BGSprite);
 	}
 
 }

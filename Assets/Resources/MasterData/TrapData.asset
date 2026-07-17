@@ -30,3 +30,13 @@ MonoBehaviour:
       actionID: 14
       activateRatio: 100
       deleteRatio: 0
+    - ID: 3
+      nameID: 5003
+      actionID: 16
+      activateRatio: 100
+      deleteRatio: 0
+    - ID: 4
+      nameID: 5004
+      actionID: 17
+      activateRatio: 100
+      deleteRatio: 0

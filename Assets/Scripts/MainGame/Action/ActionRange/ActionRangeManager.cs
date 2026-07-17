@@ -25,6 +25,7 @@ public class ActionRangeManager {
 		_rangeList.Add(new ActionRange01_Self());
 		_rangeList.Add(new ActionRange02_Shoot());
 		_rangeList.Add(new ActionRange03_RoomAll());
+		_rangeList.Add(new ActionRange04_Around8());
 	}
 
 	/// <summary>

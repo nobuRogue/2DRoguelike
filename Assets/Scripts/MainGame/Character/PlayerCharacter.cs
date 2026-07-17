@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -163,5 +164,17 @@ public class PlayerCharacter : CharacterBase {
 	/// <returns></returns>
 	public override bool ExistMoveTrail(SquareObject square) {
 		return _moveTrailList.Exists(element => element == square.squareData.ID);
+	}
+
+	/// <summary>
+	/// 割合ダメージを受ける
+	/// </summary>
+	/// <param name="damageRatio"></param>
+	public override void ExplosionDamage(int damageRatio) {
+		// ダメージの決定
+		int damage = HP * damageRatio / 100;
+		damage = Mathf.Min(damage, HP - 1);
+		// HPの減少
+		RemoveHP(damage);
 	}
 }

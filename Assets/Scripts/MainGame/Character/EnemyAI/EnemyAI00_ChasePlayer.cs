@@ -25,7 +25,7 @@ public class EnemyAI00_ChasePlayer : EnemyAIBase {
 		}
 		else {
 			// ƒ‰ƒ“ƒ_ƒ€ˆÚ“®
-			//RandomMove();
+			RandomMove();
 		}
 	}
 

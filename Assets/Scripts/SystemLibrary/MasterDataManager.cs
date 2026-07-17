@@ -36,6 +36,8 @@ public class MasterDataManager {
 	private List<Entity_ItemDropTable.Param> _itemDropTable = null;
 	// 罠情報
 	private List<Entity_TrapData.Param> _trapData = null;
+	// 罠テーブル
+	private List<Entity_TrapTable.Param> _trapTable = null;
 
 
 	/// <summary>
@@ -60,6 +62,9 @@ public class MasterDataManager {
 		_itemDropTable = Load<Entity_ItemDropTable, Entity_ItemDropTable.Sheet, Entity_ItemDropTable.Param>("ItemDropTable")[0];
 		// 罠データ読み込み
 		_trapData = Load<Entity_TrapData, Entity_TrapData.Sheet, Entity_TrapData.Param>("TrapData")[0];
+		// 罠テーブル読み込み
+		_trapTable = Load<Entity_TrapTable, Entity_TrapTable.Sheet, Entity_TrapTable.Param>("TrapTable")[0];
+
 	}
 
 	/// <summary>
@@ -213,6 +218,20 @@ public class MasterDataManager {
 			if (_trapData[i].ID != trapID) continue;
 
 			return _trapData[i];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// ID指定の罠テーブル取得
+	/// </summary>
+	/// <param name="tableID"></param>
+	/// <returns></returns>
+	public Entity_TrapTable.Param GetTrapTable(int tableID) {
+		for (int i = 0; i < _trapTable.Count; i++) {
+			if (_trapTable[i].ID != tableID) continue;
+
+			return _trapTable[i];
 		}
 		return null;
 	}

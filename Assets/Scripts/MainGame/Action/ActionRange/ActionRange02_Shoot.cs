@@ -7,7 +7,7 @@ public class ActionRange02_Shoot : ActionRangeBase {
 
 	public override void Execute(CharacterObject sourceCharacter) {
 		targetCharacterList.Clear();
-		if (sourceCharacter == null) ;
+		if (sourceCharacter == null) return;
 		// s“®Ò‚ÌŒü‚¢‚Ä‚¢‚é•ûŒüAÀ•Wæ“¾
 		eDirectionEight dir = sourceCharacter.characterData.direction;
 		int currentX = sourceCharacter.characterData.posX;

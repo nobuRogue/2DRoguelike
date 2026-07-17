@@ -57,3 +57,9 @@ MonoBehaviour:
     - ID: 13
       effectType: 9
       param: 0000000000000000
+    - ID: 14
+      effectType: 10
+      param: 3200000000000000
+    - ID: 15
+      effectType: 10
+      param: 6400000000000000
