@@ -50,6 +50,9 @@ public class ItemCommandList : ListMenu {
 				addItem.Setup(eItemCommand.Equip);
 				break;
 		}
+		// “Š‚°‚é€–Ú‚Ì’Ç‰Á
+		addItem = AddListItem() as ItemCommandItem;
+		addItem.Setup(eItemCommand.Throw);
 		// ’u‚­€–Ú‚Ì’Ç‰Á
 		addItem = AddListItem() as ItemCommandItem;
 		addItem.Setup(eItemCommand.Puton);

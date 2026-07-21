@@ -59,12 +59,10 @@ public class AcceptItemList {
 		if (_decideCommand == eItemCommand.Invalid ||
 			_decideItemID < 0) return false;
 
-		ItemObject item = ItemManager.instance.GetItem(_decideItemID);
-		Debug.Log(item.itemData.GetName() + "に" + _decideCommand + "を実行");
 		switch (_decideCommand) {
 			case eItemCommand.Use:
 				// アイテムを使う処理実行
-				await ActionManager.instance.UseItem(player, item);
+				await ActionManager.instance.UseItem(player, _decideItemID);
 				break;
 			case eItemCommand.Puton:
 				// アイテムを置く処理実行
@@ -76,6 +74,10 @@ public class AcceptItemList {
 				break;
 			case eItemCommand.Remove:
 				// アイテムを外す処理実行
+				break;
+			case eItemCommand.Throw:
+				// 投げる処理
+
 				break;
 		}
 		// 決定内容をクリア

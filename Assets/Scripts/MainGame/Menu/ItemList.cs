@@ -14,7 +14,6 @@ public class ItemList : ListMenu {
 	public async UniTask Setup(List<int> itemIDList, ListMenuCallbackFormat format) {
 		// コールバックの設定
 		SetCallbackFormat(format);
-
 		// すべての項目削除
 		RemoveAllItem();
 		// アイテムリストが空なら終了

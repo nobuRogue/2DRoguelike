@@ -18,6 +18,6 @@ MonoBehaviour:
     - ID: 0
       itemID: 0000000001000000ffffffffffffffffffffffffffffffffffffffffffffffff
     - ID: 1
-      itemID: 65000000c80000002c0100002d010000cb000000ffffffffffffffffffffffff
+      itemID: 65000000c800000058020000ffffffffffffffffffffffffffffffffffffffff
     - ID: 2
-      itemID: cb000000c9000000ffffffffffffffffffffffffffffffffffffffffffffffff
+      itemID: cb00000058020000ffffffffffffffffffffffffffffffffffffffffffffffff

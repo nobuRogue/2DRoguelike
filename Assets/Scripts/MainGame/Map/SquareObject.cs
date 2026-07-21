@@ -29,8 +29,8 @@ public class SquareObject : MonoBehaviour {
 			return squareData.characterID >= 0;
 		}
 	}
-	// アイテム有無
-	public bool existItem {
+	// オブジェクト有無
+	public bool existObject {
 		get {
 			if (squareData == null) return false;
 

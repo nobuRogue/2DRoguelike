@@ -19,7 +19,7 @@ public class PutonAction {
 	/// <returns></returns>
 	public async UniTask ExecutePuton(SquareObject putonSquare, int itemID) {
 		// マスにアイテムが置けるか判定
-		if (putonSquare.existItem) {
+		if (putonSquare.existObject) {
 			// 置けない場合、ログを表示して終了
 			MenuManager.instance.Get<RogueLogMenu>().AddLog(_CANNOT_PUTON_LOG_ID.ToMessage());
 			return;

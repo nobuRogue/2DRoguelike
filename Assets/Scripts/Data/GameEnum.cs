@@ -95,6 +95,7 @@ public enum eItemCommand {
 	Puton,      // 置く
 	Equip,      // 装備
 	Remove,     // 装備を外す
+	Throw,		// 投げる
 }
 
 // マスに設置されるオブジェクトの種類
@@ -102,4 +103,12 @@ public enum eSqaureObjectType {
 	Invalid = -1,
 	Item,
 	Trap
+}
+
+// 確認ダイアログの結果
+public enum eConfirmResult {
+	Invalid = -1,
+	Yes,
+	No,
+	Cancel,
 }

@@ -97,7 +97,9 @@ public class ActionManager {
 	/// <param name="useCharacter"></param>
 	/// <param name="useItem"></param>
 	/// <returns></returns>
-	public async UniTask UseItem(CharacterObject useCharacter, ItemObject useItem) {
+	public async UniTask UseItem(CharacterObject useCharacter, int itemID) {
+		ItemObject useItem = ItemManager.instance.GetItem(itemID);
+		if (useItem == null) return;
 		// アイテムのマスターデータを取得する
 		Entity_ItemData.Param itemMaster = useItem.itemData.itemMaster;
 		// ログの表示

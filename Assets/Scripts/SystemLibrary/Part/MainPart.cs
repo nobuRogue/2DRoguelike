@@ -41,6 +41,7 @@ public class MainPart : PartBase {
 		MenuManager.instance.Get<RogueLogMenu>("RogueLogCanvas");
 		MenuManager.instance.Get<ItemList>("ItemListCanvas");
 		MenuManager.instance.Get<ItemCommandList>("ItemCommandListCanvas");
+		MenuManager.instance.Get<ConfirmDialog>("ConfirmDialog");
 	}
 
 	public override async UniTask Setup() {

@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 /// <summary>
@@ -30,7 +31,7 @@ public class ItemObject : MonoBehaviour {
 
 	public void Teardown() {
 		itemData.Teardown();
-		gameObject.SetActive(false);
+		SetVisibility(false);
 	}
 
 	/// <summary>
@@ -40,7 +41,7 @@ public class ItemObject : MonoBehaviour {
 	public void SetSquare(SquareObject square) {
 		// 見た目の処理
 		SetPosition(square.GetObjectRoot().position);
-		gameObject.SetActive(true);
+		SetVisibility(true);
 		// 内部情報の処理
 		itemData.SetSquare(square);
 	}
@@ -50,12 +51,12 @@ public class ItemObject : MonoBehaviour {
 	/// </summary>
 	public void SetCharacter(CharacterObject character) {
 		// 見た目の処理
-		gameObject.SetActive(false);
+		SetVisibility(false);
 		// 内部情報の処理
 		itemData.SetCharacter(character);
 	}
 
-	private void SetPosition(Vector3 position) {
+	public void SetPosition(Vector3 position) {
 		transform.position = position;
 	}
 
@@ -66,6 +67,14 @@ public class ItemObject : MonoBehaviour {
 	public void SetMasterData(Entity_ItemData.Param itemMaster) {
 		// 情報の反映
 		itemData.SetMasterData(itemMaster);
+	}
+
+	/// <summary>
+	/// アイテムオブジェクトの可視状態変更
+	/// </summary>
+	/// <param name="isVisible"></param>
+	public void SetVisibility(bool isVisible) {
+		gameObject.SetActive(isVisible);
 	}
 
 }

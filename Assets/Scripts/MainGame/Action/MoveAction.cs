@@ -16,6 +16,8 @@ public class MoveAction {
 	private const int _ADD_ITEM_LOG_ID = 3001;
 	// アイテムを拾えなかった時のログメッセージID
 	private const int _NOT_ADD_LOG_ID = 3002;
+	// 階段選択の任意メッセージID
+	private const int _CONFIRM_STAIR_ID = 30;
 
 	// 移動キャラ
 	private CharacterObject _character = null;
@@ -71,10 +73,10 @@ public class MoveAction {
 	private async UniTask AfterMoveProcess(SquareObject goalSquare) {
 		// プレイヤーでなければ処理しない
 		if (!_character.characterData.IsPlayer()) return;
-		// 移動先のマスのアイテムを拾う処理
+		// 移動先のマスのオブジェクトに依る処理
 		await ProcessSquareObject(goalSquare);
 		// 階段処理
-		ProcessStair(goalSquare);
+		await ProcessStair(goalSquare);
 	}
 
 	private async UniTask ProcessSquareObject(SquareObject square) {
@@ -105,9 +107,20 @@ public class MoveAction {
 	/// 階段による移動処理
 	/// </summary>
 	/// <param name="goalSquare"></param>
-	private void ProcessStair(SquareObject goalSquare) {
+	private async UniTask ProcessStair(SquareObject goalSquare) {
 		// 移動先が階段でなければ処理しない
 		if (goalSquare.squareData.terrain != eTerrain.Stair) return;
+		// 階段使用の選択待ち
+		ConfirmDialog confirmDialog = MenuManager.instance.Get<ConfirmDialog>();
+		await confirmDialog.Setup(_CONFIRM_STAIR_ID.ToMessage());
+		await confirmDialog.Open();
+		await confirmDialog.AcceptInput();
+		await confirmDialog.Close();
+		// はいが選択されていなければ終了
+		if (confirmDialog.result != eConfirmResult.Yes) {
+			await UniTask.DelayFrame(5);
+			return;
+		}
 		// 階数をインクリメント
 		UserData userData = UserDataHolder.instance.currentData;
 		userData.SetFloorCount(userData.floorCount + 1);
